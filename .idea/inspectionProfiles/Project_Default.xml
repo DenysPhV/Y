@@ -1,0 +1,24 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredPackages">
+        <value>
+          <list size="2">
+            <item index="0" class="java.lang.String" itemvalue="StartBot" />
+            <item index="1" class="java.lang.String" itemvalue="hw-python-web-two" />
+          </list>
+        </value>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredIdentifiers">
+        <list>
+          <option value="part_one.json.load" />
+          <option value="dict.DATABASE_URL" />
+          <option value="main.fastapi_limiter" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>
