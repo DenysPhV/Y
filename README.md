@@ -51,6 +51,7 @@
 
 
 ## Хто це робив
-[Denys TM](https://github.com/DenysPhV)
-[Maksius93 SM](https://github.com/Maksius93)
-[Anatoliy Dev](https://github.com/anatoliysafonov)
+* [Denys -> TM](https://github.com/DenysPhV)
+* [Maksius93 -> SM](https://github.com/Maksius93)
+* [Anatoliy -> Dev](https://github.com/anatoliysafonov)
+* [OOlexandr -> Dev](https://github.com/OOlexandr)
