@@ -8,11 +8,11 @@
   * schemas/: Pydantic моделі для валідації вхідних і вихідних даних.
   * services/: Логіка застосунку, така як аутентифікація, завантаження фото, і т.д.
   * main.py: Точка входу для FastAPI додатку.
-  * requirements.txt: Залежності проекту.
 * tests/: Модульні тести для проекта.
 
 * Dockerfile: Для контейнеризації проекта.
 * README.md: Документація та інструкції.
+* requirements.txt: Залежності проекту.
 
 
 ## Схема структури
@@ -38,14 +38,14 @@
 * │   ├── services/
 * │   │   ├── auth_service.py
 * │   │   └── photo_service.py
-* │   ├── main.py
-* │   └── requirements.txt
+* │   └── main.py
 * ├── tests/
 * │   ├── test_auth.py
 * │   ├── test_photos.py
 * │   └── test_comments.py
 * ├── pyproject.toml
 * ├── Dockerfile
+* ├── requirements.txt
 * └── README.md
 
 
