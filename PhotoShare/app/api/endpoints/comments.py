@@ -4,9 +4,14 @@ from fastapi import APIRouter, HTTPException, Depends, status
 from sqlalchemy.orm import Session
 
 from PhotoShare.app.core.database import get_db
+from PhotoShare.app.services import auth_service
+
+from PhotoShare.app.models.user import User
+
 from PhotoShare.app.schemas.comment import CommentModel, CommentResponse
 from PhotoShare.app.schemas.user import UserModel
 from PhotoShare.app.schemas.photo import PhotoModel
+
 from PhotoShare.app.repositories import comments as repository_comments
 
 
