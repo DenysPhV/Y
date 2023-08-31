@@ -14,6 +14,10 @@
 * │   │   ├── user.py
 * │   │   ├── photo.py
 * │   │   └── comment.py
+* │   ├── schemas/
+* │   │   ├── user.py
+* │   │   ├── photo.py
+* │   │   └── comment.py
 * │   ├── services/
 * │   │   ├── auth_service.py
 * │   │   └── photo_service.py
@@ -23,8 +27,10 @@
 * │   ├── test_auth.py
 * │   ├── test_photos.py
 * │   └── test_comments.py
+* ├── pyproject.toml
 * ├── Dockerfile
 * └── README.md
+
 
 
 # Опис структури:
