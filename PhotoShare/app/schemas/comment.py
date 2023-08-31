@@ -11,10 +11,6 @@ class CommentResponse(CommentModel):
     id: int
     created_at: datetime
     updated_at: List[datetime]
-    #TODO
-    #When the models for posts and users are finished must change the next two fields to correspond to them
-    post: p.PostModel
-    user: u.UserModel
     
     class Config:
         orm_mode = True
