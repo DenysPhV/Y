@@ -5,14 +5,15 @@
     * endpoints/: Конкретні модулі для кожного набору endpoints (аутентифікація, фотографії, коментарі).
   * core/: Загальні налаштування та конфігурація.
   * models/: ORM моделі для взаємодії з базою даних.
+  * repositories/: Містить класи для взаємодії з базою даних, як правило, використовує models/ для CRUD операцій
   * schemas/: Pydantic моделі для валідації вхідних і вихідних даних.
   * services/: Логіка застосунку, така як аутентифікація, завантаження фото, і т.д.
   * main.py: Точка входу для FastAPI додатку.
-  * requirements.txt: Залежності проекту.
 * tests/: Модульні тести для проекта.
 
 * Dockerfile: Для контейнеризації проекта.
 * README.md: Документація та інструкції.
+* requirements.txt: Залежності проекту.
 
 
 ## Схема структури
@@ -31,6 +32,12 @@
 * │   │   ├── user.py
 * │   │   ├── photo.py
 * │   │   └── comment.py
+* │   ├── repositories/
+* │   │   ├── comments.py
+* │   │   ├── images.py
+* │   │   ├── ratings.py
+* │   │   ├── tags.py
+* │   │   └── users.py
 * │   ├── schemas/
 * │   │   ├── user.py
 * │   │   ├── photo.py
@@ -38,14 +45,14 @@
 * │   ├── services/
 * │   │   ├── auth_service.py
 * │   │   └── photo_service.py
-* │   ├── main.py
-* │   └── requirements.txt
+* │   └── main.py
 * ├── tests/
 * │   ├── test_auth.py
 * │   ├── test_photos.py
 * │   └── test_comments.py
 * ├── pyproject.toml
 * ├── Dockerfile
+* ├── requirements.txt
 * └── README.md
 
 
