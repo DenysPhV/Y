@@ -48,3 +48,8 @@
 
 * Dockerfile: Для контейнеризації проекту.
 * README.md: Документація та інструкції.
+
+
+## Хто це робив
+
+[Anatoliy Safonov](https://github.com/anatoliysafonov)
