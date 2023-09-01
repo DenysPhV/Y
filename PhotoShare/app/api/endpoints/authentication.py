@@ -3,10 +3,10 @@ from sqlalchemy.orm import Session
 from fastapi import status
 from fastapi.security import HTTPAuthorizationCredentials
 
-from PhotoShare.app.schemas.user import UserModel, UserRespond, TokenResponse
 from PhotoShare.app.core.database import get_db
 from PhotoShare.app.models.user import User
 import PhotoShare.app.repositories.users as user_repo
+from PhotoShare.app.schemas.user import UserRespond, UserModel, LoginResponse, TokenResponse
 from PhotoShare.app.services.auth_service import (
     create_email_confirmation_token,
     send_in_background,
@@ -17,7 +17,7 @@ from PhotoShare.app.services.auth_service import (
 )
 from PhotoShare.app.services.roles import Roles
 
-router_auth = APIRouter(prefix="/auth", tags=["autentication/authorization"])
+router_auth = APIRouter(prefix="/auth", tags=["authentication/authorization"])
 
 
 @router_auth.post("/signup", response_model=UserRespond, status_code=status.HTTP_201_CREATED, summary='Створення користувача')
@@ -40,6 +40,7 @@ async def signup(body: UserModel, background_task: BackgroundTasks,
     token = await create_email_confirmation_token({"email": user.email})
     background_task.add_task(send_in_background, user.email, str(request.base_url), token)
     return user
+
 
 
 @router_auth.post("/login", response_model=TokenResponse, status_code=status.HTTP_200_OK, summary='Логінізація користувача')
