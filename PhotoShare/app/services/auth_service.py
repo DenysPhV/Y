@@ -136,7 +136,8 @@ async def create_email_confirmation_token(data: dict, expires_delta: float | Non
     return encoded_jwt
 
 
-async def get_current_user(token: HTTPAuthorizationCredentials = Depends(oauth2_scheme), session: Session = Depends(get_db)):
+async def get_current_user(token: HTTPAuthorizationCredentials = Depends(oauth2_scheme),
+                           session: Session = Depends(get_db)):
     """
     The get_current_user function is a dependency that will be used in the
     get_current_active_user endpoint. It takes an optional token parameter, which
@@ -210,6 +211,25 @@ def get_email_form_confirmation_token(token: str):
     """
     try:
         payload = jwt.decode(token, SECRET_EMAIL_KEY, algorithms=[ALGORITHM])
+        email = payload.get('email')
+        return email
+    except JWTError:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Could not validate credentials')
+
+
+def get_email_form_refresh_token(refresh_token: str):
+    """
+    The get_email_form_refresh_token function takes a refresh token as an argument and returns the email associated with that refresh token.
+    It does this by decoding the JWT using the SECRET_REFRESH_KEY, which is stored in config.py.
+
+    Args:
+    refresh_token: str: Pass in the refresh token that was sent by the client
+
+    Returns:
+    The email of the user who is trying to refresh the access token
+    """
+    try:
+        payload = jwt.decode(refresh_token, SECRET_REFRESH_KEY, algorithms=[ALGORITHM])
         email = payload.get('email')
         return email
     except JWTError:
