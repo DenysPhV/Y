@@ -15,18 +15,20 @@ async def get_user_by_email(email: str, session: Session):
 
 
 async def create_user(body: UserModel, session: Session):
+    is_db_full = session.query(User).first()
     avatar = None
     try:
         g = Gravatar(body.email)
         avatar = g.get_image()
     except Exception as err:
-        ...
-
+        raise err
     user = await get_user_by_email(body.email, session)
     if user:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail='User exists already')
     hashed_password = get_password_hash(password=body.password)
     user = User(email=body.email, password=hashed_password, avatar=avatar)
+    if not is_db_full:
+        user.role = 'admin'
     session.add(user)
     session.commit()
     session.refresh(user)

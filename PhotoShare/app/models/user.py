@@ -13,6 +13,7 @@ class User(Base):
     avatar: Mapped[str] = mapped_column(String(255), nullable=True)
     refresh_token: Mapped[str] = mapped_column(String(255), nullable=True)
     confirmed: Mapped[bool] = mapped_column(Boolean, default=False)
+    role: Mapped[str] = mapped_column(default='user')
 
 
 Base.metadata.create_all(bind=engine)
