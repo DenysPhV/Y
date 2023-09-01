@@ -11,8 +11,8 @@ from PhotoShare.app.services.auth_service import (
     send_in_background,
     get_email_form_confirmation_token,
     verify_password,
-    get_password_hash,
 )
+from PhotoShare.app.services.roles import Roles
 
 router_auth = APIRouter(prefix="/auth", tags=["autentication/authorization"])
 

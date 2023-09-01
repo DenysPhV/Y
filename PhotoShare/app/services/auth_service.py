@@ -85,7 +85,7 @@ async def create_access_token(data: dict, expires_delta: float | None = None):
         expire = datetime.utcnow() + timedelta(seconds=expires_delta)
     else:
         expire = datetime.utcnow() + timedelta(minutes=15)
-    to_encode.update({"iat": datetime.utcnow(), "exp": expire, "scope": "access_token"})
+    to_encode.update({"iat": datetime.utcnow(), "exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_ACCESS_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
@@ -106,7 +106,7 @@ async def create_refresh_token(data: dict, expires_delta: float | None = None):
         expire = datetime.utcnow() + timedelta(seconds=expires_delta)
     else:
         expire = datetime.utcnow() + timedelta(days=7)
-    to_encode.update({"iat": datetime.utcnow(), "exp": expire, "scope": "refresh_token"})
+    to_encode.update({"iat": datetime.utcnow(), "exp": expire})
     encoded_refresh_token = jwt.encode(to_encode, SECRET_REFRESH_KEY, algorithm=ALGORITHM)
     return encoded_refresh_token
 
