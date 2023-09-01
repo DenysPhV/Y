@@ -1,8 +1,9 @@
 from fastapi import APIRouter, Depends, BackgroundTasks, Request, HTTPException
 from sqlalchemy.orm import Session
 from fastapi import status
+from fastapi.security import HTTPAuthorizationCredentials
 
-from PhotoShare.app.schemas.user import UserModel, UserRespond, LoginResponse
+from PhotoShare.app.schemas.user import UserModel, UserRespond, TokenResponse
 from PhotoShare.app.core.database import get_db
 from PhotoShare.app.models.user import User
 import PhotoShare.app.repositories.users as user_repo
@@ -10,7 +11,9 @@ from PhotoShare.app.services.auth_service import (
     create_email_confirmation_token,
     send_in_background,
     get_email_form_confirmation_token,
+    get_email_form_refresh_token,
     verify_password,
+    oauth2_scheme,
 )
 from PhotoShare.app.services.roles import Roles
 
@@ -40,7 +43,7 @@ async def signup(body: UserModel, background_task: BackgroundTasks,
     return user
 
 
-@router_auth.post("/login", response_model= LoginResponse, status_code=status.HTTP_200_OK, summary='login user')
+@router_auth.post("/login", response_model=TokenResponse, status_code=status.HTTP_200_OK, summary='login user')
 async def login(body: UserModel, session: Session = Depends(get_db)):
     """
     The login function is used to authenticate a user.
@@ -63,7 +66,28 @@ async def login(body: UserModel, session: Session = Depends(get_db)):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Your email not confirmed')
     if not verify_password(body.password, user.password):
         raise credential_exception
-    return {'email': user.email, "access_token": access_token, "refresh_token": refresh_token}
+    return {"access_token": access_token, "refresh_token": refresh_token, "token_type": "bearer"}
+
+
+@router_auth.get("/refresh_token", response_model=TokenResponse, status_code=status.HTTP_200_OK)
+async def refresh_token(credentials: HTTPAuthorizationCredentials = Depends(oauth2_scheme),
+                        session: Session = Depends(get_db)):
+    """
+    The refresh_token function is used to refresh the access token.
+    The function takes in a refresh token and returns an access_token,
+    a new refresh_token, and the type of authorization.
+
+    Args:
+    credentials: HTTPAuthorizationCredentials: Get the token from the request
+    db: Session: Pass the database session to the function
+
+    Returns:
+    A dictionary with the access_token, refresh_token and token_type
+    """
+    email = get_email_form_refresh_token(credentials.credentials)
+    token = credentials.credentials
+    access_token, refresh_token = await user_repo.refresh_token(email, token, session)  # noqa
+    return {"access_token": access_token, "refresh_token": refresh_token, "token_type": "bearer"}
 
 
 @router_auth.get("/email-confirmation/{token}", status_code=status.HTTP_200_OK, summary='set user as authenticated')

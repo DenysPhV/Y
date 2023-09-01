@@ -214,3 +214,22 @@ def get_email_form_confirmation_token(token: str):
         return email
     except JWTError:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Could not validate credentials')
+
+
+def get_email_form_refresh_token(refresh_token: str):
+    """
+    The get_email_form_refresh_token function takes a refresh token as an argument and returns the email associated with that refresh token.
+    It does this by decoding the JWT using the SECRET_REFRESH_KEY, which is stored in config.py.
+
+    Args:
+    refresh_token: str: Pass in the refresh token that was sent by the client
+
+    Returns:
+    The email of the user who is trying to refresh the access token
+    """
+    try:
+        payload = jwt.decode(refresh_token, SECRET_REFRESH_KEY, algorithms=[ALGORITHM])
+        email = payload.get('email')
+        return email
+    except JWTError:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Could not validate credentials')

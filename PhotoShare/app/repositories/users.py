@@ -64,3 +64,32 @@ async def user_login(email: str, session: Session):
         session.commit()
     return user, acess_token, refresh_token
 
+
+async def refresh_token(email: str, token: str, session: Session):
+    """
+    The refresh_token function is used to refresh the access token.
+    It takes in an email and a refresh token, then checks if the user exists and if their
+    refresh_token matches what was passed in. If it does not match, we set their refresh_token to None
+    and raise an HTTPException with status code 401 (Unauthorized). If it does match, we create a new
+    access token using the create_access_token function from fastapi-users' utils module. We also generate
+    a new refresh token using the same method as before. Then we update our database with this new information.
+
+    Args:
+    email: str: Get the user email
+    token: str: Get the token from the request
+    db: Session: Pass the database session to the function
+
+    Returns:
+    The access_token and refresh_token
+    """
+    user = await get_user_by_email(email, session)
+    if user.refresh_token != token:
+        user.refresh_token = None
+        session.commit()
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid refresh token")
+
+    access_token = await create_access_token(data={"email": user.email})
+    refresh_token = await create_refresh_token(data={"email": user.email})  # noqa
+    user.refresh_token = refresh_token
+    session.commit()
+    return access_token, refresh_token
