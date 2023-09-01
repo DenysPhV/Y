@@ -7,3 +7,10 @@ app.include_router(router_auth)
 
 
 
+
+
+
+@app.get("/api/healthchecker")
+def root():
+    return {"message": "Welcome to FastAPI!"}
+
