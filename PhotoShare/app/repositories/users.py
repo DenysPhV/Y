@@ -6,7 +6,7 @@ from libgravatar import Gravatar
 
 from PhotoShare.app.models.user import User
 from PhotoShare.app.schemas.user import UserModel
-from PhotoShare.app.services.auth_service import get_password_hash
+from PhotoShare.app.services.auth_service import get_password_hash, create_access_token, create_refresh_token
 
 
 async def get_user_by_email(email: str, session: Session):
@@ -50,4 +50,15 @@ async def set_user_confirmation(email: str, db: Session):
         db.commit()
     return user
 
+
+async def user_login(email: str, session: Session):
+    acess_token = None
+    refresh_token = None
+    user = await get_user_by_email(email, session)
+    if user:
+        acess_token = await create_access_token(data={"email": user.email})
+        refresh_token = await create_refresh_token(data={"email": user.email})
+        user.refresh_token = refresh_token
+        session.commit()
+    return user, acess_token, refresh_token
 

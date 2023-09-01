@@ -2,8 +2,8 @@ from pydantic import BaseModel, EmailStr
 
 
 class UserModel(BaseModel):
-    email: EmailStr
-    password: str
+    email: EmailStr = 'mail@service.ext'
+    password: str = 'some password'
 
 
 class UserRespond(BaseModel):
@@ -11,3 +11,8 @@ class UserRespond(BaseModel):
     email: EmailStr
     avatar: str
 
+
+class LoginResponse(BaseModel):
+    email: str
+    access_token: str
+    refresh_token: str
