@@ -40,3 +40,7 @@ urllib3==1.26.16
 uvicorn==0.23.2
 watchfiles==0.20.0
 websockets==11.0.3
+
+fastapi-mail==1.4.1
+bcrypt==4.0.1
+libgravatar==1.0.4
