@@ -1,5 +1,7 @@
 from typing import List
 
+from datetime import datetime
+
 from sqlalchemy.orm import Session
 from sqlalchemy.sql import extract
 import sqlalchemy as sa
@@ -58,4 +60,41 @@ def create_comment(body: CommentModel, user: User, post_id: int, db: Session) ->
     db.add(comment)
     db.commit()
     db.refresh(comment)
+    return comment
+
+def update_comment(body: CommentModel, comment_id: int, db: Session) -> Comment:
+    """
+    Updates the comment
+
+    :param body: The data to use when updating the comment.
+    :type body: CommentModel
+    :param comment_id: id of a comment to update.
+    :type comment_id: int
+    :param db: The database session.
+    :type db: Session
+    :return: The updated comment.
+    :rtype: Comment
+    """
+    comment = db.query(Comment).filter(Comment.id==body.id).first()
+    if comment:
+        comment.content = body.content
+        comment.updated_at = comment.updated_at + datetime.now()
+        db.commit()
+    return comment
+
+def delete_comment(comment_id: int, db: Session) -> Comment:
+    """
+    Deletes the comment
+    
+    :param comment_id: id of a comment to delete.
+    :type comment_id: int
+    :param db: The database session.
+    :type db: Session
+    :return: The deleted comment.
+    :rtype: Comment
+    """
+    comment = db.query(Comment).filter(Comment.id==comment_id).first()
+    if comment:
+        db.delete(comment)
+        db.commit()
     return comment
