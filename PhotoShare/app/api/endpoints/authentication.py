@@ -20,22 +20,21 @@ from PhotoShare.app.services.roles import Roles
 router_auth = APIRouter(prefix="/auth", tags=["autentication/authorization"])
 
 
-@router_auth.post("/signup", response_model=UserRespond, status_code=status.HTTP_201_CREATED, summary='create user')
+@router_auth.post("/signup", response_model=UserRespond, status_code=status.HTTP_201_CREATED, summary='Створення користувача')
 async def signup(body: UserModel, background_task: BackgroundTasks,
                  request: Request, session: Session = Depends(get_db)):
     """
-    The signup function creates a new user in the database.
-    It also sends an email to the user with a link to confirm their account.
-    The function returns the newly created User object.
+    Функція реєстрації створює нового користувача в базі даних.
+    Вона також надсилає користувачеві електронний лист із посиланням для підтвердження свого облікового запису.
+    Функція повертає щойно створений об’єкт User.
 
     Args:
-    body: UserModel: Validate the request body
-    background_tasks: BackgroundTasks: Add a task to the background tasks queue
-    request: Request: Get the base url of the application
-    db: Session: Get the database session
+    body: UserModel: Валідація тіло запиту
+    background_tasks: BackgroundTasks: Додавання завдання до черги фонових завдань
+    request: Request: Отримання базову URL-адресу програми
+    session: Session: Отримання сессії бази данних
 
-    Returns:
-    The user object
+    Returns: Об'єкт типу User
     """
     user = await user_repo.create_user(body, session)
     token = await create_email_confirmation_token({"email": user.email})
@@ -43,19 +42,19 @@ async def signup(body: UserModel, background_task: BackgroundTasks,
     return user
 
 
-@router_auth.post("/login", response_model=TokenResponse, status_code=status.HTTP_200_OK, summary='login user')
+@router_auth.post("/login", response_model=TokenResponse, status_code=status.HTTP_200_OK, summary='Логінізація користувача')
 async def login(body: UserModel, session: Session = Depends(get_db)):
     """
-    The login function is used to authenticate a user.
-    It takes the email and password of the user as input,
-    checks if they are valid credentials, and returns an access token.
+    Функція входу використовується для автентифікації користувача.
+    Вона приймає адресу електронної пошти та пароль користувача як вхідні дані,
+    перевіряє, чи є вони дійсними обліковими даними, і повертає токени (маркери) доступу.
 
     Args:
-    body: UserModel: Get the email and password from the request body
-    db: Session: Get the database session
+    body: UserModel: Отримання адресу електронної пошти та пароль із тіла запиту
+    session: Session: Отримання сессії бази данних
 
     Returns:
-    An access token and a refresh token
+    Токен (Маркер) доступу, токен (маркер) оновлення та тип авторизації
     """
     credential_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -69,20 +68,20 @@ async def login(body: UserModel, session: Session = Depends(get_db)):
     return {"access_token": access_token, "refresh_token": refresh_token, "token_type": "bearer"}
 
 
-@router_auth.get("/refresh_token", response_model=TokenResponse, status_code=status.HTTP_200_OK)
+@router_auth.get("/refresh_token", response_model=TokenResponse, status_code=status.HTTP_200_OK,
+                 summary="Отримати нові access та refresh_token")
 async def refresh_token(credentials: HTTPAuthorizationCredentials = Depends(oauth2_scheme),
                         session: Session = Depends(get_db)):
     """
-    The refresh_token function is used to refresh the access token.
-    The function takes in a refresh token and returns an access_token,
-    a new refresh_token, and the type of authorization.
+    Функція refresh_token використовується для оновлення токену(маркера) доступу.
+    Функція приймає маркер оновлення (refresh_token) та повертає токен доступи (access_token) і тип авторизації.
 
     Args:
-    credentials: HTTPAuthorizationCredentials: Get the token from the request
-    db: Session: Pass the database session to the function
+    credentials: HTTPAuthorizationCredentials: Отримання токену (refresh_token) із запиту
+    db: Session: Передача сеанс бази даних у функцію
 
     Returns:
-    A dictionary with the access_token, refresh_token and token_type
+    Словник із access_token, refresh_token і token_type
     """
     email = get_email_form_refresh_token(credentials.credentials)
     token = credentials.credentials
@@ -90,17 +89,17 @@ async def refresh_token(credentials: HTTPAuthorizationCredentials = Depends(oaut
     return {"access_token": access_token, "refresh_token": refresh_token, "token_type": "bearer"}
 
 
-@router_auth.get("/email-confirmation/{token}", status_code=status.HTTP_200_OK, summary='set user as authenticated')
+@router_auth.get("/email-confirmation/{token}", status_code=status.HTTP_200_OK, summary='Встановлення користувача як confirmed')
 async def email_confirmation(token: str, session: Session = Depends(get_db)):
     """
-    The email_confirmation function is used to confirm a user's email address.
-    Otherwise, we return a JSON object containing 'activation': 'you email is confirmed'
+    Функція email_confirmation використовується для підтвердження електронної адреси користувача.
+    Також ми повертаємо об’єкт JSON, що містить «активацію»: «ваша електронна адреса підтверджена»
 
     Args:
-    db: Session: Get the database session
+    db: Session: Отримання сессії бази данних
 
     Returns:
-    A dictionary with a key of activation and a value of you email is confirmed
+    Словник з ключем "активація" та значенням "ваша електронна адреса підтверджена"
     """
     email = get_email_form_confirmation_token(token)
     user = await user_repo.set_user_confirmation(email, session)
