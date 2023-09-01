@@ -2,10 +2,10 @@ from fastapi import APIRouter, Depends, BackgroundTasks, Request, HTTPException
 from sqlalchemy.orm import Session
 from fastapi import status
 
-from PhotoShare.app.schemas.user import UserModel, UserRespond, LoginResponse
 from PhotoShare.app.core.database import get_db
 from PhotoShare.app.models.user import User
 import PhotoShare.app.repositories.users as user_repo
+from PhotoShare.app.schemas.user import UserRespond, UserModel, LoginResponse
 from PhotoShare.app.services.auth_service import (
     create_email_confirmation_token,
     send_in_background,
@@ -14,7 +14,7 @@ from PhotoShare.app.services.auth_service import (
 )
 from PhotoShare.app.services.roles import Roles
 
-router_auth = APIRouter(prefix="/auth", tags=["autentication/authorization"])
+router_auth = APIRouter(prefix="/auth", tags=["authentication/authorization"])
 
 
 @router_auth.post("/signup", response_model=UserRespond, status_code=status.HTTP_201_CREATED, summary='create user')
@@ -40,7 +40,7 @@ async def signup(body: UserModel, background_task: BackgroundTasks,
     return user
 
 
-@router_auth.post("/login", response_model= LoginResponse, status_code=status.HTTP_200_OK, summary='login user')
+@router_auth.post("/login", response_model=LoginResponse, status_code=status.HTTP_200_OK, summary='login user')
 async def login(body: UserModel, session: Session = Depends(get_db)):
     """
     The login function is used to authenticate a user.
