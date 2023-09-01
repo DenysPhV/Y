@@ -136,7 +136,8 @@ async def create_email_confirmation_token(data: dict, expires_delta: float | Non
     return encoded_jwt
 
 
-async def get_current_user(token: HTTPAuthorizationCredentials = Depends(oauth2_scheme), session: Session = Depends(get_db)):
+async def get_current_user(token: HTTPAuthorizationCredentials = Depends(oauth2_scheme),
+                           session: Session = Depends(get_db)):
     """
     The get_current_user function is a dependency that will be used in the
     get_current_active_user endpoint. It takes an optional token parameter, which

@@ -8,7 +8,7 @@ from PhotoShare.app.models.user import User
 from PhotoShare.app.schemas.user import UserModel
 from PhotoShare.app.services.auth_service import get_password_hash, create_access_token, create_refresh_token
 
-
+from PhotoShare.app.services.auth_service import get_current_user
 async def get_user_by_email(email: str, session: Session):
     user = session.query(User).filter_by(email=email).first()
     return user
