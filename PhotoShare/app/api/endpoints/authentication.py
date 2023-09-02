@@ -4,9 +4,9 @@ from fastapi import status
 from fastapi.security import HTTPAuthorizationCredentials
 
 from PhotoShare.app.core.database import get_db
-from PhotoShare.app.models.user import User
+# from PhotoShare.app.models.user import User
 import PhotoShare.app.repositories.users as user_repo
-from PhotoShare.app.schemas.user import UserRespond, UserModel, LoginResponse, TokenResponse
+from PhotoShare.app.schemas.user import UserRespond, UserModel, TokenResponse  # LoginResponse
 from PhotoShare.app.services.auth_service import (
     create_email_confirmation_token,
     send_in_background,
@@ -20,7 +20,8 @@ from PhotoShare.app.services.roles import Roles
 router_auth = APIRouter(prefix="/auth", tags=["authentication/authorization"])
 
 
-@router_auth.post("/signup", response_model=UserRespond, status_code=status.HTTP_201_CREATED, summary='Створення користувача')
+@router_auth.post("/signup", response_model=UserRespond, status_code=status.HTTP_201_CREATED,
+                  summary='Створення користувача')
 async def signup(body: UserModel, background_task: BackgroundTasks,
                  request: Request, session: Session = Depends(get_db)):
     """
@@ -42,8 +43,8 @@ async def signup(body: UserModel, background_task: BackgroundTasks,
     return user
 
 
-
-@router_auth.post("/login", response_model=TokenResponse, status_code=status.HTTP_200_OK, summary='Логінізація користувача')
+@router_auth.post("/login", response_model=TokenResponse, status_code=status.HTTP_200_OK,
+                  summary='Логінізація користувача')
 async def login(body: UserModel, session: Session = Depends(get_db)):
     """
     Функція входу використовується для автентифікації користувача.
@@ -90,7 +91,8 @@ async def refresh_token(credentials: HTTPAuthorizationCredentials = Depends(oaut
     return {"access_token": access_token, "refresh_token": refresh_token, "token_type": "bearer"}
 
 
-@router_auth.get("/email-confirmation/{token}", status_code=status.HTTP_200_OK, summary='Встановлення користувача як confirmed')
+@router_auth.get("/email-confirmation/{token}", status_code=status.HTTP_200_OK,
+                 summary='Встановлення користувача як confirmed')
 async def email_confirmation(token: str, session: Session = Depends(get_db)):
     """
     Функція email_confirmation використовується для підтвердження електронної адреси користувача.

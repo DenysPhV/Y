@@ -23,6 +23,12 @@ bcrypt = "^4.0.1"
 fastapi-mail = "^1.4.1"
 
 
+[tool.poetry.group.dev.dependencies]
+sphinx = "^7.2.5"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
