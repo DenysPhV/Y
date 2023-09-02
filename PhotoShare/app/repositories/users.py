@@ -67,6 +67,11 @@ async def user_login(email: str, session: Session):
     return user, access_token, refresh_token
 
 
+async def reset_refresh_token(user, session: Session):
+    user.refresh_token = None
+    session.commit()
+
+
 async def refresh_token(email: str, token: str, session: Session):
     """
     The refresh_token function is used to refresh the access token.
@@ -84,11 +89,9 @@ async def refresh_token(email: str, token: str, session: Session):
     Returns:
     The access_token and refresh_token
     """
-    print('TOKEN', token)
     user = await get_user_by_email(email, session)
     if user.refresh_token != token:
-        user.refresh_token = None
-        session.commit()
+        await reset_refresh_token(user=user, session=session)
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid refresh token")
 
     access_token = await create_access_token(data={"email": user.email})

@@ -17,6 +17,7 @@ from PhotoShare.app.repositories import comments as repository_comments
 
 router = APIRouter(prefix='/comments', tags=["comments"])
 
+
 @router.get("/", response_model=List[CommentResponse])
 def read_comments(limit: int = 100, post_id: int = 0, db: Session = Depends(get_db)):
     """
@@ -36,6 +37,7 @@ def read_comments(limit: int = 100, post_id: int = 0, db: Session = Depends(get_
     comments = repository_comments.get_comments(limit, post_id, db)
     return comments
 
+
 @router.get("/{comment_id}", response_model=CommentResponse)
 def read_comment(comment_id: int, db: Session = Depends(get_db)):
     """
@@ -54,7 +56,7 @@ def read_comment(comment_id: int, db: Session = Depends(get_db)):
     return comment
 
 @router.post("/", response_model=CommentResponse)
-def create_comment(body: CommentModel, post_id: int = 0, db: Session = Depends(get_db),/
+def create_comment(body: CommentModel, post_id: int = 0, db: Session = Depends(get_db),
                       current_user: User = Depends(auth_service.get_current_user)):#temp
     """
     Creates a new comment.
@@ -76,8 +78,9 @@ def create_comment(body: CommentModel, post_id: int = 0, db: Session = Depends(g
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='Post id is required')
     return repository_comments.create_comment(body, current_user, post_id, db)
 
+
 @router.put("/{comment_id}", response_model=CommentResponse)
-def update_comment(body: CommentModel, comment_id: int, db: Session = Depends(get_db),/
+def update_comment(body: CommentModel, comment_id: int, db: Session = Depends(get_db),
                       current_user: User = Depends(auth_service.get_current_user)):
     """
     Updates the comment with specified ID.
@@ -102,6 +105,7 @@ def update_comment(body: CommentModel, comment_id: int, db: Session = Depends(ge
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="You do not have permission to edit this comment")
     new_comment = repository_comments.update_comment(body, comment_id, db)
     return new_comment
+
 
 @router.delete("/{comment_id}", response_model=CommentResponse, dependencies=[Depends(roles.Roles(['admin', 'moderator']))])
 def delete_comment(comment_id: int, db: Session = Depends(get_db)):

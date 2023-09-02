@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 
 from passlib.context import CryptContext
-from fastapi.security import OAuth2PasswordBearer, HTTPAuthorizationCredentials, HTTPBearer
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jose import jwt, JWTError
 from fastapi import status, Depends, HTTPException
 from sqlalchemy.orm import Session
@@ -11,13 +11,15 @@ from fastapi_mail.errors import ConnectionErrors
 from fastapi_mail import FastMail, MessageSchema, ConnectionConfig, MessageType
 
 from PhotoShare.app.core.config import settings
-from PhotoShare.app.core.database import get_db, get_redis
+from PhotoShare.app.core.database import get_db
+from PhotoShare.app.services.redis import RedisService as cache
 from PhotoShare.app.models.user import User
 from PhotoShare.app.services.logout import (
     get_revoked_tokens,
     get_key_from_token,
     get_valid_token_from_revoked
 )
+
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 SECRET_ACCESS_KEY = settings.secret_access_key
 SECRET_REFRESH_KEY = settings.secret_refresh_key
@@ -141,7 +143,7 @@ async def create_email_confirmation_token(data: dict, expires_delta: float | Non
 
 
 async def get_current_user(token: HTTPAuthorizationCredentials = Depends(oauth2_scheme),
-                           session: Session = Depends(get_db), cache=Depends(get_redis)):
+                           session: Session = Depends(get_db), cache=Depends(cache.get_redis)):
     """
     The get_current_user function is a dependency that will be used in the
     get_current_active_user endpoint. It takes an optional token parameter, which

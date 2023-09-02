@@ -4,8 +4,13 @@ from sqlalchemy.orm import Session
 
 from PhotoShare.app.api.endpoints.authentication import router_auth
 from PhotoShare.app.core.database import get_db
-
+from PhotoShare.app.services.redis import RedisService
 app = FastAPI()
+
+
+@app.on_event("startup")
+async def startup():
+    await RedisService.init()
 
 
 @app.get("/", description="Main page")
