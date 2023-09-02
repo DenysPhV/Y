@@ -18,6 +18,8 @@ from PhotoShare.app.services.auth_service import (
         get_current_user
 )
 from PhotoShare.app.services.logout import add_token_to_revoked
+from PhotoShare.app.services.roles import Roles
+
 
 router_auth = APIRouter(prefix="/auth", tags=["authentication/authorization"])
 
@@ -137,7 +139,7 @@ async def logout(token: HTTPAuthorizationCredentials = Depends(oauth2_scheme),
     return {'tokens_revoked': token_revoked}
 
 
-@router_auth.get("/secret")
-async def secret(user: User = Depends(get_current_user)):
-    return {'message': f'secret for {user.email}'}
+# @router_auth.get("/secret", dependencies=[Depends(Roles(['admin']))])
+# async def secret():
+#     return {'message': f'secret for admins'}
 
