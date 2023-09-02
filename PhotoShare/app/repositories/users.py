@@ -9,6 +9,8 @@ from PhotoShare.app.schemas.user import UserModel
 from PhotoShare.app.services.auth_service import get_password_hash, create_access_token, create_refresh_token
 
 from PhotoShare.app.services.auth_service import get_current_user
+
+
 async def get_user_by_email(email: str, session: Session):
     user = session.query(User).filter_by(email=email).first()
     return user
@@ -54,15 +56,15 @@ async def set_user_confirmation(email: str, db: Session):
 
 
 async def user_login(email: str, session: Session):
-    acess_token = None
+    access_token = None
     refresh_token = None
     user = await get_user_by_email(email, session)
     if user:
-        acess_token = await create_access_token(data={"email": user.email})
+        access_token = await create_access_token(data={"email": user.email})
         refresh_token = await create_refresh_token(data={"email": user.email})
         user.refresh_token = refresh_token
         session.commit()
-    return user, acess_token, refresh_token
+    return user, access_token, refresh_token
 
 
 async def refresh_token(email: str, token: str, session: Session):
@@ -82,6 +84,7 @@ async def refresh_token(email: str, token: str, session: Session):
     Returns:
     The access_token and refresh_token
     """
+    print('TOKEN', token)
     user = await get_user_by_email(email, session)
     if user.refresh_token != token:
         user.refresh_token = None

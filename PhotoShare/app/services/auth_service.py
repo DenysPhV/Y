@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 
 from passlib.context import CryptContext
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi.security import OAuth2PasswordBearer, HTTPAuthorizationCredentials, HTTPBearer
 from jose import jwt, JWTError
 from fastapi import status, Depends, HTTPException
 from sqlalchemy.orm import Session
@@ -11,9 +11,13 @@ from fastapi_mail.errors import ConnectionErrors
 from fastapi_mail import FastMail, MessageSchema, ConnectionConfig, MessageType
 
 from PhotoShare.app.core.config import settings
-from PhotoShare.app.core.database import get_db
+from PhotoShare.app.core.database import get_db, get_redis
 from PhotoShare.app.models.user import User
-
+from PhotoShare.app.services.logout import (
+    get_revoked_tokens,
+    get_key_from_token,
+    get_valid_token_from_revoked
+)
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 SECRET_ACCESS_KEY = settings.secret_access_key
 SECRET_REFRESH_KEY = settings.secret_refresh_key
@@ -137,7 +141,7 @@ async def create_email_confirmation_token(data: dict, expires_delta: float | Non
 
 
 async def get_current_user(token: HTTPAuthorizationCredentials = Depends(oauth2_scheme),
-                           session: Session = Depends(get_db)):
+                           session: Session = Depends(get_db), cache=Depends(get_redis)):
     """
     The get_current_user function is a dependency that will be used in the
     get_current_active_user endpoint. It takes an optional token parameter, which
@@ -156,10 +160,18 @@ async def get_current_user(token: HTTPAuthorizationCredentials = Depends(oauth2_
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
+    token = token.credentials
+    tokens_revoked_all = await get_revoked_tokens(cache=cache)
+    tokens_revoked_valid = await get_valid_token_from_revoked(tokens_revoked_all, cache=cache)
 
+    if await get_key_from_token(token) in tokens_revoked_valid:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail='YOUR TOKEN HAS BEEN REVOKE'
+        )
     try:
         # Decode JWT
-        payload = jwt.decode(token.credentials, SECRET_ACCESS_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode(token, SECRET_ACCESS_KEY, algorithms=[ALGORITHM])
         email = payload.get("email")
         if email is None:
             raise credentials_exception

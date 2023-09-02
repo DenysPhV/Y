@@ -11,7 +11,6 @@ from PhotoShare.app.models.user import User
 
 from PhotoShare.app.schemas.comment import CommentModel, CommentResponse
 from PhotoShare.app.schemas.user import UserModel
-from PhotoShare.app.schemas.photo import PhotoModel
 
 from PhotoShare.app.repositories import comments as repository_comments
 

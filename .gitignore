@@ -160,3 +160,4 @@ cython_debug/
 #.idea/
 PhotoShare/app/core/env
 PhotoShare/app/core/env
+.DS_Store
