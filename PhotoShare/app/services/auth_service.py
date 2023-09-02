@@ -69,7 +69,7 @@ def get_password_hash(password: str):
     return pwd_context.hash(password)
 
 
-async def create_access_token(data: dict, expires_delta: float):
+async def create_access_token(data: dict, expires_delta: float | None = None):
     """
     Функція create_access_token створює маркер JWT, який використовується для автентифікації користувача.
     Функція приймає два аргументи: дані та expires_delta. Аргумент даних - це словник, що містить адресу електронної
