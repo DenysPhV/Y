@@ -15,7 +15,7 @@ def root():
 
     :return: dict: health status
     """
-    return {"message": "Welcome to FastAPI! Check test"}
+    return {"message": "Welcome to root!"}
 
 
 @app.get("/api/healthchecker")

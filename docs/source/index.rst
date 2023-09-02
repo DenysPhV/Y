@@ -12,7 +12,7 @@ Welcome to Y's documentation!
 
 Y main
 ===================
-.. automodule:: main
+.. automodule:: PhotoShare.main
   :members:
   :undoc-members:
   :show-inheritance:
