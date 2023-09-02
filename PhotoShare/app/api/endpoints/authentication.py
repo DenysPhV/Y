@@ -4,7 +4,7 @@ from fastapi import status
 from fastapi.security import HTTPAuthorizationCredentials
 
 from PhotoShare.app.core.database import get_db
-from PhotoShare.app.services.redis import RedisService as cache
+from PhotoShare.app.services.redis import RedisService as cache_redis                                           # noqa
 from PhotoShare.app.models.user import User
 import PhotoShare.app.repositories.users as user_repo
 from PhotoShare.app.schemas.user import UserRespond, UserModel, TokenResponse
@@ -18,7 +18,6 @@ from PhotoShare.app.services.auth_service import (
         get_current_user
 )
 from PhotoShare.app.services.logout import add_token_to_revoked
-from PhotoShare.app.services.roles import Roles
 
 
 router_auth = APIRouter(prefix="/auth", tags=["authentication/authorization"])
@@ -49,7 +48,7 @@ async def signup(body: UserModel, background_task: BackgroundTasks,
 
 @router_auth.post("/login", response_model=TokenResponse, status_code=status.HTTP_200_OK,
                   summary='Логінізація користувача')
-async def login(body: UserModel, session: Session = Depends(get_db), cache=Depends(cache.get_redis)):
+async def login(body: UserModel, session: Session = Depends(get_db)):
     """
     Функція входу використовується для автентифікації користувача.
     Вона приймає адресу електронної пошти та пароль користувача як вхідні дані,
@@ -62,12 +61,11 @@ async def login(body: UserModel, session: Session = Depends(get_db), cache=Depen
     Returns:
     Токен (Маркер) доступу, токен (маркер) оновлення та тип авторизації
     """
-    await cache.set('key', '100')
     credential_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail='You are not authorized'
     )
-    user, access_token, refresh_token = await user_repo.user_login(body.email, session)
+    user, access_token, refresh_token = await user_repo.user_login(body.email, session)                         # noqa
     if user is None:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User not Found")
     if not user.confirmed:
@@ -94,7 +92,7 @@ async def refresh_token(token: HTTPAuthorizationCredentials = Depends(oauth2_sch
     """
     token = token.credentials
     email = get_email_form_refresh_token(token)
-    access_token, refresh_token = await user_repo.refresh_token(email, token, session)  # noqa
+    access_token, refresh_token = await user_repo.refresh_token(email, token, session)                          # noqa
     return {"access_token": access_token, "refresh_token": refresh_token, "token_type": "bearer"}
 
 
@@ -118,11 +116,11 @@ async def email_confirmation(token: str, session: Session = Depends(get_db)):
     return {'activation': 'you email is confirmed'}
 
 
-@router_auth.get("/logout")
+@router_auth.get("/logout", summary="Виконання logout для авторизованного користувача")
 async def logout(token: HTTPAuthorizationCredentials = Depends(oauth2_scheme),
                  user: User = Depends(get_current_user),
-                 session : Session = Depends(get_db),
-                 cache=Depends(cache.get_redis)):
+                 session: Session = Depends(get_db),
+                 cache=Depends(cache_redis.get_redis)):
     """
     Функція logout використовується для відкликання access_token та refresh_token користувача.
 
@@ -137,9 +135,3 @@ async def logout(token: HTTPAuthorizationCredentials = Depends(oauth2_scheme),
     token_revoked = await add_token_to_revoked(token, cache=cache)
     await user_repo.reset_refresh_token(user=user, session=session)
     return {'tokens_revoked': token_revoked}
-
-
-# @router_auth.get("/secret", dependencies=[Depends(Roles(['admin']))])
-# async def secret():
-#     return {'message': f'secret for admins'}
-

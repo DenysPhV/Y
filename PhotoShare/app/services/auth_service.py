@@ -3,7 +3,7 @@ from pathlib import Path
 
 from passlib.context import CryptContext
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-from jose import jwt, JWTError
+from jose import jwt, JWTError                                                                                  # noqa
 from fastapi import status, Depends, HTTPException
 from sqlalchemy.orm import Session
 
@@ -12,7 +12,7 @@ from fastapi_mail import FastMail, MessageSchema, ConnectionConfig, MessageType
 
 from PhotoShare.app.core.config import settings
 from PhotoShare.app.core.database import get_db
-from PhotoShare.app.services.redis import RedisService as cache
+from PhotoShare.app.services.redis import RedisService as redis_cache                                           # noqa
 from PhotoShare.app.models.user import User
 from PhotoShare.app.services.logout import (
     get_revoked_tokens,
@@ -44,47 +44,43 @@ conf = ConnectionConfig(
 
 
 def verify_password(plain_password, hashed_password):
-
     """
-    The verify_password function takes a plain-text password and a hashed password as arguments.
-    It then uses the pwd_context object to verify that the plain-text password matches the hashed
-    password.
+    Функція verify_password приймає як аргументи простий текстовий пароль і хешований пароль.
+    Потім він використовує об’єкт pwd_context, щоб перевірити, чи збігається простий текстовий пароль із хешованим
+    пароль.
 
-    Args:
-    hashed_password: Store the hashed password from the database
+    Args: hashed_password: збережений хешований пароль із бази даних
 
     Returns:
-    A boolean value
+    Логічне значення перевірки на відповідність паролів
     """
     return pwd_context.verify(plain_password, hashed_password)
 
 
 def get_password_hash(password: str):
-
     """
-    The get_password_hash function takes a password as an argument and returns the hashed version of that password.
+    Функція get_password_hash приймає пароль як аргумент і повертає хешовану версію цього пароля.
 
-    Args:
-    password: str: Pass the password that is to be hashed
+    Args: password: str: Передавача пароля, який потрібно хешувати
 
     Returns:
-    A hash of the password
+    Хешований пароль
     """
     return pwd_context.hash(password)
 
 
-async def create_access_token(data: dict, expires_delta: float | None = None):
+async def create_access_token(data: dict, expires_delta: float):
     """
-    The create_access_token function creates a JWT token that is used to authenticate the user.
-    The function takes in two arguments: data and expires_delta. The data argument is a dictionary containing the
-    user's id, username, email address and role (admin or user). The expires_delta argument specifies how long the token will be valid for.
+    Функція create_access_token створює маркер JWT, який використовується для автентифікації користувача.
+    Функція приймає два аргументи: дані та expires_delta. Аргумент даних - це словник, що містить адресу електронної
+    пошти. Аргумент expires_delta визначає тривалість дії маркера.
 
     Args:
-    data: dict: Pass the data we want to encode in our jwt
-    expires_delta: Optional[float]: Set the expiration time of the access token
+    data: dict: Передача email, який ми хочемо закодувати у наш jwt
+    expires_delta: float: Встановлення термін дії маркера доступу
 
     Returns:
-    A json web token (jwt) that contains the user's id,
+    Веб-токен json (jwt), який містить ідентифікатор користувача
     """
     to_encode = data.copy()
     if expires_delta:
@@ -98,14 +94,14 @@ async def create_access_token(data: dict, expires_delta: float | None = None):
 
 async def create_refresh_token(data: dict, expires_delta: float | None = None):
     """
-    The create_refresh_token function creates a refresh token for the user.
+    Функція create_refresh_token створює маркер оновлення для користувача.
 
     Args:
-    data: dict: Pass in the data that we want to encode into our jwt
-    expires_delta: float: Set the expiration time for the token
+    data: dict: Передайте дані, які ми хочемо закодувати в наш jwt
+    expires_delta: float: Встановлення термін дії маркера
 
     Returns:
-    A refresh token
+    Маркер оновлення
     """
     to_encode = data.copy()
     if expires_delta:
@@ -119,18 +115,19 @@ async def create_refresh_token(data: dict, expires_delta: float | None = None):
 
 async def create_email_confirmation_token(data: dict, expires_delta: float | None = None):
     """
-    The create_email_confirmation_token function creates a JWT token that is used to confirm the user's email address.
-    The function takes in two arguments: data and expires_delta. The data argument is a dictionary containing the user's
-    email address, username, and password hash (the password hash will be used to log in after confirming their email).
-    The expires_delta argument is an optional float representing how long until the token should expire (in seconds). If no
-    expires_delta value is provided, then it defaults to 1 minute.
+    Функція create_email_confirmation_token створює маркер JWT, який використовується для підтвердження електронної
+    адреси користувача.Функція приймає два аргументи: дані та expires_delta. Аргумент даних - це словник, що містить
+    дані користувача адреса електронної пошти, ім’я користувача та хеш пароля (хеш пароля буде використано для входу
+    після підтвердження електронної пошти).
+    Аргумент expires_delta є необов’язковим значенням із плаваючою точкою, яке вказує, скільки часу має закінчитися
+    термін дії маркера (у секундах). Якщо значення expires_delta не вказано, за замовчуванням воно становить 5 хвилин.
 
     Args:
-    data: dict: Pass in the user's email address and username
-    expires_delta: float: Set the expiration time of the token
+    data: dict: Передайте дані, які ми хочемо закодувати в наш jwt
+    expires_delta: float: Встановлення термін дії маркера
 
     Returns:
-    A jwt token
+    Токен для підтвердження елетронної скриньки
     """
     to_encode = data.copy()
     if expires_delta:
@@ -143,19 +140,20 @@ async def create_email_confirmation_token(data: dict, expires_delta: float | Non
 
 
 async def get_current_user(token: HTTPAuthorizationCredentials = Depends(oauth2_scheme),
-                           session: Session = Depends(get_db), cache=Depends(cache.get_redis)):
+                           session: Session = Depends(get_db), cache=Depends(redis_cache.get_redis)):
     """
-    The get_current_user function is a dependency that will be used in the
-    get_current_active_user endpoint. It takes an optional token parameter, which
-    is passed by Depends(oauth2_scheme). The oauth2 scheme returns an object of type
-    HTTPAuthorizationCredentials, which contains the JWT in its credentials attribute.
+    Функція get_current_user — це залежність, яка використовуватиметься в
+    для отримання поточного користувача. Вона приймає додатковий параметр маркера, який
+    передається Depends(oauth2_scheme). Схема oauth2 повертає об’єкт типу
+    HTTPAuthorizationCredentials, який містить JWT.
 
     Args:
-    token: HTTPAuthorizationCredentials: Get the jwt token from the authorization header
-    db: Session: Access the database
+    token: HTTPAuthorizationCredentials: Отримайте маркер jwt із заголовка з поля "авторизація"
+    session: Session: Сессія для роботи з базою даних
+    cache: Redis: Редіс кліент для роботи з кешом
 
     Returns:
-    A user object, which is a user model
+    Об’єкт користувача, який є моделлю користувача
     """
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -177,7 +175,7 @@ async def get_current_user(token: HTTPAuthorizationCredentials = Depends(oauth2_
         email = payload.get("email")
         if email is None:
             raise credentials_exception
-    except JWTError as e:
+    except JWTError:
         raise credentials_exception
     user = session.query(User).filter_by(email=email).first()
     return user
@@ -185,17 +183,15 @@ async def get_current_user(token: HTTPAuthorizationCredentials = Depends(oauth2_
 
 async def send_in_background(email: str, host: str, token: str):
     """
-    The send_in_background function is a coroutine that sends an email to the user's email address.
-    It takes in three arguments:
-    -email: The user's email address, which will be used as the recipient of the message.
-    -host: The hostname of your website
+    Функція send_in_background — це співпрограма, яка надсилає електронний лист на адресу електронної пошти користувача.
 
     Args:
-    email: str: Specify the email address of the recipient
-    token: str: Pass the token to the email template
+    email: str: Передача електронної адреси одержувача
+    host: str: Передача host для даного сайту
+    token: str: Передача маркеру до шаблону електронної пошти
 
     Returns:
-    A coroutine object
+    Об'єкто співпрограмми
     """
     try:
         message = MessageSchema(
@@ -212,16 +208,17 @@ async def send_in_background(email: str, host: str, token: str):
 
 def get_email_form_confirmation_token(token: str):
     """
-    The get_email_form_confirmation_token function takes in a token as an argument.
-    It then tries to decode the token using the SECRET_EMAIL_KEY and ALGORITHM.
-    If it is successful, it returns the email address that was encoded into the token.
-    Otherwise, if there is a JWTError, it raises an HTTPException with status code 401 (Unauthorized) and detail message 'Could not validate credentials'.
+    Функція get_email_form_confirmation_token приймає маркер як аргумент.
+    Потім вона намагається декодувати маркер за допомогою SECRET_EMAIL_KEY і ALGORITHM.
+    У разі успіху повертається адреса електронної пошти яка закодована в маркері.
+    В іншому випадку, якщо виникає помилка JWTError, виникає HTTPException із кодом статусу 401 (неавторизовано) та
+    детальним повідомленням «Не вдалося перевірити облікові дані».
 
     Args:
-    token: str: Get the token from the url
+    token: str: Отримання маркера з url
 
     Returns:
-    The email address associated with the token
+    Адреса електронної пошти, пов’язана з маркером
     """
     try:
         payload = jwt.decode(token, SECRET_EMAIL_KEY, algorithms=[ALGORITHM])
@@ -233,14 +230,15 @@ def get_email_form_confirmation_token(token: str):
 
 def get_email_form_refresh_token(refresh_token: str):
     """
-    The get_email_form_refresh_token function takes a refresh token as an argument and returns the email associated with that refresh token.
-    It does this by decoding the JWT using the SECRET_REFRESH_KEY, which is stored in config.py.
+    Функція get_email_form_refresh_token приймає маркер оновлення (refresh_token) як аргумент і повертає пов’язану
+    електронну адресу з цим маркером оновлення. Він робить це шляхом декодування JWT за допомогою SECRET_REFRESH_KEY,
+    який зберігається в config.py.
 
     Args:
-    refresh_token: str: Pass in the refresh token that was sent by the client
+    refresh_token: str: Передайте маркер оновлення, надісланий клієнтом headers в полі Authorization
 
     Returns:
-    The email of the user who is trying to refresh the access token
+    Електронна адреса користувача, який намагається оновити маркер доступу
     """
     try:
         payload = jwt.decode(refresh_token, SECRET_REFRESH_KEY, algorithms=[ALGORITHM])

@@ -1,4 +1,5 @@
 import redis.asyncio as redis
+
 from PhotoShare.app.core.config import settings
 
 

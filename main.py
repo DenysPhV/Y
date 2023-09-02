@@ -10,6 +10,10 @@ app = FastAPI()
 
 @app.on_event("startup")
 async def startup():
+    """
+    The startup ініціалізує асинхронний Redis клієнт
+    :return: Список Task на виконяння в EvenLoop
+    """
     await RedisService.init()
 
 
