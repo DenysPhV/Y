@@ -9,12 +9,24 @@ from PhotoShare.app.schemas.user import UserModel
 from PhotoShare.app.services.auth_service import get_password_hash, create_access_token, create_refresh_token
 
 from PhotoShare.app.services.auth_service import get_current_user
+
+
 async def get_user_by_email(email: str, session: Session):
     user = session.query(User).filter_by(email=email).first()
     return user
 
 
 async def create_user(body: UserModel, session: Session):
+    """
+       The create_user function creates a new user in the database.
+
+       Arguments:
+           body (UserModel): Pass in the UserModel object that is created from the request body
+           session (Session): SQLAlchemy session object for accessing the database
+
+       Returns:
+           User: A user object, which is the same as what we return from our get_user function
+       """
     is_db_full = session.query(User).first()
     avatar = None
     try:
