@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 import pickle
 
-ACCESS_TOKEN_TTL = 60
+ACCESS_TOKEN_TTL = 900
 
 
 async def add_token_to_revoked(token: str, cache=None) -> dict:
