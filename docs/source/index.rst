@@ -12,15 +12,15 @@ Welcome to Y's documentation!
 
 Y main
 ===================
-.. automodule:: PhotoShare.main
+.. automodule::main
   :members:
   :undoc-members:
   :show-inheritance:
 
 
-Y repository Users
+Y repositories Users
 =========================
-.. automodule:: PhotoShare.app.repositories.users
+.. automodule::PhotoShare.app.repositories.users
   :members:
   :undoc-members:
   :show-inheritance:
