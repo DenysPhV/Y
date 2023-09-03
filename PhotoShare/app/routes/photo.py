@@ -21,9 +21,11 @@ cloudinary.config(
     secure=True
 )
 
+
+
 @router.get("/", response_model=List[PhotoResponse])
 def get_photos(limit: int = Query(10, ge=10, le=500), offset: int = Query(0, ge=0, le=200),
-                    db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+               db: Session = Depends(get_db), user: User = Depends(get_current_user)):
 
     """
     The get_photos function returns a list of photos.
@@ -65,8 +67,9 @@ def get_photo(photo_url: str, db: Session = Depends(get_db), user: User = Depend
 
 
 @router.post("/", response_model=PhotoResponse, status_code=status.HTTP_201_CREATED)
-def create_photo(body: PhotoModel, file: UploadFile = File(), db: Session = Depends(get_db), user: User = Depends(get_current_user)):
-    """
+def create_photo(body: PhotoModel, file: UploadFile = File(), db: Session = Depends(get_db),
+                 user: User = Depends(get_current_user)):
+
     The create_photo function creates a new photo in the database.
 
     :param body: PhotoModel: Create a new photo
@@ -84,7 +87,9 @@ def create_photo(body: PhotoModel, file: UploadFile = File(), db: Session = Depe
 
 
 @router.put("/{contact_id}", response_model=PhotoResponse)
-def update_contact(body: PhotoUpdate, photo_id: int = Path(ge=1), db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+def update_contact(body: PhotoUpdate, photo_id: int = Path(ge=1), db: Session = Depends(get_db),
+                   user: User = Depends(get_current_user)):
+
     """
     The update_contact function updates a contact in the database.
         Args:
@@ -128,4 +133,6 @@ def delete_contact(photo_id: int = Path(ge=1), db: Session = Depends(get_db), us
             status_code=status.HTTP_404_NOT_FOUND,
             detail="NOT FOUND",
         )
+
     return photo
+
