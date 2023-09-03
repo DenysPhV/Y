@@ -1,23 +1,31 @@
-import asyncio
-
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 from libgravatar import Gravatar
 
 from PhotoShare.app.models.user import User
 from PhotoShare.app.schemas.user import UserModel
-from PhotoShare.app.services.auth_service import get_password_hash, create_access_token, create_refresh_token
-
-from PhotoShare.app.services.auth_service import get_current_user
+from PhotoShare.app.services.auth_service import get_password_hash, create_access_token, create_refresh_token, get_current_user
 
 
 async def get_user_by_email(email: str, session: Session):
+    """
+    Функція get_user_by_email приймає електронний лист і сеанс,
+    і повертає користувача з цією електронною поштою. Якщо такого користувача не існує, повертається None.
+
+    Args:
+    email: str: Вказуємо email користувача, якого ми хочемо отримати
+    session: Session: Передаємо об’єкт сеансу функції
+
+    Returns:
+    Об’єкт користувача, який відповідає наданій адресі електронної пошти
+    """
     user = session.query(User).filter_by(email=email).first()
     return user
 
 
 async def create_user(body: UserModel, session: Session):
     """
+
        The create_user function creates a new user in the database.
 
        Arguments:
@@ -27,8 +35,17 @@ async def create_user(body: UserModel, session: Session):
        Returns:
            User: A user object, which is the same as what we return from our get_user function
        """
+    """    Функція create_user створює нового користуваа в базі данних
+
+        Args:
+        email: str: Вказуємо email і пароль в body запиту користувача, якого ми хочемо створити
+        session: Session: Передаємо об’єкт сеансу функції
+
+        Returns:
+        Об'єкт класу User користувача якаго ми створили в базі даних
+    """
+
     is_db_full = session.query(User).first()
-    avatar = None
     try:
         g = Gravatar(body.email)
         avatar = g.get_image()
@@ -47,60 +64,85 @@ async def create_user(body: UserModel, session: Session):
     return user
 
 
-async def set_user_confirmation(email: str, db: Session):
+async def set_user_confirmation(email: str, session: Session):
     """
-    The set_user_confirmation function sets the user's confirmation status to True.
+    Функція set_user_confirmation встановлює для статусу підтвердження користувача значення True.
 
     Args:
-    email: str: Get the user by email
-    db: Session: Pass the database session to the function
+    email: str: Email користувача
+    session: Session: Передача сеанса бази даних у функцію
 
     Returns:
-    The user object
+    Об'єкт користувача
     """
-    user = await get_user_by_email(email, db)
+    user = await get_user_by_email(email, session)
     if user:
         user.confirmed = True
-        db.commit()
+        session.commit()
     return user
 
 
 async def user_login(email: str, session: Session):
-    acess_token = None
-    refresh_token = None
+    """
+    Функція user_login вибирає користуваа з бази даних, email якого ми передали як аргумент у ф-цію. Створює access та
+    refresh токени
+
+    Args:
+    email: str: Email користувача
+    session: Session: Передача сеанса бази даних у функцію
+
+    Returns:
+    Об'єкт користувача, access та refresh_token
+    """
+    access_token = None
+    refresh_token = None                                                                                        # noqa
     user = await get_user_by_email(email, session)
     if user:
-        acess_token = await create_access_token(data={"email": user.email})
-        refresh_token = await create_refresh_token(data={"email": user.email})
+        access_token = await create_access_token(data={"email": user.email})
+        refresh_token = await create_refresh_token(data={"email": user.email})                                  # noqa
         user.refresh_token = refresh_token
         session.commit()
-    return user, acess_token, refresh_token
+    return user, access_token, refresh_token
+
+
+async def reset_refresh_token(user, session: Session):
+    """
+    Функція reset_refresh_token скидає значення поля refresh_token в базі данних
+
+    Args:
+    user: User: об'єкт користувача
+    session: Session: Передача сеанса бази даних у функцію
+
+    Returns:
+    співпрограмму для виконання в EventLoop
+    """
+    user.refresh_token = None
+    session.commit()
 
 
 async def refresh_token(email: str, token: str, session: Session):
     """
-    The refresh_token function is used to refresh the access token.
-    It takes in an email and a refresh token, then checks if the user exists and if their
-    refresh_token matches what was passed in. If it does not match, we set their refresh_token to None
-    and raise an HTTPException with status code 401 (Unauthorized). If it does match, we create a new
-    access token using the create_access_token function from fastapi-users' utils module. We also generate
-    a new refresh token using the same method as before. Then we update our database with this new information.
+    Функція refresh_token використовується для оновлення маркера доступу.
+    Вона приймає електронний лист і маркер оновлення, а потім перевіряє, чи існує користувач і чи
+    refresh_token відповідає тому, що було передано. Якщо він не збігається, ми встановлюємо для їх refresh_token
+    значення None і викликати HTTPException із кодом статусу 401 (Неавторизовано). Якщо він збігається, ми створюємо
+    новий маркер доступу (access_token). Ми також генеруємо новий маркер оновлення (refresh_token). Потім ми оновлюєм
+    нашу базу даних для зберігання нового (refresh_token).
 
     Args:
-    email: str: Get the user email
-    token: str: Get the token from the request
-    db: Session: Pass the database session to the function
+    email: str: Email користувача
+    token: str: Токен взятий з request
+    session: Session: Передача сеанса бази даних у функцію
 
     Returns:
-    The access_token and refresh_token
+    access_token та refresh_token
     """
     user = await get_user_by_email(email, session)
     if user.refresh_token != token:
-        user.refresh_token = None
-        session.commit()
+        await reset_refresh_token(user=user, session=session)
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid refresh token")
 
-    access_token = await create_access_token(data={"email": user.email})
+    access_token = await create_access_token(data={"email": user.email})                                        # noqa
     refresh_token = await create_refresh_token(data={"email": user.email})  # noqa
     user.refresh_token = refresh_token
     session.commit()

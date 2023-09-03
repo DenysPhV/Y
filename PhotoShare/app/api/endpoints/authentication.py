@@ -4,18 +4,21 @@ from fastapi import status
 from fastapi.security import HTTPAuthorizationCredentials
 
 from PhotoShare.app.core.database import get_db
-# from PhotoShare.app.models.user import User
+from PhotoShare.app.services.redis import RedisService as cache_redis                                           # noqa
+from PhotoShare.app.models.user import User
 import PhotoShare.app.repositories.users as user_repo
-from PhotoShare.app.schemas.user import UserRespond, UserModel, TokenResponse  # LoginResponse
+from PhotoShare.app.schemas.user import UserRespond, UserModel, TokenResponse
 from PhotoShare.app.services.auth_service import (
-    create_email_confirmation_token,
-    send_in_background,
-    get_email_form_confirmation_token,
-    get_email_form_refresh_token,
-    verify_password,
-    oauth2_scheme,
+        create_email_confirmation_token,
+        send_in_background,
+        get_email_form_confirmation_token,
+        get_email_form_refresh_token,
+        verify_password,
+        oauth2_scheme,
+        get_current_user
 )
-from PhotoShare.app.services.roles import Roles
+from PhotoShare.app.services.logout import add_token_to_revoked
+
 
 router_auth = APIRouter(prefix="/auth", tags=["authentication/authorization"])
 
@@ -62,7 +65,9 @@ async def login(body: UserModel, session: Session = Depends(get_db)):
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail='You are not authorized'
     )
-    user, access_token, refresh_token = await user_repo.user_login(body.email, session)
+    user, access_token, refresh_token = await user_repo.user_login(body.email, session)                         # noqa
+    if user is None:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User not Found")
     if not user.confirmed:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Your email not confirmed')
     if not verify_password(body.password, user.password):
@@ -72,7 +77,7 @@ async def login(body: UserModel, session: Session = Depends(get_db)):
 
 @router_auth.get("/refresh_token", response_model=TokenResponse, status_code=status.HTTP_200_OK,
                  summary="Отримати нові access та refresh_token")
-async def refresh_token(credentials: HTTPAuthorizationCredentials = Depends(oauth2_scheme),
+async def refresh_token(token: HTTPAuthorizationCredentials = Depends(oauth2_scheme),
                         session: Session = Depends(get_db)):
     """
     Функція refresh_token використовується для оновлення токену(маркера) доступу.
@@ -85,9 +90,9 @@ async def refresh_token(credentials: HTTPAuthorizationCredentials = Depends(oaut
     Returns:
     Словник із access_token, refresh_token і token_type
     """
-    email = get_email_form_refresh_token(credentials.credentials)
-    token = credentials.credentials
-    access_token, refresh_token = await user_repo.refresh_token(email, token, session)  # noqa
+    token = token.credentials
+    email = get_email_form_refresh_token(token)
+    access_token, refresh_token = await user_repo.refresh_token(email, token, session)                          # noqa
     return {"access_token": access_token, "refresh_token": refresh_token, "token_type": "bearer"}
 
 
@@ -109,3 +114,24 @@ async def email_confirmation(token: str, session: Session = Depends(get_db)):
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid email token")
     return {'activation': 'you email is confirmed'}
+
+
+@router_auth.get("/logout", summary="Виконання logout для авторизованного користувача")
+async def logout(token: HTTPAuthorizationCredentials = Depends(oauth2_scheme),
+                 user: User = Depends(get_current_user),
+                 session: Session = Depends(get_db),
+                 cache=Depends(cache_redis.get_redis)):
+    """
+    Функція logout використовується для відкликання access_token та refresh_token користувача.
+
+    Args:
+    token: Отримання
+    cache: Отримання redis
+
+    Returns:
+    Словник з ще валідними відкликанними токенами
+    """
+    token = token.credentials
+    token_revoked = await add_token_to_revoked(token, cache=cache)
+    await user_repo.reset_refresh_token(user=user, session=session)
+    return {'tokens_revoked': token_revoked}
