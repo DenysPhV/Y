@@ -4,7 +4,7 @@ from libgravatar import Gravatar
 
 from PhotoShare.app.models.user import User
 from PhotoShare.app.schemas.user import UserModel
-from PhotoShare.app.services.auth_service import get_password_hash, create_access_token, create_refresh_token, get_current_user
+from PhotoShare.app.services.auth_service import get_password_hash, create_access_token, create_refresh_token
 
 
 async def get_user_by_email(email: str, session: Session):
@@ -32,8 +32,12 @@ async def create_user(body: UserModel, session: Session):
            body (UserModel): Pass in the UserModel object that is created from the request body
            session (Session): SQLAlchemy session object for accessing the database
 
+
        Returns:
            User: A user object, which is the same as what we return from our get_user function
+           :param body: UserModel: Pass the user data to the function
+           :param session: Session: Access the database
+           :return: The new user object
        """
     """    Функція create_user створює нового користуваа в базі данних
 
@@ -53,7 +57,8 @@ async def create_user(body: UserModel, session: Session):
         raise err
     user = await get_user_by_email(body.email, session)
     if user:
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail='User exists already')
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT,
+                            detail='User exists already')
     hashed_password = get_password_hash(password=body.password)
     user = User(email=body.email, password=hashed_password, avatar=avatar)
     if not is_db_full:
@@ -95,11 +100,11 @@ async def user_login(email: str, session: Session):
     Об'єкт користувача, access та refresh_token
     """
     access_token = None
-    refresh_token = None                                                                                        # noqa
+    refresh_token = None  # noqa
     user = await get_user_by_email(email, session)
     if user:
         access_token = await create_access_token(data={"email": user.email})
-        refresh_token = await create_refresh_token(data={"email": user.email})                                  # noqa
+        refresh_token = await create_refresh_token(data={"email": user.email})  # noqa
         user.refresh_token = refresh_token
         session.commit()
     return user, access_token, refresh_token
@@ -124,9 +129,9 @@ async def refresh_token(email: str, token: str, session: Session):
     """
     Функція refresh_token використовується для оновлення маркера доступу.
     Вона приймає електронний лист і маркер оновлення, а потім перевіряє, чи існує користувач і чи
-    refresh_token відповідає тому, що було передано. Якщо він не збігається, ми встановлюємо для їх refresh_token
+    refresh_token відповідає тому, що було передано. Якщо він не збігається, ми встановлюємо для їхніх refresh_token
     значення None і викликати HTTPException із кодом статусу 401 (Неавторизовано). Якщо він збігається, ми створюємо
-    новий маркер доступу (access_token). Ми також генеруємо новий маркер оновлення (refresh_token). Потім ми оновлюєм
+    новий маркер доступу (access_token). Ми також генеруємо новий маркер оновлення (refresh_token). Потім ми оновлюємо
     нашу базу даних для зберігання нового (refresh_token).
 
     Args:
@@ -142,7 +147,7 @@ async def refresh_token(email: str, token: str, session: Session):
         await reset_refresh_token(user=user, session=session)
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid refresh token")
 
-    access_token = await create_access_token(data={"email": user.email})                                        # noqa
+    access_token = await create_access_token(data={"email": user.email})  # noqa
     refresh_token = await create_refresh_token(data={"email": user.email})  # noqa
     user.refresh_token = refresh_token
     session.commit()
