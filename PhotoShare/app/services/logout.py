@@ -6,13 +6,12 @@ ACCESS_TOKEN_TTL = 60*15
 
 async def add_token_to_revoked(token: str, cache=None) -> dict:
     """
-    The add_token_to_revoked function adds a token to the revoked tokens list.
+    Функція додає дійсний access_token до відкликаних з метою унеможливлення його подальшого використання
     Args:
-        token (str): The access_token to be added to the revoked tokens list.
-
-    :param token: str: Pass the token to be revoked
-    :param cache: Pass in the cache object
-    :return: A dictionary of revoked tokens
+    token (str): Access_token, який буде додано до списку відкликаних маркерів.
+    cache: Передаємо об'єкт Redis
+    Returns:
+    Словник відкликаних токенів
     """
     key = await get_key_from_token(token=token)
     token_ttl = datetime.utcnow() + timedelta(seconds=ACCESS_TOKEN_TTL)
@@ -26,32 +25,54 @@ async def add_token_to_revoked(token: str, cache=None) -> dict:
     return token_revoked
 
 
-async def token_validation(token: str, tokens: dict) -> bool:
-    if datetime.utcnow() < tokens.get(token):
-        return True
-    return False
-
-
-async def update_valid_tokens_redis(tokens: dict | None = None, cache=None):
+async def update_valid_tokens_redis(tokens: dict, cache=None):
+    """
+    Функція оноввлює в кеші ще валідні по часу відкликані токені
+    Args:
+    tokens: Словник токенів для запису в Redis кеш
+    cache: Redis клієнт
+    Returns:
+    Співпрограмму для EventLoop
+    """
     await cache.set('tokens', pickle.dumps(tokens))                                                             # noqa
 
 
 async def get_revoked_tokens(cache) -> dict:
+    """
+    Функція отримує усі відкликані токени з кешу
+    :cache: Redis кліент
+    Returns:
+    словник відкликаних токенів
+    """
     tokens_revoked_redis = await cache.get('tokens')
     if tokens_revoked_redis:
         return pickle.loads(tokens_revoked_redis)
 
 
 async def get_valid_token_from_revoked(revoked_tokens: dict, cache=None) -> dict:
+    """
+    Функція нормалізує словник усіх відкладених токенів. Для кожного відкладеного токена перевіряється час його
+    валідності. Як токен вже не валідний, тоді він повністю видаляється зі списку відкликаних токенів.
+    revoked_tokens: Словник з усіма відкладеними токенами
+    cache: Redis клієнт для роботи з кешом
+    Returns:
+    Нормалізований словник з відкладеними токенами
+    """
     tokens_valid = {}
     if revoked_tokens:
-        for t in revoked_tokens:
-            is_valid = await token_validation(t, revoked_tokens)
-            if is_valid:
-                tokens_valid.update({t: revoked_tokens.get(t)})
-    await update_valid_tokens_redis(tokens_valid, cache=cache)
+        tokens_valid = list(filter(lambda x: datetime.utcnow() < x[1], revoked_tokens.items()))
+        tokens_valid = {box[0]: box[1] for box in tokens_valid}
+        await update_valid_tokens_redis(tokens_valid, cache=cache)
     return tokens_valid
 
 
 async def get_key_from_token(token: str) -> str:
+    """
+    Функція виділяє унікальну(підписану) частину токена. Оскільки вона не повторюється, то вона буде використовуватись
+    як ключ в словнику відкладених токенів
+    Args:
+    :token: Токен доступу
+    Args:
+    Поветається тільки підписана частина вхідного токена
+    """
     return token.split(".")[2]
