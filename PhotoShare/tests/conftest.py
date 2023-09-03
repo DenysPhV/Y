@@ -5,8 +5,9 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from main import app
-from ..app.models.base import Base
-from ..app.core.database import get_db
+from PhotoShare.app.models.base import Base
+from PhotoShare.app.core.database import get_db
+
 
 SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
 
