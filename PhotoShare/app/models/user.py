@@ -1,8 +1,7 @@
 from sqlalchemy import String, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, declarative_base
 from PhotoShare.app.core.database import engine
-
-Base = declarative_base()
+from PhotoShare.app.models.base import Base
 
 
 class User(Base):
