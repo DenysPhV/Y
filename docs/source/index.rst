@@ -25,6 +25,13 @@ Y repositories Users
   :undoc-members:
   :show-inheritance:
 
+Y repositories Comments
+=========================
+.. automodule::PhotoShare.app.repositories.comments
+  :members:
+  :undoc-members:
+  :show-inheritance:
+
 
 Indices and tables
 ==================

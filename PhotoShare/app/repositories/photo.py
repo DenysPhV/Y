@@ -13,8 +13,11 @@ def get_photos(limit: int, offset: int, db: Session, user: User):
     The get_photos function returns a list of photos from the database.
         Args:
             limit (int): The number of photos to return.
-            offset (int): The starting point for the query.  This is used for pagination, so that you can get more than one page of results at a time.
-                For example, if you have 100 total results and want to get 10 per page, set limit=10 and offset=0 on your first request; then set limit=10 and offset=10 on your second request; etc... until you've gotten all 100 results back in chunks of 10 each time.&quot;
+            offset (int): The starting point for the query.  This is used for pagination, so that you can get more than
+             one page of results at a time.
+                For example, if you have 100 total results and want to get 10 per page, set limit=10 and
+                offset=0 on your first request; then set limit=10 and offset=10 on your second request;
+                 etc... until you've gotten all 100 results back in chunks of 10 each time.&quot;
 
     :param limit: int: Limit the number of photos returned
     :param offset: int: Specify the number of records to skip before starting to return rows
@@ -76,7 +79,8 @@ def update_photo(photo_id: int, body: PhotoUpdate, db: Session, user: User):
         Args:
             photo_id (int): The id of the photo to be updated.
             body (PhotoUpdate): A PhotoUpdate object containing a new description for the specified photo.
-                This is passed as JSON data in an HTTP request body, and converted into a PhotoUpdate object by FastAPI's Pydantic library.
+                This is passed as JSON data in an HTTP request body, and converted into a PhotoUpdate object by
+                FastAPI's Pydantic library.
                 See models/photo_update for more information on this class and its attributes.
 
     :param photo_id: int: Identify the photo to be updated
@@ -103,7 +107,8 @@ def remove_photo(photo_id: int, db: Session, user: User):
     The remove_photo function removes a photo from the database.
         Args:
             photo_id (int): The id of the photo to be removed.
-            db (Session): A connection to the database.  This is used for querying and deleting photos from the database.
+            db (Session): A connection to the database.  This is used for querying and deleting photos from
+             the database.
             user (User): The user who owns this particular photo, and therefore has permission to delete it.
     
     :param photo_id: int: Identify the photo to be removed
@@ -111,7 +116,7 @@ def remove_photo(photo_id: int, db: Session, user: User):
     :param user: User: Check if the user is authorized to delete a photo
     :return: The photo object that was deleted
     :doc-author: Trelent
-    """`
+    """
     sq = select(Photo).filter_by(id=photo_id, user=user)
     result = db.execute(sq)
     photo = result.scalar_one_or_none()
