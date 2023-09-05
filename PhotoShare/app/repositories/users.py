@@ -23,6 +23,13 @@ async def get_user_by_email(email: str, session: Session):
     return user
 
 
+async def update_user(user: User, session: Session):
+    session.add(user)
+    session.commit()
+    session.refresh(user)
+    return user
+
+
 async def create_user(body: UserModel, session: Session):
     """
     Функція create_user створює нового користуваа в базі данних
@@ -47,9 +54,10 @@ async def create_user(body: UserModel, session: Session):
     user = User(email=body.email, password=hashed_password, avatar=avatar)
     if not is_db_full:
         user.role = 'admin'
-    session.add(user)
-    session.commit()
-    session.refresh(user)
+    user.username = None if body.username == "string" else body.username
+    user.username = None if body.first_name == "string" else body.first_name
+    user.username = None if body.last_name == "string" else body.last_name
+    await update_user(user, session)
     return user
 
 
