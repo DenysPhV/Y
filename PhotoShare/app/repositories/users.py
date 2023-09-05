@@ -3,8 +3,15 @@ from sqlalchemy.orm import Session
 from libgravatar import Gravatar
 
 from PhotoShare.app.models.user import User
-from PhotoShare.app.schemas.user import UserModel
+from PhotoShare.app.schemas.user import UserRegisterModel
 from PhotoShare.app.services.auth_service import get_password_hash, create_access_token, create_refresh_token
+
+
+async def update_user(user: User, session: Session):
+    session.add(user)
+    session.commit()
+    session.refresh(user)
+    return user
 
 
 async def get_user_by_email(email: str, session: Session):
@@ -30,7 +37,7 @@ async def update_user(user: User, session: Session):
     return user
 
 
-async def create_user(body: UserModel, session: Session):
+async def create_user(body: UserRegisterModel, session: Session):
     """
     Функція create_user створює нового користуваа в базі данних
 
@@ -51,13 +58,17 @@ async def create_user(body: UserModel, session: Session):
     if user:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail='User exists already')
     hashed_password = get_password_hash(password=body.password)
-    user = User(email=body.email, password=hashed_password, avatar=avatar)
+    user = User(email=body.email,
+                password=hashed_password,
+                avatar=avatar,
+                username=body.username,
+                )
+    user.first_name = None if body.first_name == "string" else body.first_name
+    user.last_name = None if body.last_name == "string" else body.last_name
+    user.username = None if body.username == "string" else body.username
     if not is_db_full:
         user.role = 'admin'
-    user.username = None if body.username == "string" else body.username
-    user.username = None if body.first_name == "string" else body.first_name
-    user.username = None if body.last_name == "string" else body.last_name
-    await update_user(user, session)
+    user = await update_user(user, session)
     return user
 
 
