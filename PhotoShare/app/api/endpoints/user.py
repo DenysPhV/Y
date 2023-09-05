@@ -27,6 +27,7 @@ async def get_user_profile(email: str, session: Session = Depends(get_db)):
         'images_uploaded': user.uploaded_photos
     }
 
+
 @router_user.get("/me", response_model=UserRespond, status_code=status.HTTP_200_OK,
                  summary='Отримати інформацію про користувача')
 async def me(user: User = Depends(get_current_user)):
@@ -59,15 +60,7 @@ async def edit_lastname(body: UserLastname, user: User = Depends(get_current_use
 @router_user.patch("/edit/avatar", response_model=UserRespond, status_code=status.HTTP_200_OK)
 async def upload_avatar(file: UploadFile = File(), user: User = Depends(get_current_user),
                         session: Session = Depends(get_db)):
-    cloudinary.config(
-        cloud_name="dojm1hfxr",
-        api_key="224227453225525",
-        api_secret="kJ9D2rxqqmdRT9T_VhEbo6EpUvs",
-        # cloud_name="demnd161p",
-        # api_key="387793814646383",
-        # api_secret="wdF9CRgOI99GFvYVYZ_-keQ_yzw",
-        secure=True,
-    )
+    ...
     public_id = f"Y/{user.email}/avatar/" + hashlib.sha256(file.filename.encode()).hexdigest()[:10]
     image = cloudinary.uploader.upload(file.file, public_id=public_id, overwrite=True)
     url = cloudinary.CloudinaryImage(public_id).build_url(width=250, height=250, crop='fill',
