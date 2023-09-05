@@ -70,8 +70,6 @@ async def login(body: UserLoginModel, session: Session = Depends(get_db)):
     user, access_token, refresh_token = await user_repo.user_login(body.email, session)                         # noqa
     if user is None:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User not Found")
-    if not user.confirmed:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Your email not confirmed')
     if not verify_password(body.password, user.password):
         raise credential_exception
     return {"access_token": access_token, "refresh_token": refresh_token, "token_type": "bearer"}

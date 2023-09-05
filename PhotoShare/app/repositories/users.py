@@ -106,6 +106,8 @@ async def user_login(email: str, session: Session):
     refresh_token = None                                                                                        # noqa
     user = await get_user_by_email(email, session)
     if user:
+        if not user.confirmed:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Your email not confirmed')
         access_token = await create_access_token(data={"email": user.email})
         refresh_token = await create_refresh_token(data={"email": user.email})                                  # noqa
         user.refresh_token = refresh_token
