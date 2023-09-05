@@ -140,6 +140,16 @@ async def logout(token: HTTPAuthorizationCredentials = Depends(oauth2_scheme),
 
 @router_auth.patch("/banned/{email}", status_code=status.HTTP_200_OK, dependencies=[Depends(Roles(['admin']))])
 async def banned_user(email: str, session: Session = Depends(get_db)):
+    """
+    Функція banned_user використовується для встановлення заборони доступу до додатку певного користувача.
+
+    Args:
+    email: str: Отримання email користувача якому нам треба заборонити заходити в додаток
+    session: Session: Отримання сессії бази данних
+
+    Returns:
+    json вівдповідь заборони користувача
+    """
     user = await user_repo.get_user_by_email(email=email, session=session)
     user.banned = True
     user = await user_repo.update_user(user, session)
