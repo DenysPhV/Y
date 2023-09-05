@@ -3,8 +3,8 @@ from typing import List
 from datetime import datetime
 
 from sqlalchemy.orm import Session
-from sqlalchemy.sql import extract
-import sqlalchemy as sa
+# from sqlalchemy.sql import extract
+# import sqlalchemy as sa
 
 
 from PhotoShare.app.models.comment import Comment

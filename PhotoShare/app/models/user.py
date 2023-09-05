@@ -1,7 +1,9 @@
+
 from datetime import datetime
 from sqlalchemy import String, Boolean, func
 from sqlalchemy.sql.sqltypes import DateTime
-from sqlalchemy.orm import Mapped, mapped_column, declarative_base
+from sqlalchemy.orm import Mapped, mapped_column
+
 from PhotoShare.app.core.database import engine
 from PhotoShare.app.models.base import Base
 
