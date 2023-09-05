@@ -115,12 +115,6 @@ async def upload_avatar(file: UploadFile = File(), user: User = Depends(get_curr
     user: Повертаємо user з оновленими даними
     """
     ...
-    public_id = f"Y/{user.email}/avatar/" + hashlib.sha256(file.filename.encode()).hexdigest()[:10]
-    image = cloudinary.uploader.upload(file.file, public_id=public_id, overwrite=True)
-    url = cloudinary.CloudinaryImage(public_id).build_url(width=250, height=250, crop='fill',
-                                                          version=image.get('version'))
-    user.avatar = url
-    user = await update_user(user, session)
     return user
 
 
