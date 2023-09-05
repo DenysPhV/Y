@@ -18,8 +18,8 @@ class Comment(Base):
     user = relationship('User', backref='comments')
     photo_id = Column('photo_id', ForeignKey('photo.id', ondelete='CASCADE'), default=None)
     photo = relationship('Photo', backref='comments')
-    #When a user is deleted I wish all their comments to remain.
-    #But if a post is deleted all it's comments will go down with it.
+    # When a user is deleted I wish all their comments to remain.
+    # But if a post is deleted all it's comments will go down with it.
+
 
 Base.metadata.create_all(bind=engine)
-
