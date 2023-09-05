@@ -3,6 +3,7 @@ from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 from PhotoShare.app.api.endpoints.authentication import router_auth
+from PhotoShare.app.api.endpoints.comments import router_comments
 from PhotoShare.app.core.database import get_db
 from PhotoShare.app.services.redis import RedisService
 app = FastAPI()
@@ -46,3 +47,4 @@ def healthchecker(db: Session = Depends(get_db)):
 
 
 app.include_router(router_auth)
+app.include_router(router_comments)

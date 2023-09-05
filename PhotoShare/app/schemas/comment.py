@@ -12,7 +12,9 @@ class CommentModel(BaseModel):
 class CommentResponse(CommentModel):
     id: int
     created_at: datetime
-    updated_at: List[datetime]
+    updated_at: List[datetime] | None
+    user_id: int
+    photo_id: int
 
     class Config:
         orm_mode = True
