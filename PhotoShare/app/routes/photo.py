@@ -70,7 +70,7 @@ def get_photo(photo_url: str, db: Session = Depends(get_db), user: User = Depend
 def create_photo(body: PhotoModel, file: UploadFile = File(), db: Session = Depends(get_db),
                  user: User = Depends(get_current_user)):
 
-    The create_photo function creates a new photo in the database.
+    """The create_photo function creates a new photo in the database.
 
     :param body: PhotoModel: Create a new photo
     :param file: UploadFile: Upload the file to cloudinary
@@ -115,13 +115,13 @@ def update_contact(body: PhotoUpdate, photo_id: int = Path(ge=1), db: Session = 
 @router.delete("/{contact_id}", response_model=PhotoResponse)
 def delete_contact(photo_id: int = Path(ge=1), db: Session = Depends(get_db), user: User = Depends(get_current_user)):
     """
-    The delete_contact function deletes a contact from the database.
+        The delete_contact function deletes a contact from the database.
         Args:
             photo_id (int): The id of the contact to delete.
             db (Session, optional): SQLAlchemy Session. Defaults to Depends(get_db).
             user (User, optional): User object containing information about the current user's session. Defaults to Depends(get_current_user).
 
-    :param photo_id: int: Specify the photo to be deleted
+         :param photo_id: int: Specify the photo to be deleted
     :param db: Session: Get a database session
     :param user: User: Get the current user
     :return: The deleted contact
