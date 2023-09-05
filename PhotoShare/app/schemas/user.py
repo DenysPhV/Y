@@ -35,6 +35,7 @@ class UserRespond(BaseModel):
     last_name: str | None
     uploaded_photos: int
     avatar: str
+    role: str
 
 
 class TokenResponse(BaseModel):

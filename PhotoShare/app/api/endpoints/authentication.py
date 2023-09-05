@@ -4,7 +4,8 @@ from fastapi import status
 from fastapi.security import HTTPAuthorizationCredentials
 
 from PhotoShare.app.core.database import get_db
-from PhotoShare.app.services.redis import RedisService as cache_redis                                           # noqa
+from PhotoShare.app.services.redis import RedisService as cache_redis                                            # noqa
+from PhotoShare.app.services.roles import Roles
 from PhotoShare.app.models.user import User
 import PhotoShare.app.repositories.users as user_repo
 from PhotoShare.app.schemas.user import (
@@ -137,3 +138,9 @@ async def logout(token: HTTPAuthorizationCredentials = Depends(oauth2_scheme),
     return {'tokens_revoked': token_revoked}
 
 
+@router_auth.patch("/banned/{email}", status_code=status.HTTP_200_OK, dependencies=[Depends(Roles(['admin']))])
+async def banned_user(email: str, session: Session = Depends(get_db)):
+    user = await user_repo.get_user_by_email(email=email, session=session)
+    user.banned = True
+    user = await user_repo.update_user(user, session)
+    return {f'user {user.email}': 'BANNED'}
