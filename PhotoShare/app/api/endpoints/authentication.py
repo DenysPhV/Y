@@ -4,10 +4,13 @@ from fastapi import status
 from fastapi.security import HTTPAuthorizationCredentials
 
 from PhotoShare.app.core.database import get_db
-from PhotoShare.app.services.redis import RedisService as cache_redis                                           # noqa
+from PhotoShare.app.services.redis import RedisService as cache_redis                                            # noqa
+from PhotoShare.app.services.roles import Roles
 from PhotoShare.app.models.user import User
 import PhotoShare.app.repositories.users as user_repo
-from PhotoShare.app.schemas.user import UserRespond, UserModel, TokenResponse
+from PhotoShare.app.schemas.user import (
+    UserRespond, UserRegisterModel, UserLoginModel, TokenResponse
+)
 from PhotoShare.app.services.auth_service import (
         create_email_confirmation_token,
         send_in_background,
@@ -20,12 +23,12 @@ from PhotoShare.app.services.auth_service import (
 from PhotoShare.app.services.logout import add_token_to_revoked
 
 
-router_auth = APIRouter(prefix="/auth", tags=["authentication/authorization"])
+router_auth = APIRouter(prefix="/auth", tags=["authentication / authorization"])
 
 
 @router_auth.post("/signup", response_model=UserRespond, status_code=status.HTTP_201_CREATED,
                   summary='Створення користувача')
-async def signup(body: UserModel, background_task: BackgroundTasks,
+async def signup(body: UserRegisterModel, background_task: BackgroundTasks,
                  request: Request, session: Session = Depends(get_db)):
     """
     Функція реєстрації створює нового користувача в базі даних.
@@ -48,7 +51,7 @@ async def signup(body: UserModel, background_task: BackgroundTasks,
 
 @router_auth.post("/login", response_model=TokenResponse, status_code=status.HTTP_200_OK,
                   summary='Логінізація користувача')
-async def login(body: UserModel, session: Session = Depends(get_db)):
+async def login(body: UserLoginModel, session: Session = Depends(get_db)):
     """
     Функція входу використовується для автентифікації користувача.
     Вона приймає адресу електронної пошти та пароль користувача як вхідні дані,
@@ -68,8 +71,6 @@ async def login(body: UserModel, session: Session = Depends(get_db)):
     user, access_token, refresh_token = await user_repo.user_login(body.email, session)                         # noqa
     if user is None:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User not Found")
-    if not user.confirmed:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Your email not confirmed')
     if not verify_password(body.password, user.password):
         raise credential_exception
     return {"access_token": access_token, "refresh_token": refresh_token, "token_type": "bearer"}
@@ -135,3 +136,21 @@ async def logout(token: HTTPAuthorizationCredentials = Depends(oauth2_scheme),
     token_revoked = await add_token_to_revoked(token, cache=cache)
     await user_repo.reset_refresh_token(user=user, session=session)
     return {'tokens_revoked': token_revoked}
+
+
+@router_auth.patch("/banned/{email}", status_code=status.HTTP_200_OK, dependencies=[Depends(Roles(['admin']))])
+async def banned_user(email: str, session: Session = Depends(get_db)):
+    """
+    Функція banned_user використовується для встановлення заборони доступу до додатку певного користувача.
+
+    Args:
+    email: str: Отримання email користувача якому нам треба заборонити заходити в додаток
+    session: Session: Отримання сессії бази данних
+
+    Returns:
+    json вівдповідь заборони користувача
+    """
+    user = await user_repo.get_user_by_email(email=email, session=session)
+    user.banned = True
+    user = await user_repo.update_user(user, session)
+    return {f'user {user.email}': 'BANNED'}
