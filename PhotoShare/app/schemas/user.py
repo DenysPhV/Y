@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from pydantic import BaseModel, EmailStr
 
 
@@ -12,6 +14,16 @@ class UserRegisterModel(BaseModel):
     username: str
     first_name: str
     last_name: str
+
+
+class UserProfileModel(BaseModel):
+    user_email: EmailStr
+    user_first_name: str
+    user_last_name: str
+    user_username: str
+    created_at: datetime
+    avatar: str
+    images_uploaded: int
 
 
 class UserRespond(BaseModel):
