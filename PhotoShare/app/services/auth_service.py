@@ -167,7 +167,7 @@ async def get_current_user(token: HTTPAuthorizationCredentials = Depends(oauth2_
     if await get_key_from_token(token) in tokens_revoked_valid:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail='YOUR TOKEN HAS BEEN REVOKE'
+            detail='You are not authorizated'
         )
     try:
         # Decode JWT

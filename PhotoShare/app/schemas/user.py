@@ -17,13 +17,13 @@ class UserRegisterModel(BaseModel):
 
 
 class UserProfileModel(BaseModel):
-    user_email: EmailStr
-    user_first_name: str
-    user_last_name: str
-    user_username: str
+    email: EmailStr
+    first_name: str
+    last_name: str
+    username: str
     created_at: datetime
     avatar: str
-    images_uploaded: int
+    uploaded_photos: int
 
 
 class UserRespond(BaseModel):

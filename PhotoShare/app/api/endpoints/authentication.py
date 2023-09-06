@@ -69,8 +69,6 @@ async def login(body: UserLoginModel, session: Session = Depends(get_db)):
         detail='You are not authorized'
     )
     user, access_token, refresh_token = await user_repo.user_login(body.email, session)                         # noqa
-    if user is None:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User not Found")
     if not verify_password(body.password, user.password):
         raise credential_exception
     return {"access_token": access_token, "refresh_token": refresh_token, "token_type": "bearer"}
@@ -135,7 +133,7 @@ async def logout(token: HTTPAuthorizationCredentials = Depends(oauth2_scheme),
     token = token.credentials
     token_revoked = await add_token_to_revoked(token, cache=cache)
     await user_repo.reset_refresh_token(user=user, session=session)
-    return {'tokens_revoked': token_revoked}
+    return {'token_revoked': token}
 
 
 @router_auth.patch("/banned/{email}", status_code=status.HTTP_200_OK, dependencies=[Depends(Roles(['admin']))])
@@ -151,6 +149,8 @@ async def banned_user(email: str, session: Session = Depends(get_db)):
     json вівдповідь заборони користувача
     """
     user = await user_repo.get_user_by_email(email=email, session=session)
+    if user is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'User not found')
     user.banned = True
     user = await user_repo.update_user(user, session)
     return {f'user {user.email}': 'BANNED'}

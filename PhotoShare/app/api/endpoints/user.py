@@ -10,6 +10,8 @@ from PhotoShare.app.services.auth_service import get_current_user
 from PhotoShare.app.schemas.user import UserRespond, UserFirstname, UserLastname, UserProfileModel, UserUsername
 from PhotoShare.app.core.database import get_db
 from PhotoShare.app.repositories.users import update_user, get_user_by_email
+from PhotoShare.app.core.config import settings
+
 
 router_user = APIRouter(prefix="/user", tags=["user"])
 
@@ -28,15 +30,7 @@ async def get_user_profile(email: str, session: Session = Depends(get_db)):
     Словник інформації про користувача
     """
     user = await get_user_by_email(email=email, session=session)
-    return {
-        'user_email': user.email,
-        'user_first_name': user.first_name,
-        'user_last_name': user.last_name,
-        'user_username': user.username,
-        'created_at': user.created_at,
-        'avatar': user.avatar,
-        'images_uploaded': user.uploaded_photos
-    }
+    return user
 
 
 @router_user.get("/me", response_model=UserRespond, status_code=status.HTTP_200_OK,
@@ -114,7 +108,18 @@ async def upload_avatar(file: UploadFile = File(), user: User = Depends(get_curr
     Returns:
     user: Повертаємо user з оновленими даними
     """
-    ...
+    cloudinary.config(
+        cloud_name=settings.cloudinary_name,
+        api_key=settings.cloudinary_api_key,
+        api_secret=settings.cloudinary_secret,
+        secure=True
+    )
+    public_id = hashlib.sha256(file.filename.encode()).hexdigest()[:10]
+    image = cloudinary.uploader.upload(file.file, public_id=public_id, overwrite=True)
+    version = image.get('version')
+    url = cloudinary.CloudinaryImage(public_id).build_url(width=250, height=250, crop='fill', version=version)
+    user.avatar = url
+    user = await update_user(user=user, session=session)
     return user
 
 

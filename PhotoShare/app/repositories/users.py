@@ -8,6 +8,14 @@ from PhotoShare.app.services.auth_service import get_password_hash, create_acces
 
 
 async def update_user(user: User, session: Session):
+    """
+    Функція update_user user та session для роботи з базою даних
+    Args:
+    user: User: об'єкт користувача
+    session: Session: Передаємо об’єкт сеансу функції
+    Returns:
+    Оновлений об’єкт користувача
+    """
     session.add(user)
     session.commit()
     session.refresh(user)
@@ -30,39 +38,17 @@ async def get_user_by_email(email: str, session: Session):
     return user
 
 
-async def update_user(user: User, session: Session):
-    session.add(user)
-    session.commit()
-    session.refresh(user)
-    return user
-
-
 async def create_user(body: UserRegisterModel, session: Session):
     """
+    Функція create_user створює нового користуваа в базі данних
 
-       The create_user function creates a new user in the database.
+    Args:
+    email: str: Вказуємо email і пароль в body запиту користувача, якого ми хочемо створити
+    session: Session: Передаємо об’єкт сеансу функції
 
-       Arguments:
-           body (UserModel): Pass in the UserModel object that is created from the request body
-           session (Session): SQLAlchemy session object for accessing the database
-
-
-       Returns:
-           User: A user object, which is the same as what we return from our get_user function
-           :param body: UserModel: Pass the user data to the function
-           :param session: Session: Access the database
-           :return: The new user object
-       """
-    """    Функція create_user створює нового користуваа в базі данних
-
-        Args:
-        email: str: Вказуємо email і пароль в body запиту користувача, якого ми хочемо створити
-        session: Session: Передаємо об’єкт сеансу функції
-
-        Returns:
-        Об'єкт класу User користувача якаго ми створили в базі даних
+    Returns:
+    Об'єкт класу User користувача якаго ми створили в базі даних
     """
-
     is_db_full = session.query(User).first()
     try:
         g = Gravatar(body.email)
@@ -123,14 +109,17 @@ async def user_login(email: str, session: Session):
     user = await get_user_by_email(email, session)
     if user:
         if user.banned:
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Operation not permitted')
-        if not user.confirmed :
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail='Operation not permitted')
+        if not user.confirmed:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Your email not confirmed')
         access_token = await create_access_token(data={"email": user.email})
         refresh_token = await create_refresh_token(data={"email": user.email})  # noqa
         user.refresh_token = refresh_token
         session.commit()
-    return user, access_token, refresh_token
+        return user, access_token, refresh_token
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not Found")
+
+
 
 
 async def reset_refresh_token(user, session: Session):
