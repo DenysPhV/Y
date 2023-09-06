@@ -29,9 +29,9 @@ class Settings(BaseSettings):
     redis_host: str
     redis_port: int
 
-    cloudinary_name: str
-    cloudinary_api_key: str
-    cloudinary_secret :str
+    # cloudinary_name: str
+    # cloudinary_api_key: str
+    # cloudinary_secret: str
 
     class Config:
         env_file = Path(__file__).parent.joinpath(".env")

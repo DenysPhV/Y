@@ -43,7 +43,7 @@ def get_photo(photo_url: str, db: Session, user: User):
     :return: A photo object or none if the photo does not exist
     :doc-author: Trelent
     """
-    sq = select(Photo).filter_by(url=photo_url, user=user)
+    sq = select(Photo).filter_by(photo_url=photo_url, user=user)
     contact = db.execute(sq)
     return contact.scalar_one_or_none()
 
