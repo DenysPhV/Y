@@ -6,6 +6,7 @@ from pydantic import BaseModel, EmailStr
 class UserLoginModel(BaseModel):
     email: EmailStr = 'user@gmail.com'
     password: str = 'qwerty'
+    username: str
 
 
 class UserRegisterModel(BaseModel):

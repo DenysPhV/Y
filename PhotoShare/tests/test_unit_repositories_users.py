@@ -1,13 +1,10 @@
 import pytest
 import unittest
-from fastapi import HTTPException
+
 from unittest.mock import AsyncMock, patch
 
-from sqlalchemy.orm import Session
-
 from PhotoShare.app.repositories.users import create_user
-from PhotoShare.app.schemas.user import UserLoginModel
-from PhotoShare.app.models.user import User
+from PhotoShare.app.schemas.user import UserRegisterModel
 
 
 # Mocking SQLAlchemy Session
@@ -41,7 +38,12 @@ class MockGravatar:
 async def test_create_user():
     # Given
     session = MockSession()
-    user_model = UserLoginModel(email="test@example.com", password="testpassword")
+    user_model = UserRegisterModel(
+        username="testusername",
+        email="test@example.com",
+        password="testpassword",
+        first_name="Test",
+        last_name="User")
     mock_get_user_by_email = AsyncMock(return_value=None)
 
     # When
