@@ -12,7 +12,8 @@ class Comment(Base):
     id = Column(Integer, primary_key=True)
     content = Column(String(256), nullable=False)
     created_at = Column(DateTime, default=func.now())
-    updated_at = Column(ARRAY(DateTime))
+    # updated_at = Column(ARRAY(DateTime))
+    updated_at = Column(String)
     user_id = Column('user_id', ForeignKey('users.id', ondelete='SET NULL'), default=None)
 
     user = relationship('User', backref='comments')
