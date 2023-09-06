@@ -30,15 +30,7 @@ async def get_user_profile(email: str, session: Session = Depends(get_db)):
     Словник інформації про користувача
     """
     user = await get_user_by_email(email=email, session=session)
-    return {
-        'user_email': user.email,
-        'user_first_name': user.first_name,
-        'user_last_name': user.last_name,
-        'user_username': user.username,
-        'created_at': user.created_at,
-        'avatar': user.avatar,
-        'images_uploaded': user.uploaded_photos
-    }
+    return user
 
 
 @router_user.get("/me", response_model=UserRespond, status_code=status.HTTP_200_OK,
@@ -116,7 +108,6 @@ async def upload_avatar(file: UploadFile = File(), user: User = Depends(get_curr
     Returns:
     user: Повертаємо user з оновленими даними
     """
-    ...
     cloudinary.config(
         cloud_name=settings.cloudinary_name,
         api_key=settings.cloudinary_api_key,

@@ -109,14 +109,17 @@ async def user_login(email: str, session: Session):
     user = await get_user_by_email(email, session)
     if user:
         if user.banned:
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Operation not permitted')
-        if not user.confirmed :
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail='Operation not permitted')
+        if not user.confirmed:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Your email not confirmed')
         access_token = await create_access_token(data={"email": user.email})
         refresh_token = await create_refresh_token(data={"email": user.email})  # noqa
         user.refresh_token = refresh_token
         session.commit()
-    return user, access_token, refresh_token
+        return user, access_token, refresh_token
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not Found")
+
+
 
 
 async def reset_refresh_token(user, session: Session):
