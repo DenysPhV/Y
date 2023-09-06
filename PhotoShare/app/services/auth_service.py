@@ -140,7 +140,7 @@ def create_email_confirmation_token(data: dict, expires_delta: float | None = No
 
 
 def get_current_user(token: HTTPAuthorizationCredentials = Depends(oauth2_scheme),
-                           session: Session = Depends(get_db), cache=Depends(redis_cache.get_redis)):
+                     session: Session = Depends(get_db), cache=Depends(redis_cache.get_redis)):
     """
     Функція get_current_user — це залежність, яка використовуватиметься в
     для отримання поточного користувача. Вона приймає додатковий параметр маркера, який
@@ -181,7 +181,7 @@ def get_current_user(token: HTTPAuthorizationCredentials = Depends(oauth2_scheme
     return user
 
 
-def send_in_background(email: str, host: str, token: str):
+async def send_in_background(email: str, host: str, token: str):
     """
     Функція send_in_background — це співпрограма, яка надсилає електронний лист на адресу електронної пошти користувача.
 
@@ -201,7 +201,7 @@ def send_in_background(email: str, host: str, token: str):
             subtype=MessageType.html
         )
         fm = FastMail(conf)
-        fm.send_message(message, template_name="email_page.html")
+        await fm.send_message(message, template_name="email_page.html")
     except ConnectionErrors as err:
         print(err)
 

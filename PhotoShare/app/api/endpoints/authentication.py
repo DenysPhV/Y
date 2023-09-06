@@ -117,9 +117,9 @@ def email_confirmation(token: str, session: Session = Depends(get_db)):
 
 @router_auth.get("/logout", summary="Виконання logout для авторизованного користувача")
 def logout(token: HTTPAuthorizationCredentials = Depends(oauth2_scheme),
-                 user: User = Depends(get_current_user),
-                 session: Session = Depends(get_db),
-                 cache=Depends(cache_redis.get_redis)):
+           user: User = Depends(get_current_user),
+           session: Session = Depends(get_db),
+           cache=Depends(cache_redis.get_redis)):
     """
     Функція logout використовується для відкликання access_token та refresh_token користувача.
 
@@ -133,7 +133,7 @@ def logout(token: HTTPAuthorizationCredentials = Depends(oauth2_scheme),
     token = token.credentials
     token_revoked = add_token_to_revoked(token, cache=cache)
     user_repo.reset_refresh_token(user=user, session=session)
-    return {'token_revoked': token}
+    return {'token_revoked': token_revoked}
 
 
 @router_auth.patch("/banned/{email}", status_code=status.HTTP_200_OK, dependencies=[Depends(Roles(['admin']))])

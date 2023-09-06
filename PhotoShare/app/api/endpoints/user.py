@@ -30,7 +30,6 @@ def get_user_profile(email: str, session: Session = Depends(get_db)):
     Словник інформації про користувача
     """
     user = get_user_by_email(email=email, session=session)
-    print('USER', user)
     return user
 
 
