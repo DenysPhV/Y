@@ -17,7 +17,7 @@ router_user = APIRouter(prefix="/user", tags=["user"])
 
 
 @router_user.get("/profile/{email}", response_model=UserProfileModel, status_code=status.HTTP_200_OK)
-async def get_user_profile(email: str, session: Session = Depends(get_db)):
+def get_user_profile(email: str, session: Session = Depends(get_db)):
     """
     The get_user_profile function використовується для отримання інформації профілю користувача.
         Ця функція приймає електронний лист і повертає наступне:
@@ -29,13 +29,14 @@ async def get_user_profile(email: str, session: Session = Depends(get_db)):
     Returns:
     Словник інформації про користувача
     """
-    user = await get_user_by_email(email=email, session=session)
+    user = get_user_by_email(email=email, session=session)
+    print('USER', user)
     return user
 
 
 @router_user.get("/me", response_model=UserRespond, status_code=status.HTTP_200_OK,
                  summary='Отримати інформацію про користувача')
-async def me(user: User = Depends(get_current_user)):
+def me(user: User = Depends(get_current_user)):
     """
     Функція me повертає інформацію для активного user
     Args:
@@ -47,7 +48,7 @@ async def me(user: User = Depends(get_current_user)):
 
 
 @router_user.patch("/edit/username/{username}", response_model=UserRespond, status_code=status.HTTP_200_OK)
-async def change_username(body: UserUsername, user: User = Depends(get_current_user), session: Session = Depends(get_db)):
+def change_username(body: UserUsername, user: User = Depends(get_current_user), session: Session = Depends(get_db)):
     """
     Функція змінює username користувача
     Args:
@@ -58,12 +59,12 @@ async def change_username(body: UserUsername, user: User = Depends(get_current_u
     user: Повертаємо user з оновленими даними
     """
     user.username = body.username
-    user = await update_user(user, session)
+    user = update_user(user, session)
     return user
 
 
 @router_user.patch("/edit/firstname/{firstname}", response_model=UserRespond, status_code=status.HTTP_200_OK)
-async def edit_firstname(body: UserFirstname, user: User = Depends(get_current_user),
+def edit_firstname(body: UserFirstname, user: User = Depends(get_current_user),
                          session: Session = Depends(get_db)):
     """
     Функція змінює first_name користувача
@@ -75,13 +76,13 @@ async def edit_firstname(body: UserFirstname, user: User = Depends(get_current_u
     user: Повертаємо user з оновленими даними
     """
     user.first_name = body.first_name
-    user = await update_user(user, session)
+    user = update_user(user, session)
     return user
 
 
 @router_user.patch("/edit/lastname/{lastname}", response_model=UserRespond, status_code=status.HTTP_200_OK)
-async def edit_lastname(body: UserLastname, user: User = Depends(get_current_user),
-                        session: Session = Depends(get_db)):
+def edit_lastname(body: UserLastname, user: User = Depends(get_current_user),
+                  session: Session = Depends(get_db)):
     """
     Функція змінює last_name користувача
     Args:
@@ -92,12 +93,12 @@ async def edit_lastname(body: UserLastname, user: User = Depends(get_current_use
     user: Повертаємо user з оновленими даними
     """
     user.last_name = body.last_name
-    user = await update_user(user, session)
+    user = update_user(user, session)
     return user
 
 
 @router_user.patch("/edit/avatar", response_model=UserRespond, status_code=status.HTTP_200_OK)
-async def upload_avatar(file: UploadFile = File(), user: User = Depends(get_current_user),
+def upload_avatar(file: UploadFile = File(), user: User = Depends(get_current_user),
                         session: Session = Depends(get_db)):
     """
     Функція оновлює avatar користувача, завантажуючи його на сервіс cloudinary
@@ -111,7 +112,7 @@ async def upload_avatar(file: UploadFile = File(), user: User = Depends(get_curr
     cloudinary.config(
         cloud_name=settings.cloudinary_name,
         api_key=settings.cloudinary_api_key,
-        api_secret=settings.cloudinary_secret,
+        api_secret=settings.cloudinary_api_secret,
         secure=True
     )
     public_id = hashlib.sha256(file.filename.encode()).hexdigest()[:10]
@@ -119,7 +120,7 @@ async def upload_avatar(file: UploadFile = File(), user: User = Depends(get_curr
     version = image.get('version')
     url = cloudinary.CloudinaryImage(public_id).build_url(width=250, height=250, crop='fill', version=version)
     user.avatar = url
-    user = await update_user(user=user, session=session)
+    user = update_user(user=user, session=session)
     return user
 
 
