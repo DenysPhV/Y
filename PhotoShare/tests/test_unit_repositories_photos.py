@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import AsyncMock
+from unittest.mock import MagicMock
 from sqlalchemy.orm import Session
 
 from PhotoShare.app.models.photo import Photo
@@ -8,55 +8,51 @@ from PhotoShare.app.repositories.photo import get_photos, get_photo, create_phot
 from PhotoShare.app.schemas.photo import PhotoModel
 
 
-class TestContacts(unittest.IsolatedAsyncioTestCase):
+class TestPhoto(unittest.TestCase):
 
     def setUp(self):
-        self.session = AsyncMock(spec=Session)
+        self.session = MagicMock(spec=Session)
         self.user = User(id=1)
 
-    async def test_get_photos_found(self):
-        expect_res = [Photo(), ]
-        self.session.query().filter().order_by().limit().offset().all.return_value = expect_res
-        result = await get_photos(limit=10, offset=0, user=self.user, db=self.session)
+    def test_get_photos_found(self):
+        expect_res = [Photo(), Photo()]
+        self.session.execute().scalars().all.return_value = expect_res
+        result = get_photos(limit=2, offset=0, user=self.user, db=self.session)
         self.assertEqual(result, expect_res)
-        self.assertListEqual(result, expect_res)
 
-    async def test_get_photo_found(self):
+    def test_get_photo_found(self):
         expect_res = Photo()
-        self.session.query().filter().order_by().first.return_value = expect_res
-        result = await get_photo(photo_id=1, user=self.user, db=self.session)
+        self.session.execute().scalar_one_or_none.return_value = expect_res
+        result = get_photo(photo_url="photo_url", user=self.user, db=self.session)
         self.assertEqual(result, expect_res)
 
-    async def test_get_photo_not_found(self):
-        self.session.query().filter().order_by().first.return_value = None
-        result = await get_photo(photo_id=100, user=self.user, db=self.session)
+    def test_get_photo_not_found(self):
+        self.session.execute.return_value.scalar_one_or_none.return_value = None
+        result = get_photo(photo_url="photo_url", user=self.user, db=self.session)
         self.assertIsNone(result)
 
-    async def test_create_found(self):
-        body = PhotoModel(tags_text="last, python", description="test description test test")
-        result = await create_photo(body=body, url="photo_url", user=self.user,
-                                    db=self.session)
+    def test_create_found(self):
+        body = PhotoModel(name="Test Photo", description="new_desc", photo_url="test_url")
+        result = create_photo(body=body, url="photo_url", user=self.user, db=self.session)
         self.assertEqual(result.description, body.description)
-        self.assertListEqual(result.tags, [])
         self.assertTrue(hasattr(result, "id"))
 
-    async def test_remove_found(self):
+    def test_remove_found(self):
         expect_res = Photo()
-        self.session.query().filter().first.return_value = expect_res
-        result = await remove_photo(photo_id=1, user=self.user, db=self.session)
+        self.session.execute().scalar_one_or_none.return_value = expect_res
+        result = remove_photo(photo_id=1, user=self.user, db=self.session)
         self.assertEqual(result, expect_res)
 
-    async def test_remove_not_found(self):
-        self.session.query().filter().first.return_value = None
-        result = await remove_photo(photo_id=100, user=self.user, db=self.session)
+    def test_remove_not_found(self):
+        self.session.execute().scalar_one_or_none.return_value = None
+        result = remove_photo(photo_id=100, user=self.user, db=self.session)
         self.assertIsNone(result)
 
-    async def test_update_photo_found(self):
+    def test_update_photo_found(self):
         expect_res = Photo(description="old_desc")
         self.session.query().filter().first.return_value = expect_res
-        update_data = PhotoModel(description="new_desc")
-        result = await update_photo(photo_id=1, body=update_data, user=self.user,
-                                    db=self.session)
+        update_photo_date = PhotoModel(name="Test Photo", description="new_desc", photo_url="test_url")
+        result = update_photo(photo_id=1, body=update_photo_date, user=self.user, db=self.session)
         self.assertEqual(result.description, "new_desc")
         self.assertTrue(hasattr(result, "updated_at"))
 
