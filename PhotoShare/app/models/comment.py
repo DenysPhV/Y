@@ -14,6 +14,7 @@ class Comment(Base):
     content = Column(String(256), nullable=False)
     created_at = Column(DateTime, default=func.now())
     # updated_at = Column(ARRAY(DateTime))
+    # updated_at = Column(String)
     updated_at = Column(JSON)
     user_id = Column('user_id', ForeignKey('users.id', ondelete='SET NULL'), default=None)
 
