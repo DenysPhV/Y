@@ -18,7 +18,12 @@ async def startup():
     The startup ініціалізує асинхронний Redis клієнт
     Returns:
     Список Task на виконяння в EvenLoop
+
+    Start up page definition
+
+    :return: dict: health status
     """
+
     RedisService.init()
 
 
