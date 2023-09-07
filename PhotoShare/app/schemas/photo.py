@@ -1,14 +1,26 @@
 from datetime import datetime
-from typing import Optional, List
 
-from pydantic import BaseModel, Field, EmailStr
+
+from pydantic import BaseModel, Field
 
 from PhotoShare.app.schemas.user import UserRespond
+
+
+class TagModel(BaseModel):
+    name: str = Field(max_length=25)
+
+
+class TagResponse(TagModel):
+    id: int
+
+    class Config:
+        orm_mode = True
 
 
 class PhotoModel(BaseModel):
     name: str = Field(max_length=150, min_length=3)
     description: str = Field(max_length=300, min_length=3)
+    tags: list = Field(max=5)
     photo_url: str
 
 
@@ -26,4 +38,3 @@ class PhotoResponse(PhotoModel):
 
     class Config:
         orm_mode = True
-

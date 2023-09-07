@@ -55,7 +55,7 @@ def read_comment(comment_id: int, db: Session = Depends(get_db)):
     return comment
 
 @router.post("/", response_model=CommentResponse)
-def create_comment(body: CommentModel, post_id: int = 0, db: Session = Depends(get_db),/
+def create_comment(body: CommentModel, post_id: int = 0, db: Session = Depends(get_db),
                       current_user: User = Depends(auth_service.get_current_user)):#temp
     """
     Creates a new comment.
@@ -78,7 +78,7 @@ def create_comment(body: CommentModel, post_id: int = 0, db: Session = Depends(g
     return repository_comments.create_comment(body, current_user, post_id, db)
 
 @router.put("/{comment_id}", response_model=CommentResponse)
-def update_comment(body: CommentModel, comment_id: int, db: Session = Depends(get_db),/
+def update_comment(body: CommentModel, comment_id: int, db: Session = Depends(get_db),
                       current_user: User = Depends(auth_service.get_current_user)):
     """
     Updates the comment with specified ID.

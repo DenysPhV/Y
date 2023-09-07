@@ -1,51 +1,56 @@
+import io
 from datetime import datetime
 
+import qrcode
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from PhotoShare.app.models.photo import Photo
+from PhotoShare.app.models.photo import Photo, Tag
 from PhotoShare.app.models.user import User
+from PhotoShare.app.repositories.tags import get_tags
 from PhotoShare.app.schemas.photo import PhotoModel, PhotoUpdate
 
 
-def get_photos(limit: int, offset: int, db: Session, user: User):
+def get_photos(limit: int, offset: int, db: Session):
     """
     The get_photos function returns a list of photos from the database.
         Args:
             limit (int): The number of photos to return.
-            offset (int): The starting point for the query.  This is used for pagination, so that you can get more than one page of results at a time.
-                For example, if you have 100 total results and want to get 10 per page, set limit=10 and offset=0 on your first request; then set limit=10 and offset=10 on your second request; etc... until you've gotten all 100 results back in chunks of 10 each time.&quot;
+            offset (int): The starting point for the query.  This is used for pagination, so that you can get more than
+            one page of results at a time.
+                For example, if you have 100 total results and want to get 10 per page, set limit=10 and offset=0 on
+                your first request; then set limit=10 and offset=10 on your second request; etc... until you've gotten
+                all 100 results back in chunks of 10 each time.&quot;
 
     :param limit: int: Limit the number of photos returned
     :param offset: int: Specify the number of records to skip before starting to return rows
     :param db: Session: Pass the database session to the function
-    :param user: User: Filter the photos by user
     :return: A list of photos
     :doc-author: Trelent
     """
-    sq = select(Photo).filter_by(user=user).offset(offset).limit(limit)
+    sq = select(Photo).offset(offset).limit(limit)
     contacts = db.execute(sq)
     return contacts.scalars().all()
 
 
-def get_photo(photo_url: str, db: Session, user: User):
+def get_photo(photo_id: int, db: Session, user: User):
 
     """
     The get_photo function takes in a photo_url and returns the corresponding Photo object.
         If no such photo exists, it returns None.
 
-    :param photo_url: str: Specify the url of the photo
+    :param photo_id: str: Specify the id of the photo
     :param db: Session: Create a database session
     :param user: User: Filter the results by user
     :return: A photo object or none if the photo does not exist
     :doc-author: Trelent
     """
-    sq = select(Photo).filter_by(url=photo_url, user=user)
+    sq = select(Photo).filter_by(id=photo_id, user=user)
     contact = db.execute(sq)
     return contact.scalar_one_or_none()
 
 
-def create_photo(body: PhotoModel, url: str, db: Session, user: User):
+def create_photo(body: PhotoModel, photo_url: str, db: Session, user: User):
 
     """
     The create_photo function creates a new photo in the database.
@@ -55,17 +60,45 @@ def create_photo(body: PhotoModel, url: str, db: Session, user: User):
             db (Session): A SQLAlchemy Session object used for interacting with our database.
 
     :param body: PhotoModel: Get the name and description of the photo from the request body
-    :param url: str: Store the url of the photo in s3
+    :param photo_url: str: Store the url of the photo in s3
     :param db: Session: Access the database
     :param user: User: Associate the photo with a user
     :return: The photo object that was created
     :doc-author: Trelent
     """
-    photo = Photo(name=body.name, description=body.description, user=user)
-    photo.photo_url = url
+    photo_tags = []
+    tags = get_tags()
+    for tag_name in tags:
+        tag = db.query(Tag).filter(Tag.name == tag_name).first()
+        if not tag:
+            tag = Tag(name=tag_name)
+            db.add(tag)
+            db.commit()
+            db.refresh(tag)
+        if len(photo_tags) <= 5:
+            photo_tags.append(tag)
+    photo = Photo(name=body.name, description=body.description, tags=photo_tags, user=user)
+    photo.photo_url = photo_url
     db.add(photo)
     db.commit()
     db.refresh(photo)
+    return photo
+
+
+def get_qrcode(photo_id: int, db: Session):
+    """
+    Returns qr code encoding the url of the photo
+
+    :param photo_id: int: ID of the photo.
+    :param db: Session: Pass in the database session
+    :return: The qr code as a byte array
+    """
+    photo = db.query(Photo).filter(Photo.id == photo_id).first()
+    if photo:
+        code = qrcode.make(photo.photo_url)
+        bytes_code = io.BytesIO()
+        code.save(bytes_code, format='PNG')
+        return bytes_code.getvalue()
     return photo
 
 
@@ -76,7 +109,8 @@ def update_photo(photo_id: int, body: PhotoUpdate, db: Session, user: User):
         Args:
             photo_id (int): The id of the photo to be updated.
             body (PhotoUpdate): A PhotoUpdate object containing a new description for the specified photo.
-                This is passed as JSON data in an HTTP request body, and converted into a PhotoUpdate object by FastAPI's Pydantic library.
+                This is passed as JSON data in an HTTP request body, and converted into a PhotoUpdate object by
+                FastAPI's Pydantic library.
                 See models/photo_update for more information on this class and its attributes.
 
     :param photo_id: int: Identify the photo to be updated
@@ -103,7 +137,8 @@ def remove_photo(photo_id: int, db: Session, user: User):
     The remove_photo function removes a photo from the database.
         Args:
             photo_id (int): The id of the photo to be removed.
-            db (Session): A connection to the database.  This is used for querying and deleting photos from the database.
+            db (Session): A connection to the database.  This is used for querying and deleting photos
+            from the database.
             user (User): The user who owns this particular photo, and therefore has permission to delete it.
     
     :param photo_id: int: Identify the photo to be removed
@@ -111,7 +146,7 @@ def remove_photo(photo_id: int, db: Session, user: User):
     :param user: User: Check if the user is authorized to delete a photo
     :return: The photo object that was deleted
     :doc-author: Trelent
-    """`
+    """
     sq = select(Photo).filter_by(id=photo_id, user=user)
     result = db.execute(sq)
     photo = result.scalar_one_or_none()
