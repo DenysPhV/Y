@@ -10,35 +10,37 @@ from PhotoShare.app.services import roles
 from PhotoShare.app.models.user import User
 
 from PhotoShare.app.schemas.comment import CommentModel, CommentResponse
-from PhotoShare.app.schemas.user import UserModel
 
 from PhotoShare.app.repositories import comments as repository_comments
+from PhotoShare.app.repositories import photo as repository_photos
+
+router_comments = APIRouter(prefix='/comments', tags=["comments"])
 
 
-router = APIRouter(prefix='/comments', tags=["comments"])
-
-
-@router.get("/", response_model=List[CommentResponse])
-def read_comments(limit: int = 100, post_id: int = 0, db: Session = Depends(get_db)):
+@router_comments.get("/", response_model=List[CommentResponse])
+def read_comments(limit: int = 100, photo_id: int = 0, db: Session = Depends(get_db)):
     """
     Retrieves a list of comments on a specific post.
 
     :param limit: Maximum number of comments to return.
     :type limit: int
-    :param post_id: ID of the post.
-    :type post_id: int
+    :param photo_id: ID of the photo.
+    :type photo_id: int
     :param db: The database session.
     :type db: Session
     :return: A list of comments.
     :rtype: List[Comment]
     """
-    if not post_id:
+    if not photo_id:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='Post id is required')
-    comments = repository_comments.get_comments(limit, post_id, db)
+    photo = repository_photos.get_photo(photo_id, db)
+    if not photo:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Post not found")
+    comments = repository_comments.get_comments(limit, photo_id, db)
     return comments
 
 
-@router.get("/{comment_id}", response_model=CommentResponse)
+@router_comments.get("/{comment_id}", response_model=CommentResponse)
 def read_comment(comment_id: int, db: Session = Depends(get_db)):
     """
     Retrieves a comment with a specific ID.
@@ -55,45 +57,43 @@ def read_comment(comment_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Comment not found")
     return comment
 
-@router.post("/", response_model=CommentResponse)
-def create_comment(body: CommentModel, post_id: int = 0, db: Session = Depends(get_db),
-                      current_user: User = Depends(auth_service.get_current_user)):#temp
+
+@router_comments.post("/", response_model=CommentResponse)
+def create_comment(body: CommentModel, photo_id: int = 0, db: Session = Depends(get_db),
+                   current_user: User = Depends(auth_service.get_current_user)):
     """
     Creates a new comment.
 
     :param body: The data used to create a new comment.
     :type body: CommentModel
-    :param user: User that adds the comment. (change when user model is ready)
-    :type user: UserModel
-    :param post_id: ID of the post on which the comment is added.
-    :type post_id: int
+    :param photo_id: ID of the photo on which the comment is added.
+    :type photo_id: int
     :param db: The database session.
     :type db: Session
-    :param current_user: User that adds the comment. (change when user model is ready)
+    :param current_user: User that adds the comment.
     :type current_user: User
     :return: The newly added comment.
     :rtype: Comment
     """
-    if not post_id:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='Post id is required')
-    return repository_comments.create_comment(body, current_user, post_id, db)
+    if photo_id == 0:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='Photo id is required')
+    photo = repository_photos.get_photo(photo_id, db, current_user)
+    if photo == None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Photo not found")
+    return repository_comments.create_comment(body, current_user, photo_id, db)
 
 
-@router.put("/{comment_id}", response_model=CommentResponse)
+@router_comments.put("/{comment_id}", response_model=CommentResponse)
 def update_comment(body: CommentModel, comment_id: int, db: Session = Depends(get_db),
-                      current_user: User = Depends(auth_service.get_current_user)):
+                   current_user: User = Depends(auth_service.get_current_user)):
     """
     Updates the comment with specified ID.
 
     :param body: The data used to create a new comment.
     :type body: CommentModel
-    :param user: User that adds the comment. (change when user model is ready)
-    :type user: UserModel
-    :param post_id: ID of the post on which the comment is added.
-    :type post_id: int
     :param db: The database session.
     :type db: Session
-    :param current_user: User that adds the comment. (change when user model is ready)
+    :param current_user: User that updates the comment.
     :type current_user: User
     :return: The newly added comment.
     :rtype: Comment
@@ -102,25 +102,23 @@ def update_comment(body: CommentModel, comment_id: int, db: Session = Depends(ge
     if not comment:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Comment not found")
     if comment.user_id != current_user.id:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="You do not have permission to edit this comment")
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
+                            detail="You do not have permission to edit this comment")
     new_comment = repository_comments.update_comment(body, comment_id, db)
     return new_comment
 
 
-@router.delete("/{comment_id}", response_model=CommentResponse, dependencies=[Depends(roles.Roles(['admin', 'moderator']))])
+@router_comments.delete("/{comment_id}", response_model=CommentResponse,
+                        dependencies=[Depends(roles.Roles(['admin', 'moderator']))])
 def delete_comment(comment_id: int, db: Session = Depends(get_db)):
     """
     Deletes the comment with specified ID.
 
     :param body: The data used to create a new comment.
     :type body: CommentModel
-    :param user: User that adds the comment. (change when user model is ready)
-    :type user: UserModel
-    :param post_id: ID of the post on which the comment is added.
-    :type post_id: int
     :param db: The database session.
     :type db: Session
-    :param current_user: User that adds the comment. (change when user model is ready)
+    :param current_user: User that deletes the comment.
     :type current_user: User
     :return: The newly added comment.
     :rtype: Comment

@@ -33,6 +33,7 @@ class Settings(BaseSettings):
     cloudinary_api_key: str
     cloudinary_api_secret: str
 
+
     class Config:
         env_file = Path(__file__).parent.joinpath(".env")
         env_file_encoding = "utf-8"
