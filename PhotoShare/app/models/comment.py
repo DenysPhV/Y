@@ -23,4 +23,4 @@ class Comment(Base):
     # But if a post is deleted all it's comments will go down with it.
 
 
-Base.metadata.create_all(bind=engine)
+# Base.metadata.create_all(bind=engine)

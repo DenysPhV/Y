@@ -31,4 +31,4 @@ class User(Base):
     created_at: Mapped[DateTime] = mapped_column(DateTime, default=func.now())
 
 
-Base.metadata.create_all(bind=engine)
+# Base.metadata.create_all(bind=engine)
