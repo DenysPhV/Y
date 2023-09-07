@@ -3,8 +3,8 @@ from typing import List
 from datetime import datetime
 
 from sqlalchemy.orm import Session
-from sqlalchemy.sql import extract
-import sqlalchemy as sa
+# from sqlalchemy.sql import extract
+# import sqlalchemy as sa
 
 
 from PhotoShare.app.models.comment import Comment
@@ -13,20 +13,20 @@ from PhotoShare.app.models.user import User
 from PhotoShare.app.schemas.comment import CommentModel
 
 
-def get_comments(limit: int, post_id: int, db: Session) -> List[Comment]:
+def get_comments(limit: int, photo_id: int, db: Session) -> List[Comment]:
     """
     Retrieves a list of comments on a specific post.
 
     :param limit: Maximum number of comments to return.
     :type limit: int
-    :param post_id: ID of the post.
-    :type post_id: int
+    :param photo_id: ID of the post.
+    :type photo_id: int
     :param db: The database session.
     :type db: Session
     :return: A list of comments.
     :rtype: List[Comment]
     """
-    return db.query(Comment).filter(Comment.post_id==post_id).limit(limit).all()
+    return db.query(Comment).filter(Comment.photo_id==photo_id).limit(limit).all()
 
 def get_comment(comment_id: int, db: Session) -> Comment:
     """
@@ -41,7 +41,7 @@ def get_comment(comment_id: int, db: Session) -> Comment:
     """
     return db.query(Comment).filter(Comment.id==comment_id).first()
 
-def create_comment(body: CommentModel, user: User, post_id: int, db: Session) -> Comment:
+def create_comment(body: CommentModel, user: User, photo_id: int, db: Session) -> Comment:
     """
     Creates a new comment.
 
@@ -56,7 +56,7 @@ def create_comment(body: CommentModel, user: User, post_id: int, db: Session) ->
     :return: The newly added comment.
     :rtype: Comment
     """
-    comment = Comment(content=body.content, user_id=user.id, post_id=post_id)
+    comment = Comment(content=body.content, user_id=user.id, photo_id=photo_id)
     db.add(comment)
     db.commit()
     db.refresh(comment)
@@ -75,10 +75,13 @@ def update_comment(body: CommentModel, comment_id: int, db: Session) -> Comment:
     :return: The updated comment.
     :rtype: Comment
     """
-    comment = db.query(Comment).filter(Comment.id==body.id).first()
+    comment = db.query(Comment).filter(Comment.id==comment_id).first()
     if comment:
         comment.content = body.content
-        comment.updated_at = comment.updated_at + datetime.now()
+        if not comment.updated_at:
+            comment.updated_at = [datetime.now()]
+        else:
+            comment.updated_at = comment.updated_at + [datetime.now()]
         db.commit()
     return comment
 

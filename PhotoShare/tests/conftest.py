@@ -5,8 +5,9 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from main import app
-from ..app.models.base import Base
-from ..app.core.database import get_db
+from PhotoShare.app.models.base import Base
+from PhotoShare.app.core.database import get_db
+
 
 SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
 
@@ -45,14 +46,17 @@ def client(session):
 
     yield TestClient(app)
 
-    @pytest.fixture(scope="module")
-    def user():
-        return {"login": "deadpool", "email": "deadpool@example.com", "password_checksum": "123456789"}
 
-    @pytest.fixture(scope="module")
-    def user_moder():
-        return {"login": "dead2pool", "email": "dead2pool@example.com", "password_checksum": "123456789"}
+@pytest.fixture(scope="module")
+def user():
+    return {"login": "deadpool", "email": "deadpool@example.com", "password_checksum": "123456789"}
 
-    @pytest.fixture(scope="module")
-    def user_user():
-        return {"login": "dead1pool", "email": "dead1pool@example.com", "password_checksum": "123456789"}
+
+@pytest.fixture(scope="module")
+def user_moder():
+    return {"login": "dead2pool", "email": "dead2pool@example.com", "password_checksum": "123456789"}
+
+
+@pytest.fixture(scope="module")
+def user_user():
+    return {"login": "dead1pool", "email": "dead1pool@example.com", "password_checksum": "123456789"}

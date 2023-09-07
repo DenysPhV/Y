@@ -1,6 +1,8 @@
 from datetime import datetime
 
 
+
+
 from pydantic import BaseModel, Field
 
 from PhotoShare.app.schemas.user import UserRespond
@@ -37,4 +39,7 @@ class PhotoResponse(PhotoModel):
     user: UserRespond | None
 
     class Config:
-        orm_mode = True
+
+        from_attributes = True
+
+

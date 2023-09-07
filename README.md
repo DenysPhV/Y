@@ -1,5 +1,6 @@
-# Y
+# PhotoShare 
 # Опис структури:
+* PhotoShare/:
 * app/: Головна директорія для коду проекту.
   * api/: Зберігає всі API endpoints.
     * endpoints/: Конкретні модулі для кожного набору endpoints (аутентифікація, фотографії, коментарі).
@@ -17,6 +18,9 @@
 
 
 ## Схема структури
+```markdown
+
+```
 * PhotoShare/
 * ├── app/
 * │   ├── api/
@@ -26,12 +30,15 @@
 * │   │   │   └── comments.py
 * │   │   └── api.py
 * │   ├── core/
+* │   │   ├── .env
 * │   │   ├── config.py
 * │   │   └── database.py
 * │   ├── models/
-* │   │   ├── user.py
+* │   │   ├── base.py
+* │   │   ├── comment.py
+* │   │   ├── db.py
 * │   │   ├── photo.py
-* │   │   └── comment.py
+* │   │   └── user.py
 * │   ├── repositories/
 * │   │   ├── comments.py
 * │   │   ├── images.py
@@ -39,17 +46,20 @@
 * │   │   ├── tags.py
 * │   │   └── users.py
 * │   ├── schemas/
-* │   │   ├── user.py
+* │   │   ├── comment.py
 * │   │   ├── photo.py
-* │   │   └── comment.py
-* │   ├── services/
-* │   │   ├── auth_service.py
-* │   │   └── photo_service.py
-* │   └── main.py
+* │   │   └── user.py
+* │   └── services/
+* │       ├── auth_service.py
+* │       ├── photo_service.py
+* │       └── roles.py
+* │
 * ├── tests/
 * │   ├── test_auth.py
 * │   ├── test_photos.py
 * │   └── test_comments.py
+* │
+* ├──  main.py
 * ├── pyproject.toml
 * ├── Dockerfile
 * ├── requirements.txt
@@ -57,7 +67,7 @@
 
 
 ## Хто це робив
-* [Denys -> TM](https://github.com/DenysPhV)
-* [Maksius93 -> SM](https://github.com/Maksius93)
-* [Anatoliy -> Dev](https://github.com/anatoliysafonov)
-* [OOlexandr -> Dev](https://github.com/OOlexandr)
+- [Denys -> TM](https://github.com/DenysPhV)
+- [Maksius93 -> SM](https://github.com/Maksius93)
+- [Anatoliy -> Dev](https://github.com/anatoliysafonov)
+- [OOlexandr -> Dev](https://github.com/OOlexandr)

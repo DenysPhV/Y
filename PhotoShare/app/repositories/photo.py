@@ -22,6 +22,7 @@ def get_photos(limit: int, offset: int, db: Session):
                 your first request; then set limit=10 and offset=10 on your second request; etc... until you've gotten
                 all 100 results back in chunks of 10 each time.&quot;
 
+
     :param limit: int: Limit the number of photos returned
     :param offset: int: Specify the number of records to skip before starting to return rows
     :param db: Session: Pass the database session to the function
@@ -46,6 +47,8 @@ def get_photo(photo_id: int, db: Session, user: User):
     :doc-author: Trelent
     """
     sq = select(Photo).filter_by(id=photo_id, user=user)
+
+
     contact = db.execute(sq)
     return contact.scalar_one_or_none()
 
@@ -139,6 +142,7 @@ def remove_photo(photo_id: int, db: Session, user: User):
             photo_id (int): The id of the photo to be removed.
             db (Session): A connection to the database.  This is used for querying and deleting photos
             from the database.
+
             user (User): The user who owns this particular photo, and therefore has permission to delete it.
     
     :param photo_id: int: Identify the photo to be removed

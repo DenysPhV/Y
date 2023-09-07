@@ -17,6 +17,7 @@ photo_m2m_tag = Table(
 )
 
 
+
 class Photo(Base):
     __tablename__ = "photo"
     id: Mapped[int] = mapped_column(primary_key=True)
