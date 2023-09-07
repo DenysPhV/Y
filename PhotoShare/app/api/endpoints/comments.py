@@ -58,6 +58,7 @@ def read_comment(comment_id: int, db: Session = Depends(get_db)):
     return comment
 
 
+
 @router_comments.post("/", response_model=CommentResponse)
 def create_comment(body: CommentModel, photo_id: int = 0, db: Session = Depends(get_db),
                    current_user: User = Depends(auth_service.get_current_user)):
@@ -83,9 +84,11 @@ def create_comment(body: CommentModel, photo_id: int = 0, db: Session = Depends(
     return repository_comments.create_comment(body, current_user, photo_id, db)
 
 
+
 @router_comments.put("/{comment_id}", response_model=CommentResponse)
 def update_comment(body: CommentModel, comment_id: int, db: Session = Depends(get_db),
                    current_user: User = Depends(auth_service.get_current_user)):
+
     """
     Updates the comment with specified ID.
 
