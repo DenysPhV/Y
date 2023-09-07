@@ -19,8 +19,8 @@ def get_comments(limit: int, photo_id: int, db: Session) -> List[Comment]:
 
     :param limit: Maximum number of comments to return.
     :type limit: int
-    :param post_id: ID of the post.
-    :type post_id: int
+    :param photo_id: ID of the post.
+    :type photo_id: int
     :param db: The database session.
     :type db: Session
     :return: A list of comments.
