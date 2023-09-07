@@ -10,8 +10,7 @@ from PhotoShare.app.services.auth_service import get_current_user
 from PhotoShare.app.schemas.user import UserRespond, UserFirstname, UserLastname, UserProfileModel, UserUsername
 from PhotoShare.app.core.database import get_db
 from PhotoShare.app.repositories.users import update_user, get_user_by_email
-from PhotoShare.app.core.config import settings
-
+from PhotoShare.app.services.cloudinary import CloudinaryService
 
 router_user = APIRouter(prefix="/user", tags=["user"])
 
@@ -98,7 +97,7 @@ def edit_lastname(body: UserLastname, user: User = Depends(get_current_user),
 
 @router_user.patch("/edit/avatar", response_model=UserRespond, status_code=status.HTTP_200_OK)
 def upload_avatar(file: UploadFile = File(), user: User = Depends(get_current_user),
-                        session: Session = Depends(get_db)):
+                  session: Session = Depends(get_db)):
     """
     Функція оновлює avatar користувача, завантажуючи його на сервіс cloudinary
     Args:
@@ -108,16 +107,11 @@ def upload_avatar(file: UploadFile = File(), user: User = Depends(get_current_us
     Returns:
     user: Повертаємо user з оновленими даними
     """
-    cloudinary.config(
-        cloud_name=settings.cloudinary_name,
-        api_key=settings.cloudinary_api_key,
-        api_secret=settings.cloudinary_api_secret,
-        secure=True
-    )
-    public_id = hashlib.sha256(file.filename.encode()).hexdigest()[:10]
-    image = cloudinary.uploader.upload(file.file, public_id=public_id, overwrite=True)
+    public_id = CloudinaryService.get_public_id(filename=file.filename)
+    print(public_id)
+    image = CloudinaryService.upload_avater(file=file.file, public_id=public_id)
     version = image.get('version')
-    url = cloudinary.CloudinaryImage(public_id).build_url(width=250, height=250, crop='fill', version=version)
+    url = CloudinaryService.get_avatar(public_id=public_id, version=version)
     user.avatar = url
     user = update_user(user=user, session=session)
     return user
