@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import MagicMock
 
-from PhotoShare.app.repositories.comments import get_comments, create_comment, \
+from PhotoShare.app.repositories.comments import get_comments, get_comment, create_comment, \
     update_comment, delete_comment
 from PhotoShare.app.models.comment import Comment
 from PhotoShare.app.models.user import User
@@ -21,6 +21,12 @@ class TestComment(unittest.TestCase):
                               username='Somename',
                               confirmed=True,
                               password='secret')
+
+    def test_get_comment(self):
+        expected_comment = Comment(id=1, content="Test content")
+        self.session.query().filter().first.return_value = expected_comment
+        result = get_comment(comment_id=1, db=self.session)
+        self.assertEqual(result, expected_comment)
 
     def test_get_comments(self):
         expected_comments = [Comment(id=1, content="content1"), Comment(id=2, content="content2")]
