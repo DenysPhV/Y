@@ -18,7 +18,7 @@ async def startup():
     Returns:
     Список Task на виконяння в EvenLoop
     """
-    await RedisService.init()
+    RedisService.init()
 
 
 @app.get("/", description="Main page")

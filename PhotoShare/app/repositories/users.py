@@ -7,7 +7,7 @@ from PhotoShare.app.schemas.user import UserRegisterModel
 from PhotoShare.app.services.auth_service import get_password_hash, create_access_token, create_refresh_token
 
 
-async def update_user(user: User, session: Session):
+def update_user(user: User, session: Session):
     """
     Функція update_user user та session для роботи з базою даних
     Args:
@@ -22,7 +22,7 @@ async def update_user(user: User, session: Session):
     return user
 
 
-async def get_user_by_email(email: str, session: Session):
+def get_user_by_email(email: str, session: Session):
     """
     Функція get_user_by_email приймає електронний лист і сеанс,
     і повертає користувача з цією електронною поштою. Якщо такого користувача не існує, повертається None.
@@ -38,7 +38,7 @@ async def get_user_by_email(email: str, session: Session):
     return user
 
 
-async def create_user(body: UserRegisterModel, session: Session):
+def create_user(body: UserRegisterModel, session: Session):
     """
     Функція create_user створює нового користуваа в базі данних
 
@@ -55,7 +55,7 @@ async def create_user(body: UserRegisterModel, session: Session):
         avatar = g.get_image()
     except Exception as err:
         raise err
-    user = await get_user_by_email(body.email, session)
+    user = get_user_by_email(body.email, session)
     if user:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,
                             detail='User exists already')
@@ -70,11 +70,11 @@ async def create_user(body: UserRegisterModel, session: Session):
     user.username = None if body.username == "string" else body.username
     if not is_db_full:
         user.role = 'admin'
-    user = await update_user(user, session)
+    user = update_user(user, session)
     return user
 
 
-async def set_user_confirmation(email: str, session: Session):
+def set_user_confirmation(email: str, session: Session):
     """
     Функція set_user_confirmation встановлює для статусу підтвердження користувача значення True.
 
@@ -85,14 +85,14 @@ async def set_user_confirmation(email: str, session: Session):
     Returns:
     Об'єкт користувача
     """
-    user = await get_user_by_email(email, session)
+    user = get_user_by_email(email, session)
     if user:
         user.confirmed = True
         session.commit()
     return user
 
 
-async def user_login(email: str, session: Session):
+def user_login(email: str, session: Session):
     """
     Функція user_login вибирає користуваа з бази даних, email якого ми передали як аргумент у ф-цію. Створює access та
     refresh токени
@@ -106,23 +106,21 @@ async def user_login(email: str, session: Session):
     """
     access_token = None
     refresh_token = None  # noqa
-    user = await get_user_by_email(email, session)
+    user = get_user_by_email(email, session)
     if user:
         if user.banned:
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail='Operation not permitted')
         if not user.confirmed:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Your email not confirmed')
-        access_token = await create_access_token(data={"email": user.email})
-        refresh_token = await create_refresh_token(data={"email": user.email})  # noqa
+        access_token = create_access_token(data={"email": user.email})
+        refresh_token = create_refresh_token(data={"email": user.email})  # noqa
         user.refresh_token = refresh_token
         session.commit()
         return user, access_token, refresh_token
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not Found")
 
 
-
-
-async def reset_refresh_token(user, session: Session):
+def reset_refresh_token(user, session: Session):
     """
     Функція reset_refresh_token скидає значення поля refresh_token в базі данних
 
@@ -137,7 +135,7 @@ async def reset_refresh_token(user, session: Session):
     session.commit()
 
 
-async def refresh_token(email: str, token: str, session: Session):
+def refresh_token(email: str, token: str, session: Session):
     """
     Функція refresh_token використовується для оновлення маркера доступу.
     Вона приймає електронний лист і маркер оновлення, а потім перевіряє, чи існує користувач і чи
@@ -154,13 +152,13 @@ async def refresh_token(email: str, token: str, session: Session):
     Returns:
     access_token та refresh_token
     """
-    user = await get_user_by_email(email, session)
+    user = get_user_by_email(email, session)
     if user.refresh_token != token:
-        await reset_refresh_token(user=user, session=session)
+        reset_refresh_token(user=user, session=session)
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid refresh token")
 
-    access_token = await create_access_token(data={"email": user.email})  # noqa
-    refresh_token = await create_refresh_token(data={"email": user.email})  # noqa
+    access_token = create_access_token(data={"email": user.email})  # noqa
+    refresh_token = create_refresh_token(data={"email": user.email})  # noqa
     user.refresh_token = refresh_token
     session.commit()
     return access_token, refresh_token

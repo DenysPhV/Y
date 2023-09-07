@@ -19,9 +19,9 @@ class UserRegisterModel(BaseModel):
 
 class UserProfileModel(BaseModel):
     email: EmailStr
-    first_name: str
-    last_name: str
-    username: str
+    first_name: str | None
+    last_name: str | None
+    username: str | None
     created_at: datetime
     avatar: str
     uploaded_photos: int

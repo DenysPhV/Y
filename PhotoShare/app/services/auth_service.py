@@ -69,7 +69,7 @@ def get_password_hash(password: str):
     return pwd_context.hash(password)
 
 
-async def create_access_token(data: dict, expires_delta: float | None = None):
+def create_access_token(data: dict, expires_delta: float | None = None):
     """
     Функція create_access_token створює маркер JWT, який використовується для автентифікації користувача.
     Функція приймає два аргументи: дані та expires_delta. Аргумент даних - це словник, що містить адресу електронної
@@ -92,7 +92,7 @@ async def create_access_token(data: dict, expires_delta: float | None = None):
     return encoded_jwt
 
 
-async def create_refresh_token(data: dict, expires_delta: float | None = None):
+def create_refresh_token(data: dict, expires_delta: float | None = None):
     """
     Функція create_refresh_token створює маркер оновлення для користувача.
 
@@ -113,7 +113,7 @@ async def create_refresh_token(data: dict, expires_delta: float | None = None):
     return encoded_refresh_token
 
 
-async def create_email_confirmation_token(data: dict, expires_delta: float | None = None):
+def create_email_confirmation_token(data: dict, expires_delta: float | None = None):
     """
     Функція create_email_confirmation_token створює маркер JWT, який використовується для підтвердження електронної
     адреси користувача.Функція приймає два аргументи: дані та expires_delta. Аргумент даних - це словник, що містить
@@ -139,8 +139,8 @@ async def create_email_confirmation_token(data: dict, expires_delta: float | Non
     return encoded_jwt
 
 
-async def get_current_user(token: HTTPAuthorizationCredentials = Depends(oauth2_scheme),
-                           session: Session = Depends(get_db), cache=Depends(redis_cache.get_redis)):
+def get_current_user(token: HTTPAuthorizationCredentials = Depends(oauth2_scheme),
+                     session: Session = Depends(get_db), cache=Depends(redis_cache.get_redis)):
     """
     Функція get_current_user — це залежність, яка використовуватиметься в
     для отримання поточного користувача. Вона приймає додатковий параметр маркера, який
@@ -161,10 +161,10 @@ async def get_current_user(token: HTTPAuthorizationCredentials = Depends(oauth2_
         headers={"WWW-Authenticate": "Bearer"},
     )
     token = token.credentials
-    tokens_revoked_all = await get_revoked_tokens(cache=cache)
-    tokens_revoked_valid = await get_valid_token_from_revoked(tokens_revoked_all, cache=cache)
+    tokens_revoked_all = get_revoked_tokens(cache=cache)
+    tokens_revoked_valid = get_valid_token_from_revoked(tokens_revoked_all, cache=cache)
 
-    if await get_key_from_token(token) in tokens_revoked_valid:
+    if get_key_from_token(token) in tokens_revoked_valid:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail='You are not authorizated'
