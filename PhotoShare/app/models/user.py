@@ -1,11 +1,17 @@
+import enum
 
-from datetime import datetime
-from sqlalchemy import String, Boolean, func
+from sqlalchemy import String, func
 from sqlalchemy.sql.sqltypes import DateTime
 from sqlalchemy.orm import Mapped, mapped_column
 
 from PhotoShare.app.core.database import engine
 from PhotoShare.app.models.base import Base
+
+
+class UserRole(int, enum.Enum):
+    Admin = 1
+    Moderator = 2
+    User = 3
 
 
 class User(Base):
