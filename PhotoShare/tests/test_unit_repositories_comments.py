@@ -3,6 +3,7 @@ from unittest.mock import MagicMock
 
 from PhotoShare.app.repositories.comments import get_comments, get_comment, create_comment, \
     update_comment, delete_comment
+from PhotoShare.app.models.photo import Photo
 from PhotoShare.app.models.comment import Comment
 from PhotoShare.app.models.user import User
 from PhotoShare.app.schemas.comment import CommentModel
@@ -21,6 +22,7 @@ class TestComment(unittest.TestCase):
                               username='Somename',
                               confirmed=True,
                               password='secret')
+        self.test_photo = MagicMock(spec=Photo, id=1, photo_url="http://example.com/photo.jpg")
 
     def test_get_comment(self):
         expected_comment = Comment(id=1, content="Test content")
@@ -41,17 +43,23 @@ class TestComment(unittest.TestCase):
         self.session.commit = MagicMock()
         self.session.refresh = MagicMock()
         result = create_comment(comment_model, self.test_user, 1, self.session)
-        # Перевірка результату
+
         self.assertEqual(result.content, expected_comment.content)
         self.assertEqual(result.user_id, expected_comment.user_id)
         self.assertEqual(result.photo_id, expected_comment.photo_id)
+
+    def test_create_comments_by_photo(self):
+        comments = [Comment(), Comment(), Comment()]
+        self.session.query().filter().limit().all.return_value = comments
+        result = get_comments(limit=10, photo_id=1, db=self.session)
+        self.assertEqual(result, comments)
 
     def test_update_comment(self):
         comment_model = CommentModel(id=1, content="Updated content")
         existing_comment = Comment(id=1, content="Old content")
         self.session.query().filter().first.return_value = existing_comment
         updated_comment_obj = update_comment(comment_model, 1, self.session)
-        self.assertIsNotNone(updated_comment_obj, "update_comment повернув None")
+        self.assertIsNotNone(updated_comment_obj, "update_comment return None")
         self.assertEqual(updated_comment_obj.content, "Updated content")
 
     def test_delete_comment(self):

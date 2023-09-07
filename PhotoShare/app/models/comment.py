@@ -13,11 +13,9 @@ class Comment(Base):
     id = Column(Integer, primary_key=True)
     content = Column(String(256), nullable=False)
     created_at = Column(DateTime, default=func.now())
-    # updated_at = Column(ARRAY(DateTime))
-    # updated_at = Column(String)
-    updated_at = Column(JSON)
+    updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
+    # updated_at = Column(JSON)
     user_id = Column('user_id', ForeignKey('users.id', ondelete='SET NULL'), default=None)
-
     user = relationship('User', backref='comments')
     photo_id = Column('photo_id', ForeignKey('photo.id', ondelete='CASCADE'), default=None)
     photo = relationship('Photo', backref='comments')

@@ -37,6 +37,28 @@ class TestPhoto(unittest.TestCase):
         self.assertEqual(result.description, body.description)
         self.assertTrue(hasattr(result, "id"))
 
+    def test_get_photo_from_id_found(self):
+        expect_res = Photo()
+        self.session.execute().scalar_one_or_none.return_value = expect_res
+        result = get_photo(photo_url="photo_url", user=self.user, db=self.session)
+        self.assertEqual(result, expect_res)
+
+    def test_get_photo_from_id_not_found(self):
+        self.session.execute().scalar_one_or_none.return_value = None
+        result = get_photo(photo_url="photo_url", user=self.user, db=self.session)
+        self.assertIsNone(result)
+
+    def test_get_image_from_url_found(self):
+        expect_res = Photo()
+        self.session.execute().scalar_one_or_none.return_value = expect_res
+        result = get_photo(photo_url="photo/349856", user=self.user, db=self.session)
+        self.assertEqual(result, expect_res)
+
+    def test_get_image_from_url_not_found(self):
+        self.session.execute().scalar_one_or_none.return_value = None
+        result = get_photo(photo_url="", user=self.user, db=self.session)
+        self.assertIsNone(result)
+
     def test_remove_found(self):
         expect_res = Photo()
         self.session.execute().scalar_one_or_none.return_value = expect_res
@@ -50,11 +72,19 @@ class TestPhoto(unittest.TestCase):
 
     def test_update_photo_found(self):
         expect_res = Photo(description="old_desc")
+        body = PhotoModel(name="test_name", description="new_desc", photo_url="test_url")
         self.session.query().filter().first.return_value = expect_res
-        update_photo_date = PhotoModel(name="Test Photo", description="new_desc", photo_url="test_url")
-        result = update_photo(photo_id=1, body=update_photo_date, user=self.user, db=self.session)
+        self.session.commit.return_value = None
+        result = update_photo(photo_id=1, body=body, user=self.user, db=self.session)
         self.assertEqual(result.description, "new_desc")
         self.assertTrue(hasattr(result, "updated_at"))
+
+    def test_change_description_not_found(self):
+        body = PhotoModel(name="test_name", description="test description test test", photo_url="test_url")
+        self.session.execute().scalar_one_or_none.return_value = None
+        self.session.commit.return_value = None
+        result = update_photo(body=body, photo_id=1, user=self.user, db=self.session)
+        self.assertIsNone(result)
 
 
 if __name__ == '__main__':

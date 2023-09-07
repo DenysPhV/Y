@@ -16,6 +16,7 @@ from PhotoShare.app.models.base import Base
 # )
 
 
+
 class Photo(Base):
     __tablename__ = "photo"
     id: Mapped[int] = mapped_column(primary_key=True)
