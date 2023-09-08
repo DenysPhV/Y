@@ -65,7 +65,7 @@ class CloudinaryService:
 
     @staticmethod
     def edit_photo(public_id: str, gravity: str | None = None, height: int = 0, width: int = 0, crop: str | None = None,
-                   radius: str | None = None, color: str | None = None, effect: str | None = None,
+                   radius: int | None = None, color: str | None = None, effect: str | None = None,
                    zoom: float = 0.0, angle: int = 0):
         options = {key: value for key, value in locals().items() if value and value != public_id}
         print(options)
