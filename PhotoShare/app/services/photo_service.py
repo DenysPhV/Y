@@ -64,31 +64,10 @@ class CloudinaryService:
         return photo_url
 
     @staticmethod
-    def edit_photo(photo: str, gravity: str, height: int, width: int, crop: str, radius: str, color: str,
-                   effect: str, zoom: float, angle: int) -> str:
-
-        """
-        The edit_photo function takes in a photo, and returns the edited version of that photo.
-        The function uses Cloudinary's image() method to edit the photo using transformations.
-        The transformations are specified as a list of dictionaries, where each dictionary is one transformation.
-
-        :param photo: str: Pass the photo to be edited
-        :param gravity: str: Set the position of the image
-        :param height: int: Set the height of the image
-        :param width: int: Set the width of the image
-        :param crop: str: Crop the image
-        :param radius: str: Round the corners of the image
-        :param color: str: Change the color of the image
-        :param effect: str: Add an effect to the image
-        :param zoom: float: Zoom in on the image
-        :param angle: int: Rotate the image by a certain degree
-        :return: A string
-        :doc-author: Trelent
-        """
-        photo_edit = cloudinary.CloudinaryImage(photo).image(transformation=[
-            {'gravity': gravity, 'height': height, 'width': width, 'crop': crop},
-            {'radius': radius},
-            {'width': width, 'crop': "scale"},
-            {'fetch_format': "auto"}
-        ])
-        return photo_edit
+    def edit_photo(public_id: str, gravity: str | None = None, height: int = 0, width: int = 0, crop: str | None = None,
+                   radius: str | None = None, color: str | None = None, effect: str | None = None,
+                   zoom: float = 0.0, angle: int = 0):
+        options = {key: value for key, value in locals().items() if value and value != public_id}
+        print(options)
+        photo_edit = cloudinary.CloudinaryImage(public_id).build_url(transformation=options)
+        return {'url': photo_edit}
