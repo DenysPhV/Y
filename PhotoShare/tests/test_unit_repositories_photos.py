@@ -72,7 +72,7 @@ class TestPhoto(unittest.TestCase):
 
     def test_update_photo_found(self):
         expect_res = Photo(description="old_desc")
-        body = PhotoModel(name="test_name", description="new_desc", photo_url="test_url")
+        body = PhotoModel(name="test_name", description="new_desc", tags="last, python", photo_url="test_url")
         self.session.query().filter().first.return_value = expect_res
         self.session.commit.return_value = None
         result = update_photo(photo_id=1, body=body, user=self.user, db=self.session)
@@ -80,7 +80,8 @@ class TestPhoto(unittest.TestCase):
         self.assertTrue(hasattr(result, "updated_at"))
 
     def test_change_description_not_found(self):
-        body = PhotoModel(name="test_name", description="test description test test", photo_url="test_url")
+        body = PhotoModel(name="test_name", description="test description test test", tags="last, python",
+                          photo_url="test_url")
         self.session.execute().scalar_one_or_none.return_value = None
         self.session.commit.return_value = None
         result = update_photo(body=body, photo_id=1, user=self.user, db=self.session)
