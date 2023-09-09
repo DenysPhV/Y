@@ -4,7 +4,7 @@ from sqlalchemy import String, func
 from sqlalchemy.sql.sqltypes import DateTime
 from sqlalchemy.orm import Mapped, mapped_column
 
-from PhotoShare.app.core.database import engine
+
 from PhotoShare.app.models.base import Base
 
 
