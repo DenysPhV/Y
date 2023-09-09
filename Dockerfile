@@ -3,7 +3,7 @@
 FROM python:3.10
 
 # Встановимо змінну середовища
-ENV APP_HOME / PhotoShare.app
+ENV APP_HOME / app
 
 # Встановимо робочу директорію усередині контейнера
 WORKDIR $APP_HOME
@@ -22,4 +22,4 @@ COPY . .
 EXPOSE 8000
 
 # Запустимо нашу програму всередині контейнера
-CMD ["python", "Y/main.py", "runserver", "0.0.0.0:8000"]
+CMD ["python", "main.py", "runserver", "0.0.0.0:8000"]
