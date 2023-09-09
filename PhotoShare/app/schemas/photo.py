@@ -1,8 +1,5 @@
 from datetime import datetime
 
-
-
-
 from pydantic import BaseModel, Field
 
 from PhotoShare.app.schemas.user import UserRespond
@@ -22,8 +19,7 @@ class TagResponse(TagModel):
 class PhotoModel(BaseModel):
     name: str = Field(max_length=150, min_length=3)
     description: str = Field(max_length=300, min_length=3)
-    tags: list = Field(max=5)
-    photo_url: str
+    # tags: list = Field(max=5)
 
 
 class PhotoUpdate(PhotoModel):
@@ -34,6 +30,7 @@ class PhotoUpdate(PhotoModel):
 
 class PhotoResponse(PhotoModel):
     id: int = 1
+    photo_url: str
     created_at: datetime | None
     updated_at: datetime | None
     user: UserRespond | None
