@@ -47,8 +47,6 @@ def get_photo(photo_id: int, db: Session, user: User):
     :doc-author: Trelent
     """
     sq = select(Photo).filter_by(id=photo_id, user=user)
-
-
     contact = db.execute(sq)
     return contact.scalar_one_or_none()
 
@@ -69,19 +67,18 @@ def create_photo(body: PhotoModel, photo_url: str, db: Session, user: User):
     :return: The photo object that was created
     :doc-author: Trelent
     """
-    photo_tags = []
-    tags = get_tags()
-    for tag_name in tags:
-        tag = db.query(Tag).filter(Tag.name == tag_name).first()
-        if not tag:
-            tag = Tag(name=tag_name)
-            db.add(tag)
-            db.commit()
-            db.refresh(tag)
-        if len(photo_tags) <= 5:
-            photo_tags.append(tag)
-    photo = Photo(name=body.name, description=body.description, tags=photo_tags, user=user)
-    photo.photo_url = photo_url
+    # photo_tags = []
+    # tags = get_tags()
+    # for tag_name in tags:
+    #     tag = db.query(Tag).filter(Tag.name == tag_name).first()
+    #     if not tag:
+    #         tag = Tag(name=tag_name)
+    #         db.add(tag)
+    #         db.commit()
+    #         db.refresh(tag)
+    #     photo_tags.append(tag)
+    photo = Photo(name=body.name, description=body.description, user=user) #tags=photo_tags,
+    Photo.photo_url = photo_url
     db.add(photo)
     db.commit()
     db.refresh(photo)

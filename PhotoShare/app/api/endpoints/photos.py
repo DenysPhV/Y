@@ -1,7 +1,7 @@
 from typing import List
 
 from fastapi import APIRouter, HTTPException, Depends, status, Path, Query, UploadFile, File
-from fastapi.openapi.models import Response
+from fastapi.responses import Response
 from sqlalchemy.orm import Session
 
 from PhotoShare.app.core.database import get_db
@@ -94,8 +94,8 @@ def create_photo(body: PhotoModel, file: UploadFile = File(), db: Session = Depe
     """
     public_id = CloudinaryService.get_public_id(filename=file.filename)
     photo_load = CloudinaryService.upload_photo(file=file.file, public_id=public_id)
-    photo_edit = CloudinaryService.edit_photo(public_id=public_id)
-    version = photo_edit.get('version')
+    # photo_edit = CloudinaryService.edit_photo(public_id=public_id)
+    version = photo_load.get('version')
     photo_url = CloudinaryService.get_photo(public_id=public_id, version=version)
     photo = photo_repository.create_photo(body, photo_url, db, user)
     return photo
