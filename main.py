@@ -62,5 +62,7 @@ app.include_router(router_user)
 app.include_router(router_photo)
 app.include_router(router_tags)
 
+
 if __name__ == '__main__':
     uvicorn.run("main:app", host="localhost", reload=True, log_level="info", port=5000)
+
