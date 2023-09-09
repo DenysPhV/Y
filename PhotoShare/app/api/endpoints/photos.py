@@ -2,8 +2,7 @@ from typing import List
 
 import cloudinary
 import cloudinary.uploader
-from fastapi import APIRouter, HTTPException, Depends, status, Path, Query, UploadFile, File
-from fastapi.openapi.models import Response
+from fastapi import APIRouter, HTTPException, Depends, status, Path, Query, UploadFile, File, Response
 from sqlalchemy.orm import Session
 
 from PhotoShare.app.core.config import settings
@@ -120,7 +119,7 @@ def update_contact(body: PhotoUpdate, photo_id: int = Path(ge=1), db: Session = 
     :return: The updated photo
     :doc-author: Trelent
     """
-    photo = await photo_repository.update_photo(photo_id, body, db, user)
+    photo = photo_repository.update_photo(photo_id, body, db, user)
     if photo is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
