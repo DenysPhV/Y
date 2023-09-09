@@ -22,4 +22,4 @@ COPY . .
 EXPOSE 8000
 
 # Запустимо нашу програму всередині контейнера
-CMD ["python", "/main.py", "runserver", "0.0.0.0:8000"]
+CMD ["python", "main.py:app"]
