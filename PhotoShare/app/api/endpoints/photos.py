@@ -1,7 +1,12 @@
 from typing import List
 
+
+import cloudinary
+import cloudinary.uploader
+
 from fastapi import APIRouter, HTTPException, Depends, status, Path, Query, UploadFile, File
 from fastapi.responses import Response
+
 from sqlalchemy.orm import Session
 
 from PhotoShare.app.core.database import get_db
