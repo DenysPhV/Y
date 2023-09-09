@@ -1,15 +1,9 @@
-from fastapi import status
+from unittest.mock import patch
+
+from main import startup
 
 
-def test_root(client):
-    response = client.get("/")
-    assert response.status_code == status.HTTP_200_OK
-    data = response.json()
-    assert data["message"] =="Welcome to root!"
-
-
-def test_healthchecker(client):
-    response = client.get("/api/healthchecker")
-    assert response.status_code == status.HTTP_200_OK
-    data = response.json()
-    assert data["message"] == "Welcome to FastAPI!"
+def test_startup():
+    with patch("PhotoShare.app.services.redis.RedisService.init", autospec=True) as mock_init:
+        startup()
+        mock_init.assert_called_once()
