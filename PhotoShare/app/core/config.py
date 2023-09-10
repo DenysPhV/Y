@@ -4,7 +4,7 @@ from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     postgres_user: str
-    postgres_password: int
+    postgres_password: str
     postgres_domain: str
     postgres_port: int
     postgres_db_name: str
