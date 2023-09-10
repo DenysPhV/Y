@@ -1,5 +1,6 @@
 import uvicorn
 from fastapi import FastAPI
+from starlette.middleware.cors import CORSMiddleware
 
 from PhotoShare.app.api.endpoints.user import router_user
 from PhotoShare.app.api.endpoints.authentication import router_auth
@@ -25,6 +26,14 @@ def startup():
 
     RedisService.init()
 
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(router_auth)
 app.include_router(router_comments)
