@@ -10,6 +10,8 @@ from PhotoShare.app.models.user import User
 from PhotoShare.app.repositories.tags import get_tags
 from PhotoShare.app.schemas.photo import PhotoModel, PhotoUpdate
 
+from PhotoShare.app.repositories.rating import get_ratings
+
 
 def get_photos(limit: int, offset: int, db: Session):
     """
@@ -34,7 +36,7 @@ def get_photos(limit: int, offset: int, db: Session):
     return contacts.scalars().all()
 
 
-def get_photo(photo_id: int, db: Session, user: User):
+def get_photo(photo_id: int, db: Session):
 
     """
     The get_photo function takes in a photo_url and returns the corresponding Photo object.
@@ -46,7 +48,10 @@ def get_photo(photo_id: int, db: Session, user: User):
     :return: A photo object or none if the photo does not exist
     :doc-author: Trelent
     """
-    sq = select(Photo).filter_by(id=photo_id, user=user)
+
+    sq = select(Photo).filter_by(id=photo_id)
+
+
     contact = db.execute(sq)
     return contact.scalar_one_or_none()
 
@@ -156,3 +161,26 @@ def remove_photo(photo_id: int, db: Session, user: User):
         db.delete(photo)
         db.commit()
     return photo
+
+def calculate_rating(photo_id: int, db: Session) -> int:
+    """
+    Calculates rating of a specific photo.
+
+    :param photo_id: The ID of the photo to calculate rating.
+    :type photo_id: int
+    :param db: Pass in the database session
+    :type db: Session
+    :return: Calculated rating.
+    :rtype: int
+    """
+    photo = db.query(Photo).filter(Photo.id==photo_id).first()
+    if photo:
+        ratings = get_ratings(db, photo_id=photo_id)
+        rating_avg = None
+        if len(ratings):
+            n_ratings = [r.rating for r in ratings]
+            rating_avg = float(sum(n_ratings)) / len(n_ratings)
+        photo.rating = rating_avg
+        db.commit()
+        db.refresh(photo)
+    return rating_avg
