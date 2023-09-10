@@ -1,7 +1,7 @@
 import pytest
 import unittest
 
-from unittest.mock import AsyncMock, patch
+from unittest.mock import MagicMock, patch
 
 from PhotoShare.app.repositories.users import create_user
 from PhotoShare.app.schemas.user import UserRegisterModel
@@ -34,22 +34,21 @@ class MockGravatar:
         return "mock_avatar_url"
 
 
-@pytest.mark.asyncio
-async def test_create_user():
+def test_create_user():
     # Given
     session = MockSession()
     user_model = UserRegisterModel(
         username="testusername",
         email="test@example.com",
         password="testpassword",
-        first_name="Test",
-        last_name="User")
-    mock_get_user_by_email = AsyncMock(return_value=None)
+        first_name="Jhon",
+        last_name="Malckovich")
+    mock_get_user_by_email = MagicMock(return_value=None)
 
     # When
     with patch("PhotoShare.app.repositories.users.get_user_by_email", mock_get_user_by_email):
         with patch("libgravatar.Gravatar.get_image", MockGravatar().get_image):  # MockGravatar
-            created_user = await create_user(user_model, session)
+            created_user = create_user(user_model, session)
 
     # Then
     assert created_user.email == "test@example.com"

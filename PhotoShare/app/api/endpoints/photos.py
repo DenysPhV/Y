@@ -1,12 +1,16 @@
 from typing import List
 
+
 import cloudinary
 import cloudinary.uploader
-from fastapi import APIRouter, HTTPException, Depends, status, Path, Query, UploadFile, File, Response
-#from fastapi.openapi.models import 
+
+
+
+from fastapi import APIRouter, HTTPException, Depends, status, Path, Query, UploadFile, File
+from fastapi.responses import Response
+
 from sqlalchemy.orm import Session
 
-from PhotoShare.app.core.config import settings
 from PhotoShare.app.core.database import get_db
 from PhotoShare.app.models.user import User
 from PhotoShare.app.repositories import photo as photo_repository
@@ -97,15 +101,15 @@ def create_photo(body: PhotoModel, file: UploadFile = File(), db: Session = Depe
     """
     public_id = CloudinaryService.get_public_id(filename=file.filename)
     photo_load = CloudinaryService.upload_photo(file=file.file, public_id=public_id)
-    photo_edit = CloudinaryService.edit_photo(photo=photo_load)
-    version = photo_edit.get('version')
+    # photo_edit = CloudinaryService.edit_photo(public_id=public_id)
+    version = photo_load.get('version')
     photo_url = CloudinaryService.get_photo(public_id=public_id, version=version)
     photo = photo_repository.create_photo(body, photo_url, db, user)
     return photo
 
 
 @router.put("/{photo_id}", response_model=PhotoResponse)
-def update_contact(body: PhotoUpdate, photo_id: int = Path(ge=1), db: Session = Depends(get_db),
+def update_photo(body: PhotoUpdate, photo_id: int = Path(ge=1), db: Session = Depends(get_db),
                    user: User = Depends(get_current_user)):
     """
     The update_contact function updates a contact in the database.
@@ -130,7 +134,7 @@ def update_contact(body: PhotoUpdate, photo_id: int = Path(ge=1), db: Session = 
 
 
 @router.delete("/{photo_id}", response_model=PhotoResponse)
-def delete_contact(photo_id: int = Path(ge=1), db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+def delete_photo(photo_id: int = Path(ge=1), db: Session = Depends(get_db), user: User = Depends(get_current_user)):
     """
     The delete_contact function deletes a contact from the database.
         Args:
