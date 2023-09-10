@@ -31,6 +31,8 @@ class Photo(Base):
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), nullable=True)
     user: Mapped["User"] = relationship('User', backref="photo", lazy='joined')
 
+    rating: Mapped[float] = mapped_column(nullable=True)
+
 
 class Tag(Base):
     __tablename__ = "tags"

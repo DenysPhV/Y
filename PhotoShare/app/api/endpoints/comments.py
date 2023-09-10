@@ -32,10 +32,10 @@ def read_comments(limit: int = 100, photo_id: int = 0, db: Session = Depends(get
     :rtype: List[Comment]
     """
     if not photo_id:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='Post id is required')
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='Photo id is required')
     photo = repository_photos.get_photo(photo_id, db)
     if not photo:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Post not found")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Photo not found")
     comments = repository_comments.get_comments(limit, photo_id, db)
     return comments
 
@@ -59,7 +59,7 @@ def read_comment(comment_id: int, db: Session = Depends(get_db)):
 
 
 
-@router_comments.post("/", response_model=CommentResponse)
+@router_comments.post("/", response_model=CommentResponse, status_code=status.HTTP_201_CREATED)
 def create_comment(body: CommentModel, photo_id: int = 0, db: Session = Depends(get_db),
                    current_user: User = Depends(auth_service.get_current_user)):
     """
