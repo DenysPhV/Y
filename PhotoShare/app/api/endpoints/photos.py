@@ -14,6 +14,7 @@ from sqlalchemy.orm import Session
 from PhotoShare.app.core.database import get_db
 from PhotoShare.app.models.user import User
 from PhotoShare.app.repositories import photo as photo_repository
+from PhotoShare.app.repositories.users import update_user
 from PhotoShare.app.schemas.photo import PhotoResponse, PhotoModel, PhotoUpdate, CreateModelPhoto
 from PhotoShare.app.services.auth_service import get_current_user
 from PhotoShare.app.services.photo_service import CloudinaryService
@@ -106,6 +107,8 @@ def create_photo(body: CreateModelPhoto = Depends(), db: Session = Depends(get_d
     version = photo_load.get('version')
     photo_url = CloudinaryService.get_photo(public_id=public_id, version=version)
     photo = photo_repository.create_photo(body, photo_url, db, user)
+    user.uploaded_photos += 1
+    update_user(user=user, session=db)
     return photo
 
 
