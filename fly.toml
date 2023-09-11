@@ -1,0 +1,45 @@
+# fly.toml app configuration file generated for photoshare on 2023-09-11T17:44:50+03:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "photoshare"
+primary_region = "waw"
+
+
+[env]
+  POSTGRES_USER="ycrymnbx"
+  POSTGRES_PASSWORD="R76JH9HLrLwq6CcGfkXPpFc-PEvBcCzS"
+  POSTGRES_DOMAIN="snuffleupagus.db.elephantsql.com"
+  POSTGRES_PORT=5432
+  POSTGRES_DB_NAME="ycrymnbx"
+  POSTGRES_PATH="postgresql+psycopg2://ycrymnbx:R76JH9HLrLwq6CcGfkXPpFc-PEvBcCzS@snuffleupagus.db.elephantsql.com:5432/ycrymnbx"
+
+  EMAIL_USERNAME="webba1065@meta.ua"
+  EMAIL_PASSWORD="Volopas73"
+  EMAIL_FROM="webba1065@meta.ua"
+  EMAIL_PORT=465
+  EMAIL_SERVER="smtp.meta.ua"
+  EMAIL_FROM_NAME="Examplemail"
+
+  SECRET_ACCESS_KEY="cd88fb00b5b65a77530bd61afcc9b33700e369348aeb29645c0ce593f49c48fc"
+  SECRET_REFRESH_KEY="acfe0378bf23e92d178c001d68e448fecfc1823fa2a48527966303517e6a06f9"
+  SECRET_EMAIL_KEY="2809e54706094e3c2b4df095a9cf68dc6162cde7041876e0c347a320c54260be"
+
+  ALGORITHM="HS256"
+
+  REDIS_HOST="195.201.150.230"
+  REDIS_PORT=6379
+  REDIS_PASSWORD="567234"
+
+  CLOUDINARY_NAME="da6ixttju"
+  CLOUDINARY_API_KEY="421389394589724"
+  CLOUDINARY_API_SECRET="7XxgOS9euxuDM5AK-N2bDOeTOxo"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
