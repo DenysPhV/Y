@@ -14,7 +14,7 @@ from sqlalchemy.orm import Session
 from PhotoShare.app.core.database import get_db
 from PhotoShare.app.models.user import User
 from PhotoShare.app.repositories import photo as photo_repository
-from PhotoShare.app.schemas.photo import PhotoResponse, PhotoModel, PhotoUpdate
+from PhotoShare.app.schemas.photo import PhotoResponse, PhotoModel, PhotoUpdate, CreateModelPhoto
 from PhotoShare.app.services.auth_service import get_current_user
 from PhotoShare.app.services.photo_service import CloudinaryService
 
@@ -84,7 +84,7 @@ def get_qrcode(photo_id: int, db: Session = Depends(get_db)):
 
 
 @router.post("/", response_model=PhotoResponse, status_code=status.HTTP_201_CREATED)
-def create_photo(body: PhotoModel, file: UploadFile = File(), db: Session = Depends(get_db),
+def create_photo(body: CreateModelPhoto = Depends(), db: Session = Depends(get_db),
                  user: User = Depends(get_current_user)):
     """
     The create_photo function creates a new photo in the database.
@@ -99,8 +99,9 @@ def create_photo(body: PhotoModel, file: UploadFile = File(), db: Session = Depe
     :return: A photo object
     :doc-author: Trelent
     """
-    public_id = CloudinaryService.get_public_id(filename=file.filename)
-    photo_load = CloudinaryService.upload_photo(file=file.file, public_id=public_id)
+    public_id = CloudinaryService.get_public_id(filename=body.file.filename)
+    photo_load = CloudinaryService.upload_photo(file=body.file.file, public_id=public_id)
+    print(public_id, photo_load)
     # photo_edit = CloudinaryService.edit_photo(public_id=public_id)
     version = photo_load.get('version')
     photo_url = CloudinaryService.get_photo(public_id=public_id, version=version)

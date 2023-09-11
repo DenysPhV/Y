@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from fastapi import Form, UploadFile
 from pydantic import BaseModel, Field
 
 from PhotoShare.app.schemas.user import UserRespond
@@ -13,7 +14,13 @@ class TagResponse(TagModel):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
+
+
+class CreateModelPhoto(BaseModel):
+    name: str = Form(...)
+    description: str = Form(...)
+    file: UploadFile = Form(...)
 
 
 class PhotoModel(BaseModel):
@@ -37,7 +44,4 @@ class PhotoResponse(PhotoModel):
     rating: int = 0
 
     class Config:
-
         from_attributes = True
-
-

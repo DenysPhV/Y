@@ -37,7 +37,6 @@ def get_photos(limit: int, offset: int, db: Session):
 
 
 def get_photo(photo_id: int, db: Session):
-
     """
     The get_photo function takes in a photo_url and returns the corresponding Photo object.
         If no such photo exists, it returns None.
@@ -51,13 +50,11 @@ def get_photo(photo_id: int, db: Session):
 
     sq = select(Photo).filter_by(id=photo_id)
 
-
     contact = db.execute(sq)
     return contact.scalar_one_or_none()
 
 
 def create_photo(body: PhotoModel, photo_url: str, db: Session, user: User):
-
     """
     The create_photo function creates a new photo in the database.
         It takes three arguments:
@@ -72,18 +69,10 @@ def create_photo(body: PhotoModel, photo_url: str, db: Session, user: User):
     :return: The photo object that was created
     :doc-author: Trelent
     """
-    # photo_tags = []
-    # tags = get_tags()
-    # for tag_name in tags:
-    #     tag = db.query(Tag).filter(Tag.name == tag_name).first()
-    #     if not tag:
-    #         tag = Tag(name=tag_name)
-    #         db.add(tag)
-    #         db.commit()
-    #         db.refresh(tag)
-    #     photo_tags.append(tag)
-    photo = Photo(name=body.name, description=body.description, user=user) #tags=photo_tags,
-    Photo.photo_url = photo_url
+
+    photo = Photo(name=body.name, description=body.description, user=user)  # tags=photo_tags,
+    photo.photo_url = photo_url
+    photo.rating = 0
     db.add(photo)
     db.commit()
     db.refresh(photo)
@@ -108,7 +97,6 @@ def get_qrcode(photo_id: int, db: Session):
 
 
 def update_photo(photo_id: int, body: PhotoUpdate, db: Session, user: User):
-
     """
     The update_photo function updates the description of a photo in the database.
         Args:
@@ -138,7 +126,6 @@ def update_photo(photo_id: int, body: PhotoUpdate, db: Session, user: User):
 
 
 def remove_photo(photo_id: int, db: Session, user: User):
-
     """
     The remove_photo function removes a photo from the database.
         Args:
@@ -162,6 +149,7 @@ def remove_photo(photo_id: int, db: Session, user: User):
         db.commit()
     return photo
 
+
 def calculate_rating(photo_id: int, db: Session) -> int:
     """
     Calculates rating of a specific photo.
@@ -173,7 +161,7 @@ def calculate_rating(photo_id: int, db: Session) -> int:
     :return: Calculated rating.
     :rtype: int
     """
-    photo = db.query(Photo).filter(Photo.id==photo_id).first()
+    photo = db.query(Photo).filter(Photo.id == photo_id).first()
     if photo:
         ratings = get_ratings(db, photo_id=photo_id)
         rating_avg = None

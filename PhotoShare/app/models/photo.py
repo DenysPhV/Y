@@ -7,7 +7,6 @@ from PhotoShare.app.core.database import engine
 from PhotoShare.app.models.base import Base
 from PhotoShare.app.models.user import User
 
-
 photo_m2m_tag = Table(
     "photo_m2m_tag",
     Base.metadata,
@@ -15,7 +14,6 @@ photo_m2m_tag = Table(
     Column("photo_id", Integer, ForeignKey("photo.id", ondelete="CASCADE")),
     Column("tag_id", Integer, ForeignKey("tags.id", ondelete="CASCADE")),
 )
-
 
 
 class Photo(Base):

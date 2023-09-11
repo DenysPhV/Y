@@ -1,8 +1,6 @@
 from typing import List
 from pydantic import BaseModel, Field
 from datetime import datetime
-from PhotoShare.app.schemas import photo as p
-from PhotoShare.app.schemas import user as u
 
 
 class CommentModel(BaseModel):
