@@ -164,7 +164,7 @@ def calculate_rating(photo_id: int, db: Session) -> int:
     photo = db.query(Photo).filter(Photo.id == photo_id).first()
     if photo:
         ratings = get_ratings(db, photo_id=photo_id)
-        rating_avg = None
+        rating_avg = 0
         if len(ratings):
             n_ratings = [r.rating for r in ratings]
             rating_avg = float(sum(n_ratings)) / len(n_ratings)
