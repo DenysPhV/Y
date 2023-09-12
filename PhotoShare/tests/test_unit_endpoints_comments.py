@@ -6,17 +6,19 @@ from PhotoShare.app.models.user import User, UserRole
 
 @pytest.fixture(scope='function')
 def token(client, user, session):
-    response = client.post("/api/auth/signup",
-                           json={"login": "deadpool",
+    response = client.post("auth/signup",
+                           json={"username": "deadpool",
                                  "email": "deadpool@example.com",
-                                 "password_checksum": "123456789"})
+                                 "password_checksum": "123456789",
+                                 "first_name": "dead",
+                                 "last_name": "pool"})
     current_user: User = session.query(User).filter(User.email == user.get('email')).first()
     if current_user is not None:
         current_user.role = UserRole.Admin
         session.commit()
     else:
         raise Exception("User not found")
-    response = client.post("/api/auth/login",
+    response = client.post("auth/login",
                            data={"username": "deadpool@example.com",
                                  "password": "123456789"},
                            headers={'Content-Type': 'application/x-www-form-urlencoded'})

@@ -6,17 +6,18 @@ from PhotoShare.app.models.user import User, UserRole
 
 @pytest.fixture(scope='function')
 def token(client, user, session):
-    response = client.post("/api/auth/signup",
-                           json={"login": "deadpool",
+    response = client.post("auth/signup",
+                           json={"username": "deadpool",
                                  "email": "deadpool@example.com",
-                                 "password_checksum": "123456789"})
+                                 "password_checksum": "123456789",
+                                 "first_name": "dead",
+                                 "last_name": "pool"})
     current_user: User = session.query(User).filter(User.email == user.get('email')).first()
-    if current_user is not None:
-        current_user.role = UserRole.Admin
-        session.commit()
-    else:
-        raise Exception("User not found")
-    response = client.post("/api/auth/login",
+    assert current_user is not None, "User not found"
+    current_user.role = UserRole.Admin
+    session.commit()
+
+    response = client.post("auth/login",
                            data={"username": "deadpool@example.com",
                                  "password": "123456789"},
                            headers={'Content-Type': 'application/x-www-form-urlencoded'})
@@ -26,17 +27,16 @@ def token(client, user, session):
 
 @pytest.fixture(scope='function')
 def token_second(client, user, session):
-    response = client.post("/api/auth/signup",
+    response = client.post("auth/signup",
                            json={"login": "TEST",
                                  "email": "testpool@example.com",
                                  "password_checksum": "testpassword"})
     current_user: User = session.query(User).filter(User.email == 'testpool@example.com').first()
-    if current_user is not None:
-        current_user.role = UserRole.Admin
-        session.commit()
-    else:
-        raise Exception("User not found")
-    response = client.post("/api/auth/login",
+    assert current_user is not None, "User not found"
+    current_user.role = UserRole.Admin
+    session.commit()
+
+    response = client.post("auth/login",
                            data={"username": "testpool@example.com",
                                  "password": "testpassword"},
                            headers={'Content-Type': 'application/x-www-form-urlencoded'})
@@ -44,25 +44,27 @@ def token_second(client, user, session):
     return data["access_token"]
 
 
-def test_read_users_me(client, token):
-    response = client.get("api/users/me/",
+def test_read_user_me(client, token):
+    response = client.get("user/me",
                           headers={"Authorization": f"Bearer {token}"})
     assert response.status_code == status.HTTP_200_OK
-    response = client.get("api/users/me/")
+
+    response = client.get("user/me")
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
 
 def test_read_user_profile_by_username(client, token, user):
     login = user['login']
-    response = client.get(f"api/users/user/{login}/", headers={"Authorization": f"Bearer {token}"})
+    response = client.get(f"user/user/{login}/", headers={"Authorization": f"Bearer {token}"})
     assert response.status_code == status.HTTP_200_OK
+
     login = 'test_wrong_login'
-    response = client.get(f"api/users/user/{login}/", headers={"Authorization": f"Bearer {token}"})
+    response = client.get(f"user/user/{login}/", headers={"Authorization": f"Bearer {token}"})
     assert response.status_code == status.HTTP_404_NOT_FOUND
 
 
 def test_change_role(client, user, token):
-    response = client.put("api/users/change_role",
+    response = client.put("user/change_role",
                           json={
                               "id": 1000,
                               "role": 2,
@@ -70,7 +72,7 @@ def test_change_role(client, user, token):
                           headers={"Authorization": f"Bearer {token}"},)
     assert response.status_code == status.HTTP_404_NOT_FOUND
 
-    response = client.put("api/users/change_role",
+    response = client.put("user/change_role",
                           json={
                               "id": 1,
                               "role": 2,
@@ -78,12 +80,12 @@ def test_change_role(client, user, token):
                           headers={"Authorization": f"Bearer {token}"},)
     assert response.status_code == status.HTTP_200_OK
 
-    response = client.put("api/users/change_role")
+    response = client.put("user/change_role")
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
 
 def test_update_user(client, token):
-    response = client.put("api/users/update_user",
+    response = client.put("user/update_user",
                           json={
                               "id": 12121,
                               "email": "deadpool@example.com",
@@ -94,7 +96,7 @@ def test_update_user(client, token):
                           headers={"Authorization": f"Bearer {token}"},)
     assert response.status_code == status.HTTP_404_NOT_FOUND
 
-    response = client.put("api/users/update_user",
+    response = client.put("user/update_user",
                           headers={"Authorization": f"Bearer {token}"},
                           json={
                               "id": 1,
@@ -105,12 +107,12 @@ def test_update_user(client, token):
                               "password_checksum": "123456789"})
     assert response.status_code == status.HTTP_200_OK
 
-    response = client.put("api/users/update_user")
+    response = client.put("user/update_user")
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
 
 def test_update_user_by_admin(client, token_second):
-    response = client.put("api/users/update_user_by_admin",
+    response = client.put("user/update_user_by_admin",
                           json={"id": 100,
                                 "login": "deadpool_2",
                                 "name": "deadpool_2",
@@ -123,7 +125,7 @@ def test_update_user_by_admin(client, token_second):
                           headers={"Authorization": f"Bearer {token_second}"},)
     assert response.status_code == status.HTTP_404_NOT_FOUND
 
-    response = client.put("api/users/update_user_by_admin",
+    response = client.put("user/update_user_by_admin",
                           json={"id": 1,
                                 "login": "TEST_USER",
                                 "name": "test3",
@@ -132,17 +134,17 @@ def test_update_user_by_admin(client, token_second):
                                 "role": 1,
                                 "user_pic_url": "",
                                 "password_checksum": "testpasswod",
-                                "updated_at": "2023-05-21T16:35:59.380Z",},
+                                "updated_at": "2023-05-21T16:35:59.380Z"},
                           headers={"Authorization": f"Bearer {token_second}"},)
     assert response.status_code == status.HTTP_200_OK
     print(response.json())
 
-    response = client.put("api/users/update_user_by_admin")
+    response = client.put("user/update_user_by_admin")
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
 
 def test_ban_user(client, user, token):
-    response = client.put(f"api/users/ban_user/?user_id=1", headers={"Authorization": f"Bearer {token}"})
+    response = client.put(f"user/ban_user/?user_id=1", headers={"Authorization": f"Bearer {token}"})
     assert response.status_code == status.HTTP_200_OK
-    response = client.put(f"api/users/ban_user/?user_id=100", headers={"Authorization": f"Bearer {token}"})
+    response = client.put(f"user/ban_user/?user_id=100", headers={"Authorization": f"Bearer {token}"})
     assert response.status_code == status.HTTP_404_NOT_FOUND

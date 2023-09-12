@@ -123,14 +123,16 @@ celerybeat.pid
 
 PhotoShare/app/core/.env
 PhotoShare/app/core/env
-.env
+PhotoShare/app/core/.env
 .venv
 env/
 venv/
 ENV/
+fly.toml
+**/.env
 env.bak/
 venv.bak/
-
+docker-compose.yml
 # Spyder project settings
 .spyderproject
 .spyproject

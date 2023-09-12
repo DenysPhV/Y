@@ -48,6 +48,7 @@ def get_photo(photo_id: int, db: Session):
     :return: A photo object or none if the photo does not exist
     :doc-author: Trelent
     """
+
     sq = select(Photo).filter_by(id=photo_id)
 
 
@@ -71,19 +72,18 @@ def create_photo(body: PhotoModel, photo_url: str, db: Session, user: User):
     :return: The photo object that was created
     :doc-author: Trelent
     """
-    photo_tags = []
-    tags = get_tags()
-    for tag_name in tags:
-        tag = db.query(Tag).filter(Tag.name == tag_name).first()
-        if not tag:
-            tag = Tag(name=tag_name)
-            db.add(tag)
-            db.commit()
-            db.refresh(tag)
-        if len(photo_tags) <= 5:
-            photo_tags.append(tag)
-    photo = Photo(name=body.name, description=body.description, tags=photo_tags, user=user)
-    photo.photo_url = photo_url
+    # photo_tags = []
+    # tags = get_tags()
+    # for tag_name in tags:
+    #     tag = db.query(Tag).filter(Tag.name == tag_name).first()
+    #     if not tag:
+    #         tag = Tag(name=tag_name)
+    #         db.add(tag)
+    #         db.commit()
+    #         db.refresh(tag)
+    #     photo_tags.append(tag)
+    photo = Photo(name=body.name, description=body.description, user=user) #tags=photo_tags,
+    Photo.photo_url = photo_url
     db.add(photo)
     db.commit()
     db.refresh(photo)
@@ -128,11 +128,12 @@ def update_photo(photo_id: int, body: PhotoUpdate, db: Session, user: User):
     sq = select(Photo).filter_by(id=photo_id, user=user)
     result = db.execute(sq)
     photo = result.scalar_one_or_none()
-    if photo:
-        photo.description = body.description
-        photo.updated_at = photo.updated_at + datetime.now()
-        db.commit()
-        db.refresh(photo)
+    if photo is None:
+        return None
+    photo.description = body.description
+    photo.updated_at = photo.updated_at + datetime.now()
+    db.commit()
+    db.refresh(photo)
     return photo
 
 
