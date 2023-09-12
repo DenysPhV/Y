@@ -78,7 +78,7 @@ def create_comment(body: CommentModel, photo_id: int = 0, db: Session = Depends(
     """
     if photo_id == 0:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='Photo id is required')
-    photo = repository_photos.get_photo(photo_id, db, current_user)
+    photo = repository_photos.get_photo(photo_id, db)
     if photo == None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Photo not found")
     return repository_comments.create_comment(body, current_user, photo_id, db)
