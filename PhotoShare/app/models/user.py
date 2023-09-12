@@ -8,10 +8,10 @@ from sqlalchemy.orm import Mapped, mapped_column
 from PhotoShare.app.models.base import Base
 
 
-class UserRole(int, enum.Enum):
-    Admin = 1
-    Moderator = 2
-    User = 3
+class UserRole(str, enum.Enum):
+    Admin = "admin"
+    Moderator = "moderator"
+    User = "user"
 
 
 class User(Base):

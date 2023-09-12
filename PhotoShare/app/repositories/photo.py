@@ -43,7 +43,6 @@ def get_photo(photo_id: int, db: Session):
 
     :param photo_id: str: Specify the id of the photo
     :param db: Session: Create a database session
-    :param user: User: Filter the results by user
     :return: A photo object or none if the photo does not exist
     :doc-author: Trelent
     """
@@ -156,8 +155,8 @@ def calculate_rating(photo_id: int, db: Session) -> int:
 
     :param photo_id: The ID of the photo to calculate rating.
     :type photo_id: int
-    :param db: Pass in the database session
-    :type db: Session
+    :param db: Pass in the database
+    :type db:
     :return: Calculated rating.
     :rtype: int
     """
@@ -172,3 +171,4 @@ def calculate_rating(photo_id: int, db: Session) -> int:
         db.commit()
         db.refresh(photo)
     return rating_avg
+

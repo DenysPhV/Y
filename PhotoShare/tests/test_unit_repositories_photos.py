@@ -23,12 +23,12 @@ class TestPhoto(unittest.TestCase):
     def test_get_photo_found(self):
         expect_res = Photo()
         self.session.execute().scalar_one_or_none.return_value = expect_res
-        result = get_photo(photo_id="photo_id", user=self.user, db=self.session)
+        result = get_photo(photo_id=1, db=self.session)
         self.assertEqual(result, expect_res)
 
     def test_get_photo_not_found(self):
         self.session.execute.return_value.scalar_one_or_none.return_value = None
-        result = get_photo(photo_id="photo_id", user=self.user, db=self.session)
+        result = get_photo(photo_id=1, db=self.session)
         self.assertIsNone(result)
 
     def test_create_found(self):
@@ -40,23 +40,23 @@ class TestPhoto(unittest.TestCase):
     def test_get_photo_from_id_found(self):
         expect_res = Photo()
         self.session.execute().scalar_one_or_none.return_value = expect_res
-        result = get_photo(photo_id="photo_id", user=self.user, db=self.session)
+        result = get_photo(photo_id=1, db=self.session)
         self.assertEqual(result, expect_res)
 
     def test_get_photo_from_id_not_found(self):
         self.session.execute().scalar_one_or_none.return_value = None
-        result = get_photo(photo_id="photo_id", user=self.user, db=self.session)
+        result = get_photo(photo_id=1, db=self.session)
         self.assertIsNone(result)
 
     def test_get_photo_from_url_found(self):
         expect_res = Photo()
         self.session.execute().scalar_one_or_none.return_value = expect_res
-        result = get_photo(photo_id="photo_id", user=self.user, db=self.session)
+        result = get_photo(photo_id=1, db=self.session)
         self.assertEqual(result, expect_res)
 
     def test_get_photo_from_url_not_found(self):
         self.session.execute().scalar_one_or_none.return_value = None
-        result = get_photo(photo_id="", user=self.user, db=self.session)
+        result = get_photo(photo_id=0, db=self.session)
         self.assertIsNone(result)
 
     def test_remove_found(self):
