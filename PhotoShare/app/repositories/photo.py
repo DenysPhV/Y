@@ -16,14 +16,13 @@ from PhotoShare.app.repositories.rating import get_ratings
 def get_photos(limit: int, offset: int, db: Session):
     """
     The get_photos function returns a list of photos from the database.
-        Args:
-            limit (int): The number of photos to return.
-            offset (int): The starting point for the query.  This is used for pagination, so that you can get more than
-            one page of results at a time.
-                For example, if you have 100 total results and want to get 10 per page, set limit=10 and offset=0 on
-                your first request; then set limit=10 and offset=10 on your second request; etc... until you've gotten
-                all 100 results back in chunks of 10 each time.&quot;
-
+    Args:
+    limit (int): The number of photos to return.
+    offset (int): The starting point for the query.  This is used for pagination, so that you can get more than
+    one page of results at a time.
+    For example, if you have 100 total results and want to get 10 per page, set limit=10 and offset=0 on
+    your first request; then set limit=10 and offset=10 on your second request; etc... until you've gotten
+    all 100 results back in chunks of 10 each time.&quot;
 
     :param limit: int: Limit the number of photos returned
     :param offset: int: Specify the number of records to skip before starting to return rows
@@ -39,7 +38,7 @@ def get_photos(limit: int, offset: int, db: Session):
 def get_photo(photo_id: int, db: Session):
     """
     The get_photo function takes in a photo_url and returns the corresponding Photo object.
-        If no such photo exists, it returns None.
+    If no such photo exists, it returns None.
 
     :param photo_id: str: Specify the id of the photo
     :param db: Session: Create a database session
@@ -56,10 +55,10 @@ def get_photo(photo_id: int, db: Session):
 def create_photo(body: PhotoModel, photo_url: str, db: Session, user: User):
     """
     The create_photo function creates a new photo in the database.
-        It takes three arguments:
-            body (PhotoModel): The PhotoModel object that contains the information for creating a new photo.
-            url (str): The URL of the image to be uploaded to Cloudinary and associated with this photo.
-            db (Session): A SQLAlchemy Session object used for interacting with our database.
+    It takes three arguments:
+    body (PhotoModel): The PhotoModel object that contains the information for creating a new photo.
+    url (str): The URL of the image to be uploaded to Cloudinary and associated with this photo.
+    db (Session): A SQLAlchemy Session object used for interacting with our database.
 
     :param body: PhotoModel: Get the name and description of the photo from the request body
     :param photo_url: str: Store the url of the photo in s3
@@ -98,12 +97,12 @@ def get_qrcode(photo_id: int, db: Session):
 def update_photo(photo_id: int, body: PhotoUpdate, db: Session, user: User):
     """
     The update_photo function updates the description of a photo in the database.
-        Args:
-            photo_id (int): The id of the photo to be updated.
-            body (PhotoUpdate): A PhotoUpdate object containing a new description for the specified photo.
-                This is passed as JSON data in an HTTP request body, and converted into a PhotoUpdate object by
-                FastAPI's Pydantic library.
-                See models/photo_update for more information on this class and its attributes.
+    Args:
+    photo_id (int): The id of the photo to be updated.
+    body (PhotoUpdate): A PhotoUpdate object containing a new description for the specified photo.
+    This is passed as JSON data in an HTTP request body, and converted into a PhotoUpdate object by
+    FastAPI's Pydantic library.
+    See models/photo_update for more information on this class and its attributes.
 
     :param photo_id: int: Identify the photo to be updated
     :param body: PhotoUpdate: Pass in the new photo description
@@ -127,12 +126,12 @@ def update_photo(photo_id: int, body: PhotoUpdate, db: Session, user: User):
 def remove_photo(photo_id: int, db: Session, user: User):
     """
     The remove_photo function removes a photo from the database.
-        Args:
-            photo_id (int): The id of the photo to be removed.
-            db (Session): A connection to the database.  This is used for querying and deleting photos
-            from the database.
+    Args:
+    photo_id (int): The id of the photo to be removed.
+    db (Session): A connection to the database.  This is used for querying and deleting photos
+    from the database.
 
-            user (User): The user who owns this particular photo, and therefore has permission to delete it.
+    user (User): The user who owns this particular photo, and therefore has permission to delete it.
     
     :param photo_id: int: Identify the photo to be removed
     :param db: Session: Pass in the database session

@@ -22,13 +22,8 @@ class Settings(BaseSettings):
     email_server: str
     email_from_name: str
 
-    # cloudinary_name: str = "cloudinary_name"
-    # cloudinary_api_key: str = "1234"
-    # cloudinary_api_secret: str = "213213"
-
     redis_host: str
     redis_port: int
-    redis_password: str
 
     cloudinary_name: str
     cloudinary_api_key: str
