@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Welcome to Y REST API’s documentation! &#8212; Rest API  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="_static/nature.css?v=8fc2db88" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">Rest API  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Welcome to Y REST API’s documentation!</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="welcome-to-y-rest-api-s-documentation">
+<h1>Welcome to Y REST API’s documentation!<a class="headerlink" href="#welcome-to-y-rest-api-s-documentation" title="Permalink to this heading">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+<section id="module-main">
+<span id="rest-api-main"></span><h1>REST API main<a class="headerlink" href="#module-main" title="Permalink to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="main.startup">
+<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">startup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#main.startup" title="Permalink to this definition">¶</a></dt>
+<dd><p>The startup ініціалізує асинхронний Redis клієнт
+Returns:
+Список Task на виконяння в EvenLoop</p>
+<p>Start up page definition</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict: health status</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-PhotoShare.app.api.endpoints.user">
+<span id="rest-api-endpoints-user"></span><h1>REST API Endpoints User<a class="headerlink" href="#module-PhotoShare.app.api.endpoints.user" title="Permalink to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.api.endpoints.user.change_username">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.api.endpoints.user.</span></span><span class="sig-name descname"><span class="pre">change_username</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">UserUsername</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">User</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_current_user)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.api.endpoints.user.change_username" title="Permalink to this definition">¶</a></dt>
+<dd><p>Функція змінює username користувача
+Args:
+body.username: str: Отримуємо новий username користувача
+:user: Передаємо користувача в якого буде редактовано username
+:session: Отримуємо сессію для доступа до бази даних
+Returns:
+user: Повертаємо user з оновленими даними</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.api.endpoints.user.edit_firstname">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.api.endpoints.user.</span></span><span class="sig-name descname"><span class="pre">edit_firstname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">UserFirstname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">User</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_current_user)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.api.endpoints.user.edit_firstname" title="Permalink to this definition">¶</a></dt>
+<dd><p>Функція змінює first_name користувача
+Args:
+body.first_name: str: Отримуємо новий first_name користувача
+:user: Передаємо користувача в якого буде редактовано first_name
+:session: Отримуємо сессію для доступа до бази даних
+Returns:
+user: Повертаємо user з оновленими даними</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.api.endpoints.user.edit_lastname">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.api.endpoints.user.</span></span><span class="sig-name descname"><span class="pre">edit_lastname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">UserLastname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">User</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_current_user)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.api.endpoints.user.edit_lastname" title="Permalink to this definition">¶</a></dt>
+<dd><p>Функція змінює last_name користувача
+Args:
+last_name: str: Отримуємо новий last_name користувача
+:user: Передаємо користувача в якого буде редактовано last_name
+:session: Отримуємо сессію для доступа до бази даних
+Returns:
+user: Повертаємо user з оновленими даними</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.api.endpoints.user.get_user_profile">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.api.endpoints.user.</span></span><span class="sig-name descname"><span class="pre">get_user_profile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">email</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.api.endpoints.user.get_user_profile" title="Permalink to this definition">¶</a></dt>
+<dd><p>The get_user_profile function використовується для отримання інформації профілю користувача.
+Ця функція приймає електронний лист і повертає наступне:
+- Адреса електронної пошти користувача, ім’я, прізвище, ім’я користувача та дата створення.
+- Кількість зображень, завантажених користувачем.
+Args:
+email: str: Отримуємо електронну адресу користувача, який увійшов у систему
+session: Session: Передаємо сеанс бази даних у функцію
+Returns:
+Словник інформації про користувача</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.api.endpoints.user.me">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.api.endpoints.user.</span></span><span class="sig-name descname"><span class="pre">me</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">User</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_current_user)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.api.endpoints.user.me" title="Permalink to this definition">¶</a></dt>
+<dd><p>Функція me повертає інформацію для активного user
+Args:
+:user: отримюємо активного користувача
+Returns:
+Авторизований користувач</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.api.endpoints.user.upload_avatar">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.api.endpoints.user.</span></span><span class="sig-name descname"><span class="pre">upload_avatar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">UploadFile</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">File(PydanticUndefined)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">User</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_current_user)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.api.endpoints.user.upload_avatar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Функція оновлює avatar користувача, завантажуючи його на сервіс cloudinary
+Args:
+file: str: Отримуємо новий avatar користувача
+:user: Передаємо користувача в якого буде редактовано last_name
+:session: Отримуємо сессію для доступа до бази даних
+Returns:
+user: Повертаємо user з оновленими даними</p>
+</dd></dl>
+
+</section>
+<section id="module-PhotoShare.app.api.endpoints.tags">
+<span id="rest-api-endpoints-tags"></span><h1>REST API Endpoints Tags<a class="headerlink" href="#module-PhotoShare.app.api.endpoints.tags" title="Permalink to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.api.endpoints.tags.create_tag">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.api.endpoints.tags.</span></span><span class="sig-name descname"><span class="pre">create_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TagModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.api.endpoints.tags.create_tag" title="Permalink to this definition">¶</a></dt>
+<dd><p>The create_tag function creates a new tag in the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> – TagModel: Pass the request body to the function</p></li>
+<li><p><strong>db</strong> – Session: Pass the database session to the function</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tagmodel object</p>
+</dd>
+<dt class="field-odd">Doc-author<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Trelent</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.api.endpoints.tags.read_tag">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.api.endpoints.tags.</span></span><span class="sig-name descname"><span class="pre">read_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.api.endpoints.tags.read_tag" title="Permalink to this definition">¶</a></dt>
+<dd><p>The read_tag function will return a single tag from the database.
+It takes an integer as its argument, which is the ID of the tag to be returned.
+If no such tag exists in the database, it raises a 404 error.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tag_id</strong> – int: Specify the type of parameter that is expected</p></li>
+<li><p><strong>db</strong> – Session: Pass the database session from the dependency to the function</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tag object, which is defined in schemas</p>
+</dd>
+<dt class="field-odd">Doc-author<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Trelent</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.api.endpoints.tags.read_tags">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.api.endpoints.tags.</span></span><span class="sig-name descname"><span class="pre">read_tags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">skip</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.api.endpoints.tags.read_tags" title="Permalink to this definition">¶</a></dt>
+<dd><p>The read_tags function returns a list of tags.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>skip</strong> – int: Skip the first n tags</p></li>
+<li><p><strong>limit</strong> – int: Specify the number of tags to return</p></li>
+<li><p><strong>db</strong> – Session: Get a database session, which is used to query the database</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of tags</p>
+</dd>
+<dt class="field-odd">Doc-author<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Trelent</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.api.endpoints.tags.remove_tag">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.api.endpoints.tags.</span></span><span class="sig-name descname"><span class="pre">remove_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.api.endpoints.tags.remove_tag" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>The remove_tag function removes a tag from the database.</dt><dd><p>It takes in an integer representing the id of the tag to be removed, and returns a dictionary containing
+information about that tag.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tag_id</strong> – int: Specify the tag id of the tag to be deleted</p></li>
+<li><p><strong>db</strong> – Session: Pass the database session to the repository function</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The tag that was removed</p>
+</dd>
+<dt class="field-odd">Doc-author<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Trelent</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.api.endpoints.tags.update_tag">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.api.endpoints.tags.</span></span><span class="sig-name descname"><span class="pre">update_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TagModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.api.endpoints.tags.update_tag" title="Permalink to this definition">¶</a></dt>
+<dd><p>The update_tag function updates a tag in the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> – TagModel: Get the new tag name from the request body</p></li>
+<li><p><strong>tag_id</strong> – int: Identify the tag to be deleted</p></li>
+<li><p><strong>db</strong> – Session: Pass the database session to the function</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The updated tag</p>
+</dd>
+<dt class="field-odd">Doc-author<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Trelent</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-PhotoShare.app.api.endpoints.photos">
+<span id="rest-api-endpoints-photos"></span><h1>REST API Endpoints Photos<a class="headerlink" href="#module-PhotoShare.app.api.endpoints.photos" title="Permalink to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.api.endpoints.photos.create_photo">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.api.endpoints.photos.</span></span><span class="sig-name descname"><span class="pre">create_photo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CreateModelPhoto</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(CreateModelPhoto)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">User</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_current_user)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.api.endpoints.photos.create_photo" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>The create_photo function creates a new photo in the database.</dt><dd><p>It takes in a PhotoModel object, an UploadFile object, and a Session object.
+The UploadFile is used to upload the image file to Cloudinary and get its URL.
+The Session is used to create the photo in our database using SQLAlchemy’s ORM.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> – PhotoModel: Create a new photo object</p></li>
+<li><p><strong>file</strong> – UploadFile: Upload the photo to cloudinary</p></li>
+<li><p><strong>db</strong> – Session: Get the database session</p></li>
+<li><p><strong>user</strong> – User: Get the user who is currently logged in</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A photo object</p>
+</dd>
+<dt class="field-odd">Doc-author<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Trelent</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.api.endpoints.photos.delete_photo">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.api.endpoints.photos.</span></span><span class="sig-name descname"><span class="pre">delete_photo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">photo_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Path(PydanticUndefined)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">User</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_current_user)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.api.endpoints.photos.delete_photo" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>The delete_contact function deletes a contact from the database.</dt><dd><dl class="simple">
+<dt>Args:</dt><dd><p>photo_id (int): The id of the contact to delete.
+db (Session, optional): SQLAlchemy Session. Defaults to Depends(get_db).
+user (User, optional): User object containing information about the current user’s session. Defaults to
+Depends(get_current_user).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>photo_id</strong> – int: Specify the photo to be deleted</p></li>
+<li><p><strong>db</strong> – Session: Get a database session</p></li>
+<li><p><strong>user</strong> – User: Get the current user</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The deleted contact</p>
+</dd>
+<dt class="field-odd">Doc-author<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Trelent</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.api.endpoints.photos.get_photo">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.api.endpoints.photos.</span></span><span class="sig-name descname"><span class="pre">get_photo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">photo_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">User</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_current_user)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.api.endpoints.photos.get_photo" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>The get_photo function is used to retrieve a photo from the database.</dt><dd><p>The function takes in a photo_url and returns the corresponding Photo object.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>photo_id</strong> – str: Get the photo from the database</p></li>
+<li><p><strong>db</strong> – Session: Access the database</p></li>
+<li><p><strong>user</strong> – User: Get the current user</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A photo object</p>
+</dd>
+<dt class="field-odd">Doc-author<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Trelent</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.api.endpoints.photos.get_photos">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.api.endpoints.photos.</span></span><span class="sig-name descname"><span class="pre">get_photos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Query(10)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Query(0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.api.endpoints.photos.get_photos" title="Permalink to this definition">¶</a></dt>
+<dd><p>The get_photos function returns a list of photos.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>limit</strong> – int: Limit the number of photos returned</p></li>
+<li><p><strong>ge</strong> – Specify the minimum value of the parameter</p></li>
+<li><p><strong>le</strong> – Limit the number of photos returned to 500</p></li>
+<li><p><strong>offset</strong> – int: Specify the number of photos to skip</p></li>
+<li><p><strong>ge</strong> – Specify a minimum value for the limit and offset parameters</p></li>
+<li><p><strong>le</strong> – Limit the number of photos returned</p></li>
+<li><p><strong>db</strong> – Session: Get the database session</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of photos</p>
+</dd>
+<dt class="field-odd">Doc-author<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Trelent</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.api.endpoints.photos.get_qrcode">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.api.endpoints.photos.</span></span><span class="sig-name descname"><span class="pre">get_qrcode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">photo_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.api.endpoints.photos.get_qrcode" title="Permalink to this definition">¶</a></dt>
+<dd><p>The get_qrcode function returns the QR code for a given photo.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>photo_id</strong> – int: Specify the photo id of the image to be retrieved</p></li>
+<li><p><strong>db</strong> – Session: Pass the database session to the function</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The qr code for a given photo id</p>
+</dd>
+<dt class="field-odd">Doc-author<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Trelent</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.api.endpoints.photos.update_photo">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.api.endpoints.photos.</span></span><span class="sig-name descname"><span class="pre">update_photo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PhotoUpdate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">photo_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Path(PydanticUndefined)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">User</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_current_user)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.api.endpoints.photos.update_photo" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>The update_contact function updates a contact in the database.</dt><dd><dl class="simple">
+<dt>Args:</dt><dd><p>body (PhotoUpdate): The updated contact information.
+photo_id (int): The id of the contact to update.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> – PhotoUpdate: Pass the new values for the photo to be updated</p></li>
+<li><p><strong>photo_id</strong> – int: Specify the id of the photo to be updated</p></li>
+<li><p><strong>db</strong> – Session: Pass in the database session to the function</p></li>
+<li><p><strong>user</strong> – User: Get the current user</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The updated photo</p>
+</dd>
+<dt class="field-odd">Doc-author<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Trelent</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-PhotoShare.app.api.endpoints.rating">
+<span id="rest-api-endpoints-ratings"></span><h1>REST API Endpoints Ratings<a class="headerlink" href="#module-PhotoShare.app.api.endpoints.rating" title="Permalink to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.api.endpoints.rating.add_rating">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.api.endpoints.rating.</span></span><span class="sig-name descname"><span class="pre">add_rating</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">RatingModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">photo_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">User</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_current_user)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.api.endpoints.rating.add_rating" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.api.endpoints.rating.delete_rating">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.api.endpoints.rating.</span></span><span class="sig-name descname"><span class="pre">delete_rating</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rating_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.api.endpoints.rating.delete_rating" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes a rating with specified ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rating_id</strong> – ID of the rating that is to be deleted.</p></li>
+<li><p><strong>db</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.api.endpoints.rating.get_rating">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.api.endpoints.rating.</span></span><span class="sig-name descname"><span class="pre">get_rating</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rating_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.api.endpoints.rating.get_rating" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.api.endpoints.rating.get_ratings">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.api.endpoints.rating.</span></span><span class="sig-name descname"><span class="pre">get_ratings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">photo_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.api.endpoints.rating.get_ratings" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-PhotoShare.app.api.endpoints.comments">
+<span id="rest-api-endpoints-comments"></span><h1>REST API Endpoints Comments<a class="headerlink" href="#module-PhotoShare.app.api.endpoints.comments" title="Permalink to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.api.endpoints.comments.create_comment">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.api.endpoints.comments.</span></span><span class="sig-name descname"><span class="pre">create_comment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CommentModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">photo_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">User</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_current_user)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.api.endpoints.comments.create_comment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a new comment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> (<em>CommentModel</em>) – The data used to create a new comment.</p></li>
+<li><p><strong>photo_id</strong> (<em>int</em>) – ID of the photo on which the comment is added.</p></li>
+<li><p><strong>db</strong> (<em>Session</em>) – The database session.</p></li>
+<li><p><strong>current_user</strong> (<em>User</em>) – User that adds the comment.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The newly added comment.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Comment</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.api.endpoints.comments.delete_comment">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.api.endpoints.comments.</span></span><span class="sig-name descname"><span class="pre">delete_comment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comment_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.api.endpoints.comments.delete_comment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes the comment with specified ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> (<em>CommentModel</em>) – The data used to create a new comment.</p></li>
+<li><p><strong>db</strong> (<em>Session</em>) – The database session.</p></li>
+<li><p><strong>current_user</strong> (<em>User</em>) – User that deletes the comment.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The newly added comment.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Comment</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.api.endpoints.comments.read_comment">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.api.endpoints.comments.</span></span><span class="sig-name descname"><span class="pre">read_comment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comment_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.api.endpoints.comments.read_comment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves a comment with a specific ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>comment_id</strong> (<em>int</em>) – The ID of the comment.</p></li>
+<li><p><strong>db</strong> (<em>Session</em>) – The database session.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The comment.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Comment</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.api.endpoints.comments.read_comments">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.api.endpoints.comments.</span></span><span class="sig-name descname"><span class="pre">read_comments</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">photo_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.api.endpoints.comments.read_comments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves a list of comments on a specific post.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>limit</strong> (<em>int</em>) – Maximum number of comments to return.</p></li>
+<li><p><strong>photo_id</strong> (<em>int</em>) – ID of the photo.</p></li>
+<li><p><strong>db</strong> (<em>Session</em>) – The database session.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of comments.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[Comment]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.api.endpoints.comments.update_comment">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.api.endpoints.comments.</span></span><span class="sig-name descname"><span class="pre">update_comment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CommentModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comment_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">User</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_current_user)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.api.endpoints.comments.update_comment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the comment with specified ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> (<em>CommentModel</em>) – The data used to create a new comment.</p></li>
+<li><p><strong>db</strong> (<em>Session</em>) – The database session.</p></li>
+<li><p><strong>current_user</strong> (<em>User</em>) – User that updates the comment.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The newly added comment.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Comment</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-PhotoShare.app.api.endpoints.authentication">
+<span id="rest-api-endpoints-authentications"></span><h1>REST API Endpoints Authentications<a class="headerlink" href="#module-PhotoShare.app.api.endpoints.authentication" title="Permalink to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.api.endpoints.authentication.banned_user">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.api.endpoints.authentication.</span></span><span class="sig-name descname"><span class="pre">banned_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">email</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.api.endpoints.authentication.banned_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Функція banned_user використовується для встановлення заборони доступу до додатку певного користувача.</p>
+<p>Args:
+email: str: Отримання email користувача якому нам треба заборонити заходити в додаток
+session: Session: Отримання сессії бази данних</p>
+<p>Returns:
+json вівдповідь заборони користувача</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.api.endpoints.authentication.email_confirmation">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.api.endpoints.authentication.</span></span><span class="sig-name descname"><span class="pre">email_confirmation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.api.endpoints.authentication.email_confirmation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Функція email_confirmation використовується для підтвердження електронної адреси користувача.
+Також ми повертаємо об’єкт JSON, що містить «активацію»: «ваша електронна адреса підтверджена»</p>
+<p>Args:
+db: Session: Отримання сессії бази данних</p>
+<p>Returns:
+Словник з ключем “активація” та значенням “ваша електронна адреса підтверджена”</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.api.endpoints.authentication.login">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.api.endpoints.authentication.</span></span><span class="sig-name descname"><span class="pre">login</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">UserLoginModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.api.endpoints.authentication.login" title="Permalink to this definition">¶</a></dt>
+<dd><p>Функція входу використовується для автентифікації користувача.
+Вона приймає адресу електронної пошти та пароль користувача як вхідні дані,
+перевіряє, чи є вони дійсними обліковими даними, і повертає токени (маркери) доступу.</p>
+<p>Args:
+body: UserModel: Отримання адресу електронної пошти та пароль із тіла запиту
+session: Session: Отримання сессії бази данних</p>
+<p>Returns:
+Токен (Маркер) доступу, токен (маркер) оновлення та тип авторизації</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.api.endpoints.authentication.logout">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.api.endpoints.authentication.</span></span><span class="sig-name descname"><span class="pre">logout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">HTTPAuthorizationCredentials</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(HTTPBearer)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">User</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_current_user)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_redis)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.api.endpoints.authentication.logout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Функція logout використовується для відкликання access_token та refresh_token користувача.</p>
+<p>Args:
+token: Отримання
+cache: Отримання redis</p>
+<p>Returns:
+Словник з ще валідними відкликанними токенами</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.api.endpoints.authentication.refresh_token">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.api.endpoints.authentication.</span></span><span class="sig-name descname"><span class="pre">refresh_token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">HTTPAuthorizationCredentials</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(HTTPBearer)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.api.endpoints.authentication.refresh_token" title="Permalink to this definition">¶</a></dt>
+<dd><p>Функція refresh_token використовується для оновлення токену(маркера) доступу.
+Функція приймає маркер оновлення (refresh_token) та повертає токен доступи (access_token) і тип авторизації.</p>
+<p>Args:
+credentials: HTTPAuthorizationCredentials: Отримання токену (refresh_token) із запиту
+db: Session: Передача сеанс бази даних у функцію</p>
+<p>Returns:
+Словник із access_token, refresh_token і token_type</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.api.endpoints.authentication.signup">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.api.endpoints.authentication.</span></span><span class="sig-name descname"><span class="pre">signup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">UserRegisterModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background_task</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">BackgroundTasks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.api.endpoints.authentication.signup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Функція реєстрації створює нового користувача в базі даних.
+Вона також надсилає користувачеві електронний лист із посиланням для підтвердження свого облікового запису.
+Функція повертає щойно створений об’єкт User.</p>
+<p>Args:
+body: UserModel: Валідація тіло запиту
+background_tasks: BackgroundTasks: Додавання завдання до черги фонових завдань
+request: Request: Отримання базову URL-адресу програми
+session: Session: Отримання сессії бази данних</p>
+<p>Returns: Об’єкт типу User</p>
+</dd></dl>
+
+</section>
+<section id="module-PhotoShare.app.repositories.users">
+<span id="rest-api-repository-users"></span><h1>REST API Repository Users<a class="headerlink" href="#module-PhotoShare.app.repositories.users" title="Permalink to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.repositories.users.create_user">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.repositories.users.</span></span><span class="sig-name descname"><span class="pre">create_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">UserRegisterModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.repositories.users.create_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Функція create_user створює нового користуваа в базі данних</p>
+<p>Args:
+email: str: Вказуємо email і пароль в body запиту користувача, якого ми хочемо створити
+session: Session: Передаємо об’єкт сеансу функції</p>
+<p>Returns:
+Об’єкт класу User користувача якаго ми створили в базі даних</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.repositories.users.get_user_by_email">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.repositories.users.</span></span><span class="sig-name descname"><span class="pre">get_user_by_email</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">email</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.repositories.users.get_user_by_email" title="Permalink to this definition">¶</a></dt>
+<dd><p>Функція get_user_by_email приймає електронний лист і сеанс,
+і повертає користувача з цією електронною поштою. Якщо такого користувача не існує, повертається None.</p>
+<p>Args:
+email: str: Вказуємо email користувача, якого ми хочемо отримати
+session: Session: Передаємо об’єкт сеансу функції</p>
+<p>Returns:
+Об’єкт користувача, який відповідає наданій адресі електронної пошти</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.repositories.users.refresh_token">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.repositories.users.</span></span><span class="sig-name descname"><span class="pre">refresh_token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">email</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.repositories.users.refresh_token" title="Permalink to this definition">¶</a></dt>
+<dd><p>Функція refresh_token використовується для оновлення маркера доступу (access_token) та маркера оновлення
+(refresh_token).
+Вона приймає електронний лист і маркер оновлення, а потім перевіряє, чи існує користувач і чи
+refresh_token відповідає тому, що було передано. Якщо він не збігається, ми встановлюємо для їхніх refresh_token
+значення None і викликати HTTPException із кодом статусу 401 (Неавторизовано). Якщо він збігається, ми створюємо
+новий маркер доступу (access_token). Ми також генеруємо новий маркер оновлення (refresh_token). Потім ми оновлюємо
+нашу базу даних для зберігання нового (refresh_token).</p>
+<p>Args:
+email: str: Email користувача
+token: str: Токен взятий з request
+session: Session: Передача сеанса бази даних у функцію</p>
+<p>Returns:
+access_token та refresh_token</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.repositories.users.reset_refresh_token">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.repositories.users.</span></span><span class="sig-name descname"><span class="pre">reset_refresh_token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.repositories.users.reset_refresh_token" title="Permalink to this definition">¶</a></dt>
+<dd><p>Функція reset_refresh_token скидає значення поля refresh_token в базі данних</p>
+<p>Args:
+user: User: об’єкт користувача
+session: Session: Передача сеанса бази даних у функцію</p>
+<p>Returns:
+співпрограмму для виконання в EventLoop</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.repositories.users.set_user_confirmation">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.repositories.users.</span></span><span class="sig-name descname"><span class="pre">set_user_confirmation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">email</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.repositories.users.set_user_confirmation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Функція set_user_confirmation встановлює для статусу підтвердження користувача значення True.</p>
+<p>Args:
+email: str: Email користувача
+session: Session: Передача сеанса бази даних у функцію</p>
+<p>Returns:
+Об’єкт користувача</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.repositories.users.update_user">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.repositories.users.</span></span><span class="sig-name descname"><span class="pre">update_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">User</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.repositories.users.update_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Функція update_user user та session для роботи з базою даних
+Args:
+user: User: об’єкт користувача
+session: Session: Передаємо об’єкт сеансу функції
+Returns:
+Оновлений об’єкт користувача</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.repositories.users.user_login">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.repositories.users.</span></span><span class="sig-name descname"><span class="pre">user_login</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">email</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.repositories.users.user_login" title="Permalink to this definition">¶</a></dt>
+<dd><p>Функція user_login вибирає користуваа з бази даних, email якого ми передали як аргумент у ф-цію. Створює access та
+refresh токени</p>
+<p>Args:
+email: str: Email користувача
+session: Session: Передача сеанса бази даних у функцію</p>
+<p>Returns:
+Об’єкт користувача, access та refresh_token</p>
+</dd></dl>
+
+</section>
+<section id="module-PhotoShare.app.repositories.tags">
+<span id="rest-api-repository-tags"></span><h1>REST API Repository Tags<a class="headerlink" href="#module-PhotoShare.app.repositories.tags" title="Permalink to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.repositories.tags.create_tag">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.repositories.tags.</span></span><span class="sig-name descname"><span class="pre">create_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TagModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tag</span></span></span><a class="headerlink" href="#PhotoShare.app.repositories.tags.create_tag" title="Permalink to this definition">¶</a></dt>
+<dd><p>The create_tag function creates a new tag in the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> – TagModel: Specify the type of data that will be passed into the function</p></li>
+<li><p><strong>db</strong> – Session: Access the database</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The created tag object</p>
+</dd>
+<dt class="field-odd">Doc-author<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Trelent</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.repositories.tags.get_tag">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.repositories.tags.</span></span><span class="sig-name descname"><span class="pre">get_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.repositories.tags.get_tag" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>The get_tag function returns a single tag from the database.</dt><dd><dl class="simple">
+<dt>Args:</dt><dd><p>tag_id (int): The id of the desired tag.
+db (Session): A connection to the database.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tag_id</strong> – int: Specify the id of the tag we want to get</p></li>
+<li><p><strong>db</strong> – Session: Pass the database session into the function</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A single row from the tag table</p>
+</dd>
+<dt class="field-odd">Doc-author<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Trelent</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.repositories.tags.get_tags">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.repositories.tags.</span></span><span class="sig-name descname"><span class="pre">get_tags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tag</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#PhotoShare.app.repositories.tags.get_tags" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>The get_tags function returns a list of tags from the database.</dt><dd><dl class="simple">
+<dt>Args:</dt><dd><p>offset (int): The number of items to skip before starting to collect the result set.
+limit (int): The numbers of items to return after offset has been applied.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>offset</strong> – int: Specify the offset of the first row to return</p></li>
+<li><p><strong>limit</strong> – int: Limit the number of tags returned</p></li>
+<li><p><strong>db</strong> – Session: Pass the database session to the function</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of tags</p>
+</dd>
+<dt class="field-odd">Doc-author<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Trelent</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.repositories.tags.remove_tag">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.repositories.tags.</span></span><span class="sig-name descname"><span class="pre">remove_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tag</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#PhotoShare.app.repositories.tags.remove_tag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.repositories.tags.update_tag">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.repositories.tags.</span></span><span class="sig-name descname"><span class="pre">update_tag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TagModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tag</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#PhotoShare.app.repositories.tags.update_tag" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>The update_tag function updates a tag in the database.</dt><dd><dl class="simple">
+<dt>Args:</dt><dd><p>tag_id (int): The id of the tag to update.
+body (TagModel): The updated Tag object with new values for name and description.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tag_id</strong> – int: Identify the tag to be updated</p></li>
+<li><p><strong>body</strong> – TagModel: Pass in the new tag name</p></li>
+<li><p><strong>db</strong> – Session: Access the database</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The updated tag object</p>
+</dd>
+<dt class="field-odd">Doc-author<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Trelent</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-PhotoShare.app.repositories.rating">
+<span id="rest-api-repository-ratings"></span><h1>REST API Repository Ratings<a class="headerlink" href="#module-PhotoShare.app.repositories.rating" title="Permalink to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.repositories.rating.add_rating">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.repositories.rating.</span></span><span class="sig-name descname"><span class="pre">add_rating</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">RatingModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">photo_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Rating</span></span></span><a class="headerlink" href="#PhotoShare.app.repositories.rating.add_rating" title="Permalink to this definition">¶</a></dt>
+<dd><p>Posts a new rating rating.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> (<em>RatingModel</em>) – Data for creating a rating.</p></li>
+<li><p><strong>photo_id</strong> (<em>int</em>) – The ID of the photo on wich the rating is posted.</p></li>
+<li><p><strong>user_id</strong> (<em>int</em>) – The ID of the user that posts a rating.</p></li>
+<li><p><strong>db</strong> (<em>Session</em>) – The database session.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>New rating.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Rating</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.repositories.rating.delete_rating">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.repositories.rating.</span></span><span class="sig-name descname"><span class="pre">delete_rating</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rating_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Rating</span></span></span><a class="headerlink" href="#PhotoShare.app.repositories.rating.delete_rating" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes a specified rating.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rating_id</strong> (<em>int</em>) – ID of the rating to be deleted.</p></li>
+<li><p><strong>db</strong> (<em>Session</em>) – The database session.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The deleted rating.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Rating</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.repositories.rating.get_rating">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.repositories.rating.</span></span><span class="sig-name descname"><span class="pre">get_rating</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rating_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Rating</span></span></span><a class="headerlink" href="#PhotoShare.app.repositories.rating.get_rating" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a rating with the specified ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rating_id</strong> (<em>int</em>) – The ID of the rating to be found.</p></li>
+<li><p><strong>db</strong> (<em>Session</em>) – The database session.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The found rating.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Rating</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.repositories.rating.get_ratings">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.repositories.rating.</span></span><span class="sig-name descname"><span class="pre">get_ratings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">photo_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Rating</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#PhotoShare.app.repositories.rating.get_ratings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns list of ratings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>db</strong> (<em>Session</em>) – The database session.</p></li>
+<li><p><strong>photo_id</strong> (<em>int</em>) – Id of the photo which rating to find. If 0 finds ratings on all photos.</p></li>
+<li><p><strong>user_id</strong> (<em>int</em>) – Id of the user whose rating to find. If 0 finds ratings by all users.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The list of ratings.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[int]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-PhotoShare.app.repositories.photo">
+<span id="rest-api-repository-photos"></span><h1>REST API Repository Photos<a class="headerlink" href="#module-PhotoShare.app.repositories.photo" title="Permalink to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.repositories.photo.calculate_rating">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.repositories.photo.</span></span><span class="sig-name descname"><span class="pre">calculate_rating</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">photo_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#PhotoShare.app.repositories.photo.calculate_rating" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates rating of a specific photo.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>photo_id</strong> (<em>int</em>) – The ID of the photo to calculate rating.</p></li>
+<li><p><strong>db</strong> – Pass in the database</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Calculated rating.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.repositories.photo.create_photo">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.repositories.photo.</span></span><span class="sig-name descname"><span class="pre">create_photo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PhotoModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">photo_url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">User</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.repositories.photo.create_photo" title="Permalink to this definition">¶</a></dt>
+<dd><p>The create_photo function creates a new photo in the database.
+It takes three arguments:
+body (PhotoModel): The PhotoModel object that contains the information for creating a new photo.
+url (str): The URL of the image to be uploaded to Cloudinary and associated with this photo.
+db (Session): A SQLAlchemy Session object used for interacting with our database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> – PhotoModel: Get the name and description of the photo from the request body</p></li>
+<li><p><strong>photo_url</strong> – str: Store the url of the photo in s3</p></li>
+<li><p><strong>db</strong> – Session: Access the database</p></li>
+<li><p><strong>user</strong> – User: Associate the photo with a user</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The photo object that was created</p>
+</dd>
+<dt class="field-odd">Doc-author<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Trelent</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.repositories.photo.get_photo">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.repositories.photo.</span></span><span class="sig-name descname"><span class="pre">get_photo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">photo_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.repositories.photo.get_photo" title="Permalink to this definition">¶</a></dt>
+<dd><p>The get_photo function takes in a photo_url and returns the corresponding Photo object.
+If no such photo exists, it returns None.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>photo_id</strong> – str: Specify the id of the photo</p></li>
+<li><p><strong>db</strong> – Session: Create a database session</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A photo object or none if the photo does not exist</p>
+</dd>
+<dt class="field-odd">Doc-author<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Trelent</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.repositories.photo.get_photos">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.repositories.photo.</span></span><span class="sig-name descname"><span class="pre">get_photos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.repositories.photo.get_photos" title="Permalink to this definition">¶</a></dt>
+<dd><p>The get_photos function returns a list of photos from the database.
+Args:
+limit (int): The number of photos to return.
+offset (int): The starting point for the query.  This is used for pagination, so that you can get more than
+one page of results at a time.
+For example, if you have 100 total results and want to get 10 per page, set limit=10 and offset=0 on
+your first request; then set limit=10 and offset=10 on your second request; etc… until you’ve gotten
+all 100 results back in chunks of 10 each time.&amp;quot;</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>limit</strong> – int: Limit the number of photos returned</p></li>
+<li><p><strong>offset</strong> – int: Specify the number of records to skip before starting to return rows</p></li>
+<li><p><strong>db</strong> – Session: Pass the database session to the function</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of photos</p>
+</dd>
+<dt class="field-odd">Doc-author<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Trelent</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.repositories.photo.get_qrcode">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.repositories.photo.</span></span><span class="sig-name descname"><span class="pre">get_qrcode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">photo_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.repositories.photo.get_qrcode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns qr code encoding the url of the photo</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>photo_id</strong> – int: ID of the photo.</p></li>
+<li><p><strong>db</strong> – Session: Pass in the database session</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The qr code as a byte array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.repositories.photo.remove_photo">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.repositories.photo.</span></span><span class="sig-name descname"><span class="pre">remove_photo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">photo_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">User</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.repositories.photo.remove_photo" title="Permalink to this definition">¶</a></dt>
+<dd><p>The remove_photo function removes a photo from the database.
+Args:
+photo_id (int): The id of the photo to be removed.
+db (Session): A connection to the database.  This is used for querying and deleting photos
+from the database.</p>
+<p>user (User): The user who owns this particular photo, and therefore has permission to delete it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>photo_id</strong> – int: Identify the photo to be removed</p></li>
+<li><p><strong>db</strong> – Session: Pass in the database session</p></li>
+<li><p><strong>user</strong> – User: Check if the user is authorized to delete a photo</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The photo object that was deleted</p>
+</dd>
+<dt class="field-odd">Doc-author<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Trelent</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.repositories.photo.update_photo">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.repositories.photo.</span></span><span class="sig-name descname"><span class="pre">update_photo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">photo_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PhotoUpdate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">User</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#PhotoShare.app.repositories.photo.update_photo" title="Permalink to this definition">¶</a></dt>
+<dd><p>The update_photo function updates the description of a photo in the database.
+Args:
+photo_id (int): The id of the photo to be updated.
+body (PhotoUpdate): A PhotoUpdate object containing a new description for the specified photo.
+This is passed as JSON data in an HTTP request body, and converted into a PhotoUpdate object by
+FastAPI’s Pydantic library.
+See models/photo_update for more information on this class and its attributes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>photo_id</strong> – int: Identify the photo to be updated</p></li>
+<li><p><strong>body</strong> – PhotoUpdate: Pass in the new photo description</p></li>
+<li><p><strong>db</strong> – Session: Access the database</p></li>
+<li><p><strong>user</strong> – User: Ensure that the user is authorized to update the photo</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A photo object</p>
+</dd>
+<dt class="field-odd">Doc-author<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Trelent</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-PhotoShare.app.repositories.comments">
+<span id="rest-api-repository-comments"></span><h1>REST API Repository Comments<a class="headerlink" href="#module-PhotoShare.app.repositories.comments" title="Permalink to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.repositories.comments.create_comment">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.repositories.comments.</span></span><span class="sig-name descname"><span class="pre">create_comment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CommentModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">User</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">photo_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Comment</span></span></span><a class="headerlink" href="#PhotoShare.app.repositories.comments.create_comment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a new comment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> (<em>CommentModel</em>) – The data used to create a new comment.</p></li>
+<li><p><strong>user</strong> (<em>UserModel</em>) – User that adds the comment. (change when user model is ready)</p></li>
+<li><p><strong>post_id</strong> (<em>int</em>) – ID of the post on which the comment is added.</p></li>
+<li><p><strong>db</strong> (<em>Session</em>) – The database session.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The newly added comment.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Comment</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.repositories.comments.delete_comment">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.repositories.comments.</span></span><span class="sig-name descname"><span class="pre">delete_comment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comment_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Comment</span></span></span><a class="headerlink" href="#PhotoShare.app.repositories.comments.delete_comment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes the comment</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>comment_id</strong> (<em>int</em>) – id of a comment to delete.</p></li>
+<li><p><strong>db</strong> (<em>Session</em>) – The database session.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The deleted comment.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Comment</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.repositories.comments.get_comment">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.repositories.comments.</span></span><span class="sig-name descname"><span class="pre">get_comment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">comment_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Comment</span></span></span><a class="headerlink" href="#PhotoShare.app.repositories.comments.get_comment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves a comment with a specific ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>comment_id</strong> (<em>int</em>) – The ID of the comment.</p></li>
+<li><p><strong>db</strong> (<em>Session</em>) – The database session.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The comment.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Comment</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.repositories.comments.get_comments">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.repositories.comments.</span></span><span class="sig-name descname"><span class="pre">get_comments</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">photo_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Comment</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#PhotoShare.app.repositories.comments.get_comments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves a list of comments on a specific post.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>limit</strong> (<em>int</em>) – Maximum number of comments to return.</p></li>
+<li><p><strong>photo_id</strong> (<em>int</em>) – ID of the post.</p></li>
+<li><p><strong>db</strong> (<em>Session</em>) – The database session.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of comments.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[Comment]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="PhotoShare.app.repositories.comments.update_comment">
+<span class="sig-prename descclassname"><span class="pre">PhotoShare.app.repositories.comments.</span></span><span class="sig-name descname"><span class="pre">update_comment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CommentModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comment_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Comment</span></span></span><a class="headerlink" href="#PhotoShare.app.repositories.comments.update_comment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the comment</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> (<em>CommentModel</em>) – The data to use when updating the comment.</p></li>
+<li><p><strong>comment_id</strong> (<em>int</em>) – id of a comment to update.</p></li>
+<li><p><strong>db</strong> (<em>Session</em>) – The database session.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The updated comment.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Comment</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this heading">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="#">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Welcome to Y REST API’s documentation!</a></li>
+<li><a class="reference internal" href="#module-main">REST API main</a><ul>
+<li><a class="reference internal" href="#main.startup"><code class="docutils literal notranslate"><span class="pre">startup()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-PhotoShare.app.api.endpoints.user">REST API Endpoints User</a><ul>
+<li><a class="reference internal" href="#PhotoShare.app.api.endpoints.user.change_username"><code class="docutils literal notranslate"><span class="pre">change_username()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.api.endpoints.user.edit_firstname"><code class="docutils literal notranslate"><span class="pre">edit_firstname()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.api.endpoints.user.edit_lastname"><code class="docutils literal notranslate"><span class="pre">edit_lastname()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.api.endpoints.user.get_user_profile"><code class="docutils literal notranslate"><span class="pre">get_user_profile()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.api.endpoints.user.me"><code class="docutils literal notranslate"><span class="pre">me()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.api.endpoints.user.upload_avatar"><code class="docutils literal notranslate"><span class="pre">upload_avatar()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-PhotoShare.app.api.endpoints.tags">REST API Endpoints Tags</a><ul>
+<li><a class="reference internal" href="#PhotoShare.app.api.endpoints.tags.create_tag"><code class="docutils literal notranslate"><span class="pre">create_tag()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.api.endpoints.tags.read_tag"><code class="docutils literal notranslate"><span class="pre">read_tag()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.api.endpoints.tags.read_tags"><code class="docutils literal notranslate"><span class="pre">read_tags()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.api.endpoints.tags.remove_tag"><code class="docutils literal notranslate"><span class="pre">remove_tag()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.api.endpoints.tags.update_tag"><code class="docutils literal notranslate"><span class="pre">update_tag()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-PhotoShare.app.api.endpoints.photos">REST API Endpoints Photos</a><ul>
+<li><a class="reference internal" href="#PhotoShare.app.api.endpoints.photos.create_photo"><code class="docutils literal notranslate"><span class="pre">create_photo()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.api.endpoints.photos.delete_photo"><code class="docutils literal notranslate"><span class="pre">delete_photo()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.api.endpoints.photos.get_photo"><code class="docutils literal notranslate"><span class="pre">get_photo()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.api.endpoints.photos.get_photos"><code class="docutils literal notranslate"><span class="pre">get_photos()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.api.endpoints.photos.get_qrcode"><code class="docutils literal notranslate"><span class="pre">get_qrcode()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.api.endpoints.photos.update_photo"><code class="docutils literal notranslate"><span class="pre">update_photo()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-PhotoShare.app.api.endpoints.rating">REST API Endpoints Ratings</a><ul>
+<li><a class="reference internal" href="#PhotoShare.app.api.endpoints.rating.add_rating"><code class="docutils literal notranslate"><span class="pre">add_rating()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.api.endpoints.rating.delete_rating"><code class="docutils literal notranslate"><span class="pre">delete_rating()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.api.endpoints.rating.get_rating"><code class="docutils literal notranslate"><span class="pre">get_rating()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.api.endpoints.rating.get_ratings"><code class="docutils literal notranslate"><span class="pre">get_ratings()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-PhotoShare.app.api.endpoints.comments">REST API Endpoints Comments</a><ul>
+<li><a class="reference internal" href="#PhotoShare.app.api.endpoints.comments.create_comment"><code class="docutils literal notranslate"><span class="pre">create_comment()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.api.endpoints.comments.delete_comment"><code class="docutils literal notranslate"><span class="pre">delete_comment()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.api.endpoints.comments.read_comment"><code class="docutils literal notranslate"><span class="pre">read_comment()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.api.endpoints.comments.read_comments"><code class="docutils literal notranslate"><span class="pre">read_comments()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.api.endpoints.comments.update_comment"><code class="docutils literal notranslate"><span class="pre">update_comment()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-PhotoShare.app.api.endpoints.authentication">REST API Endpoints Authentications</a><ul>
+<li><a class="reference internal" href="#PhotoShare.app.api.endpoints.authentication.banned_user"><code class="docutils literal notranslate"><span class="pre">banned_user()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.api.endpoints.authentication.email_confirmation"><code class="docutils literal notranslate"><span class="pre">email_confirmation()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.api.endpoints.authentication.login"><code class="docutils literal notranslate"><span class="pre">login()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.api.endpoints.authentication.logout"><code class="docutils literal notranslate"><span class="pre">logout()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.api.endpoints.authentication.refresh_token"><code class="docutils literal notranslate"><span class="pre">refresh_token()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.api.endpoints.authentication.signup"><code class="docutils literal notranslate"><span class="pre">signup()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-PhotoShare.app.repositories.users">REST API Repository Users</a><ul>
+<li><a class="reference internal" href="#PhotoShare.app.repositories.users.create_user"><code class="docutils literal notranslate"><span class="pre">create_user()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.repositories.users.get_user_by_email"><code class="docutils literal notranslate"><span class="pre">get_user_by_email()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.repositories.users.refresh_token"><code class="docutils literal notranslate"><span class="pre">refresh_token()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.repositories.users.reset_refresh_token"><code class="docutils literal notranslate"><span class="pre">reset_refresh_token()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.repositories.users.set_user_confirmation"><code class="docutils literal notranslate"><span class="pre">set_user_confirmation()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.repositories.users.update_user"><code class="docutils literal notranslate"><span class="pre">update_user()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.repositories.users.user_login"><code class="docutils literal notranslate"><span class="pre">user_login()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-PhotoShare.app.repositories.tags">REST API Repository Tags</a><ul>
+<li><a class="reference internal" href="#PhotoShare.app.repositories.tags.create_tag"><code class="docutils literal notranslate"><span class="pre">create_tag()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.repositories.tags.get_tag"><code class="docutils literal notranslate"><span class="pre">get_tag()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.repositories.tags.get_tags"><code class="docutils literal notranslate"><span class="pre">get_tags()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.repositories.tags.remove_tag"><code class="docutils literal notranslate"><span class="pre">remove_tag()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.repositories.tags.update_tag"><code class="docutils literal notranslate"><span class="pre">update_tag()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-PhotoShare.app.repositories.rating">REST API Repository Ratings</a><ul>
+<li><a class="reference internal" href="#PhotoShare.app.repositories.rating.add_rating"><code class="docutils literal notranslate"><span class="pre">add_rating()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.repositories.rating.delete_rating"><code class="docutils literal notranslate"><span class="pre">delete_rating()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.repositories.rating.get_rating"><code class="docutils literal notranslate"><span class="pre">get_rating()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.repositories.rating.get_ratings"><code class="docutils literal notranslate"><span class="pre">get_ratings()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-PhotoShare.app.repositories.photo">REST API Repository Photos</a><ul>
+<li><a class="reference internal" href="#PhotoShare.app.repositories.photo.calculate_rating"><code class="docutils literal notranslate"><span class="pre">calculate_rating()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.repositories.photo.create_photo"><code class="docutils literal notranslate"><span class="pre">create_photo()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.repositories.photo.get_photo"><code class="docutils literal notranslate"><span class="pre">get_photo()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.repositories.photo.get_photos"><code class="docutils literal notranslate"><span class="pre">get_photos()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.repositories.photo.get_qrcode"><code class="docutils literal notranslate"><span class="pre">get_qrcode()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.repositories.photo.remove_photo"><code class="docutils literal notranslate"><span class="pre">remove_photo()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.repositories.photo.update_photo"><code class="docutils literal notranslate"><span class="pre">update_photo()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-PhotoShare.app.repositories.comments">REST API Repository Comments</a><ul>
+<li><a class="reference internal" href="#PhotoShare.app.repositories.comments.create_comment"><code class="docutils literal notranslate"><span class="pre">create_comment()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.repositories.comments.delete_comment"><code class="docutils literal notranslate"><span class="pre">delete_comment()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.repositories.comments.get_comment"><code class="docutils literal notranslate"><span class="pre">get_comment()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.repositories.comments.get_comments"><code class="docutils literal notranslate"><span class="pre">get_comments()</span></code></a></li>
+<li><a class="reference internal" href="#PhotoShare.app.repositories.comments.update_comment"><code class="docutils literal notranslate"><span class="pre">update_comment()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">Rest API  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Welcome to Y REST API’s documentation!</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2023, Y.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.0.
+    </div>
+  </body>
+</html>
