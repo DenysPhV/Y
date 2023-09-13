@@ -128,7 +128,7 @@ PhotoShare/app/core/.env
 env/
 venv/
 ENV/
-fly1.toml
+fly.toml
 **/.env
 env.bak/
 venv.bak/

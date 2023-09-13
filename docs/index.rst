@@ -17,6 +17,41 @@ REST API main
   :undoc-members:
   :show-inheritance:
 
+REST API Repository Users
+=========================
+.. automodule:: PhotoShare.app.repositories.users
+  :members:
+  :undoc-members:
+  :show-inheritance:
+
+REST API Repository Tags
+========================
+.. automodule:: PhotoShare.app.repositories.tags
+  :members:
+  :undoc-members:
+  :show-inheritance:
+
+REST API Repository Ratings
+===========================
+.. automodule:: PhotoShare.app.repositories.rating
+  :members:
+  :undoc-members:
+  :show-inheritance:
+
+REST API Repository Photos
+===========================
+.. automodule:: PhotoShare.app.repositories.photo
+  :members:
+  :undoc-members:
+  :show-inheritance:
+
+REST API Repository Comments
+============================
+.. automodule:: PhotoShare.app.repositories.comments
+  :members:
+  :undoc-members:
+  :show-inheritance:
+
 REST API Endpoints User
 =======================
 .. automodule:: PhotoShare.app.api.endpoints.user
@@ -55,42 +90,6 @@ REST API Endpoints Comments
 REST API Endpoints Authentications
 ==================================
 .. automodule:: PhotoShare.app.api.endpoints.authentication
-  :members:
-  :undoc-members:
-  :show-inheritance:
-
-
-REST API Repository Users
-=========================
-.. automodule:: PhotoShare.app.repositories.users
-  :members:
-  :undoc-members:
-  :show-inheritance:
-
-REST API Repository Tags
-========================
-.. automodule:: PhotoShare.app.repositories.tags
-  :members:
-  :undoc-members:
-  :show-inheritance:
-
-REST API Repository Ratings
-===========================
-.. automodule:: PhotoShare.app.repositories.rating
-  :members:
-  :undoc-members:
-  :show-inheritance:
-
-REST API Repository Photos
-===========================
-.. automodule:: PhotoShare.app.repositories.photo
-  :members:
-  :undoc-members:
-  :show-inheritance:
-
-REST API Repository Comments
-============================
-.. automodule:: PhotoShare.app.repositories.comments
   :members:
   :undoc-members:
   :show-inheritance:

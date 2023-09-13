@@ -1,10 +1,7 @@
 from typing import List
 
-
 import cloudinary
 import cloudinary.uploader
-
-
 
 from fastapi import APIRouter, HTTPException, Depends, status, Path, Query, UploadFile, File
 from fastapi.responses import Response
@@ -25,7 +22,6 @@ router = APIRouter(prefix='/photos', tags=["photos"])
 @router.get("/", response_model=List[PhotoResponse])
 def get_photos(limit: int = Query(10, ge=10, le=500), offset: int = Query(0, ge=0, le=200),
                db: Session = Depends(get_db)):
-
     """
     The get_photos function returns a list of photos.
 
@@ -66,7 +62,6 @@ def get_photo(photo_id: int, db: Session = Depends(get_db), user: User = Depends
 
 @router.get("/qr_code/{photo_id}", responses={200: {"content": {"image/png": {}}}}, response_class=Response)
 def get_qrcode(photo_id: int, db: Session = Depends(get_db)):
-
     """
     The get_qrcode function returns the QR code for a given photo.
 
@@ -114,7 +109,7 @@ def create_photo(body: CreateModelPhoto = Depends(), db: Session = Depends(get_d
 
 @router.put("/{photo_id}", response_model=PhotoResponse)
 def update_photo(body: PhotoUpdate, photo_id: int = Path(ge=1), db: Session = Depends(get_db),
-                   user: User = Depends(get_current_user)):
+                 user: User = Depends(get_current_user)):
     """
     The update_contact function updates a contact in the database.
         Args:
