@@ -1,3 +1,4 @@
+# musn't change the dockerignore
 .idea
 fly.toml
 **/.env

@@ -120,10 +120,9 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-
+# musn't change the gitignore
 PhotoShare/app/core/.env
 PhotoShare/app/core/env
-PhotoShare/app/core/.env
 .venv
 env/
 venv/
