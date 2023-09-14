@@ -44,8 +44,4 @@ app.include_router(router_user)
 app.include_router(router_photos)
 app.include_router(router_rating)
 
-# app.include_router(router_tags)
-
-# if __name__ == '__main__':
-#     uvicorn.run("main:app", host="0.0.0.0", log_level="info")
 
