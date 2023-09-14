@@ -10,7 +10,7 @@ class CommentModel(BaseModel):
 class CommentResponse(CommentModel):
     id: int
     created_at: datetime
-    updated_at: datetime | None
+    updated_at: datetime
     user_id: int
     photo_id: int
 
