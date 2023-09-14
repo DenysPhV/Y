@@ -78,10 +78,6 @@ def update_comment(body: CommentModel, comment_id: int, db: Session) -> Comment:
     comment = db.query(Comment).filter(Comment.id==comment_id).first()
     if comment:
         comment.content = body.content
-        if not comment.updated_at:
-            comment.updated_at = [datetime.now()]
-        else:
-            comment.updated_at = comment.updated_at + [datetime.now()]
         db.commit()
     return comment
 
