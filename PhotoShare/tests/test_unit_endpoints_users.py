@@ -40,7 +40,6 @@ def token(client, user, session):
         return data["access_token"]
     else:
         raise Exception("Token not found in the response")
-    # return data["access_token"]
 
 
 @pytest.fixture(scope="function")
@@ -66,7 +65,6 @@ def token_second(client, user, session):
         return data["access_token"]
     else:
         raise Exception("Token not found in the response")
-    # return data["access_token"]
 
 
 def test_read_user_me(client, token):
