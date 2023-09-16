@@ -3,7 +3,6 @@ from datetime import date
 from sqlalchemy import Integer, String, ForeignKey, DateTime, func, Column, Table
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from PhotoShare.app.core.database import engine
 from PhotoShare.app.models.base import Base
 from PhotoShare.app.models.user import User
 
@@ -37,5 +36,5 @@ class Tag(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(25), nullable=False)
 
-
-
+    def __eq__(self, other):
+        return self.name == other

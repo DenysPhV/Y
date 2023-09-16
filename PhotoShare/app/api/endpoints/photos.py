@@ -1,17 +1,18 @@
-from typing import List
+from typing import List, Type
 
 from fastapi import APIRouter, HTTPException, Depends, status, Path, Query, UploadFile, File
 from fastapi.responses import Response
 
 from sqlalchemy.orm import Session
-
 from PhotoShare.app.core.database import get_db
 from PhotoShare.app.models.user import User
 from PhotoShare.app.repositories import photo as photo_repository
 from PhotoShare.app.repositories.users import update_user
-from PhotoShare.app.schemas.photo import PhotoResponse, PhotoModel, PhotoUpdate, CreateModelPhoto
+from PhotoShare.app.schemas.photo import PhotoResponse, PhotoUpdate, CreateModelPhoto
+from PhotoShare.app.schemas.tags import NewTagModel
 from PhotoShare.app.services.auth_service import get_current_user
 from PhotoShare.app.services.photo_service import CloudinaryService
+from PhotoShare.app.models.photo import Photo, Tag
 
 router = APIRouter(prefix='/photos', tags=["photos"])
 
@@ -33,7 +34,6 @@ def get_photos(limit: int = Query(10, ge=10, le=500), offset: int = Query(0, ge=
     :doc-author: Trelent
     """
     photos = photo_repository.get_photos(limit, offset, db)
-    print(photos[0].tags)
     return photos
 
 
@@ -154,3 +154,28 @@ def delete_photo(photo_id: int = Path(ge=1), db: Session = Depends(get_db), user
     return photo
 
 
+@router.patch("/add_tags",  response_model=PhotoResponse, status_code=status.HTTP_200_OK, summary='Add new tag')
+def add_tag(body: NewTagModel, session: Session = Depends(get_db)):
+    photo = photo_repository.get_photo(photo_id=body.photo_id, db=session)
+    if photo is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Photo not Found")
+    tag = session.query(Tag).filter_by(name=body.tag).first()
+    if len(photo.tags) < 5:
+        if tag is None:
+            tag = Tag(name=body.tag)
+        photo.tags = photo.tags + [tag]
+        photo = photo_repository.update_photo_in_db(photo=photo, session=session)
+    return photo
+
+
+@router.patch("/delete_tag", response_model=PhotoResponse, status_code=status.HTTP_200_OK,summary="Delete Tag")
+def delete_tag(body: NewTagModel, session: Session = Depends(get_db)):
+    photo = photo_repository.get_photo(photo_id=body.photo_id, db=session)
+    if photo is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Photo not Found")
+    tag = Tag(name=body.tag)
+    if tag in photo.tags:
+        photo.tags.remove(tag)
+        session.commit()
+        session.refresh(photo)
+    return photo
