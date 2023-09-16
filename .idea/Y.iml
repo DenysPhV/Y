@@ -5,7 +5,7 @@
       <excludeFolder url="file://$MODULE_DIR$/docs/build" />
       <excludeFolder url="file://$MODULE_DIR$/.pytest_cache" />
     </content>
-    <orderEntry type="jdk" jdkName="Poetry (Y)" jdkType="Python SDK" />
+    <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="PyNamespacePackagesService">
