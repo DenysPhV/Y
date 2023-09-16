@@ -2,7 +2,7 @@ from typing import List, Type
 
 from fastapi import APIRouter, HTTPException, Depends, status, Path, Query, UploadFile, File
 from fastapi.responses import Response
-
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
 from PhotoShare.app.core.database import get_db
 from PhotoShare.app.models.user import User
@@ -38,7 +38,7 @@ def get_photos(limit: int = Query(10, ge=10, le=500), offset: int = Query(0, ge=
 
 
 @router.get("/{photo_id}", response_model=PhotoResponse)
-def get_photo(photo_id: int, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+def get_photo(photo_id: int, db: Session = Depends(get_db), user = Depends(get_current_user)):
     """
     The get_photo function is used to retrieve a photo from the database.
         The function takes in a photo_url and returns the corresponding Photo object.
@@ -49,7 +49,7 @@ def get_photo(photo_id: int, db: Session = Depends(get_db), user: User = Depends
     :return: A photo object
     :doc-author: Trelent
     """
-    photo = photo_repository.get_photo(photo_id, db, user)
+    photo = photo_repository.get_photo(photo_id, db, user=user)
     if photo is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -82,9 +82,9 @@ def create_photo(body: CreateModelPhoto = Depends(), db: Session = Depends(get_d
                  user: User = Depends(get_current_user)):
     """
     The create_photo function creates a new photo in the database.
-        It takes in a PhotoModel object, an UploadFile object, and a Session object.
-        The UploadFile is used to upload the image file to Cloudinary and get its URL.
-        The Session is used to create the photo in our database using SQLAlchemy's ORM.
+    It takes in a PhotoModel object, an UploadFile object, and a Session object.
+    The UploadFile is used to upload the image file to Cloudinary and get its URL.
+    The Session is used to create the photo in our database using SQLAlchemy's ORM.
 
     :param body: PhotoModel: Create a new photo object
     :param file: UploadFile: Upload the photo to cloudinary
@@ -109,9 +109,9 @@ def update_photo(body: PhotoUpdate, photo_id: int = Path(ge=1), db: Session = De
                  user: User = Depends(get_current_user)):
     """
     The update_contact function updates a contact in the database.
-        Args:
-            body (PhotoUpdate): The updated contact information.
-            photo_id (int): The id of the contact to update.
+    Args:
+    body (PhotoUpdate): The updated contact information.
+    photo_id (int): The id of the contact to update.
 
     :param body: PhotoUpdate: Pass the new values for the photo to be updated
     :param photo_id: int: Specify the id of the photo to be updated
@@ -133,11 +133,11 @@ def update_photo(body: PhotoUpdate, photo_id: int = Path(ge=1), db: Session = De
 def delete_photo(photo_id: int = Path(ge=1), db: Session = Depends(get_db), user: User = Depends(get_current_user)):
     """
     The delete_contact function deletes a contact from the database.
-        Args:
-            photo_id (int): The id of the contact to delete.
-            db (Session, optional): SQLAlchemy Session. Defaults to Depends(get_db).
-            user (User, optional): User object containing information about the current user's session. Defaults to
-            Depends(get_current_user).
+    Args:
+    photo_id (int): The id of the contact to delete.
+    db (Session, optional): SQLAlchemy Session. Defaults to Depends(get_db).
+    user (User, optional): User object containing information about the current user's session. Defaults to
+    Depends(get_current_user).
 
     :param photo_id: int: Specify the photo to be deleted
     :param db: Session: Get a database session
@@ -154,9 +154,19 @@ def delete_photo(photo_id: int = Path(ge=1), db: Session = Depends(get_db), user
     return photo
 
 
-@router.patch("/add_tags",  response_model=PhotoResponse, status_code=status.HTTP_200_OK, summary='Add new tag')
-def add_tag(body: NewTagModel, session: Session = Depends(get_db)):
-    photo = photo_repository.get_photo(photo_id=body.photo_id, db=session)
+@router.patch("/add_tags", response_model=PhotoResponse, status_code=status.HTTP_200_OK, summary='Add new tag')
+def add_tag(body: NewTagModel, session: Session = Depends(get_db), user: User = Depends(get_current_user)):
+    """
+    The add_tag function adds a tag to the photo.
+    The function takes in a NewTagModel object, which contains the id of the photo and name of tag.
+    It then checks if there are less than 5 tags on that photo already, and if so it adds it to that list.
+
+    :param body: NewTagModel: Specify the type of data that is expected in the body of a request
+    :param session: Session: Get the database session from the dependency injection
+    :param user: User: Get the current user
+    :return: A photo object
+    """
+    photo = photo_repository.get_photo(photo_id=body.photo_id, db=session, user=user)
     if photo is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Photo not Found")
     tag = session.query(Tag).filter_by(name=body.tag).first()
@@ -169,8 +179,18 @@ def add_tag(body: NewTagModel, session: Session = Depends(get_db)):
 
 
 @router.patch("/delete_tag", response_model=PhotoResponse, status_code=status.HTTP_200_OK,summary="Delete Tag")
-def delete_tag(body: NewTagModel, session: Session = Depends(get_db)):
-    photo = photo_repository.get_photo(photo_id=body.photo_id, db=session)
+def delete_tag(body: NewTagModel, session: Session = Depends(get_db), user: User = Depends(get_current_user)):
+    """
+    The delete_tag function deletes a tag from the photo.
+    The function takes in a NewTagModel object, which contains the photo_id and tag to be deleted.
+    It then checks if the user has access to that photo, and if so it removes that tag from it.
+
+    :param body: NewTagModel: Specify the data that will be passed in to the function
+    :param session: Session: Get the database session
+    :param user: User: Get the current user
+    :return: The photo with the tag removed
+    """
+    photo = photo_repository.get_photo(photo_id=body.photo_id, db=session, user=user)
     if photo is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Photo not Found")
     tag = Tag(name=body.tag)
@@ -179,3 +199,22 @@ def delete_tag(body: NewTagModel, session: Session = Depends(get_db)):
         session.commit()
         session.refresh(photo)
     return photo
+
+
+@router.get("/search/{word}", response_model=list[PhotoResponse], status_code=status.HTTP_200_OK, summary="Search photo")
+def search(word: str = Path(min_length=3), session: Session = Depends(get_db)):
+    """
+    The search function searches for photos by name or description.
+    It also searches for tags and returns the photos associated with that tag.
+
+
+    :param word: str: Define the type of the parameter and to give it a default value
+    :param session: Session: Get the database session
+    :return: A list of photos that contain the word in their description or name
+    """
+    photos = session.query(Photo).filter(Photo.description.contains(word) | Photo.name.contains(word)).all()
+    tag = session.query(Tag).filter_by(name=word).first()
+    photos = photos if photos else []
+    tag_photo = tag.photo if tag else []
+    photos = list(set(photos + tag_photo))
+    return photos
