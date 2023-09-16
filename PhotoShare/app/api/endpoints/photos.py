@@ -1,8 +1,5 @@
 from typing import List
 
-import cloudinary
-import cloudinary.uploader
-
 from fastapi import APIRouter, HTTPException, Depends, status, Path, Query, UploadFile, File
 from fastapi.responses import Response
 
@@ -19,7 +16,7 @@ from PhotoShare.app.services.photo_service import CloudinaryService
 router = APIRouter(prefix='/photos', tags=["photos"])
 
 
-@router.get("/", response_model=List[PhotoResponse])
+@router.get("/", response_model=list[PhotoResponse])
 def get_photos(limit: int = Query(10, ge=10, le=500), offset: int = Query(0, ge=0, le=200),
                db: Session = Depends(get_db)):
     """
@@ -36,6 +33,7 @@ def get_photos(limit: int = Query(10, ge=10, le=500), offset: int = Query(0, ge=
     :doc-author: Trelent
     """
     photos = photo_repository.get_photos(limit, offset, db)
+    print(photos[0].tags)
     return photos
 
 
@@ -96,9 +94,8 @@ def create_photo(body: CreateModelPhoto = Depends(), db: Session = Depends(get_d
     :doc-author: Trelent
     """
     public_id = CloudinaryService.get_public_id(filename=body.file.filename)
+    public_id = "Y/" + public_id
     photo_load = CloudinaryService.upload_photo(file=body.file.file, public_id=public_id)
-    print(public_id, photo_load)
-    # photo_edit = CloudinaryService.edit_photo(public_id=public_id)
     version = photo_load.get('version')
     photo_url = CloudinaryService.get_photo(public_id=public_id, version=version)
     photo = photo_repository.create_photo(body, photo_url, db, user)
@@ -155,3 +152,5 @@ def delete_photo(photo_id: int = Path(ge=1), db: Session = Depends(get_db), user
             detail="NOT FOUND",
         )
     return photo
+
+

@@ -6,7 +6,7 @@ from PhotoShare.app.services.auth_service import get_current_user
 from PhotoShare.app.schemas.user import UserRespond, UserFirstname, UserLastname, UserProfileModel, UserUsername
 from PhotoShare.app.core.database import get_db
 from PhotoShare.app.repositories.users import update_user, get_user_by_email
-from PhotoShare.app.services.cloudinary import CloudinaryService
+from PhotoShare.app.services.photo_service import CloudinaryService
 
 router_user = APIRouter(prefix="/user", tags=["user"])
 
@@ -104,10 +104,10 @@ def upload_avatar(file: UploadFile = File(), user: User = Depends(get_current_us
     user: Повертаємо user з оновленими даними
     """
     public_id = CloudinaryService.get_public_id(filename=file.filename)
-    print(public_id)
-    image = CloudinaryService.upload_avater(file=file.file, public_id=public_id)
+    public_id = "Y/avatars/" + public_id
+    image = CloudinaryService.upload_photo(file=file.file, public_id=public_id)
     version = image.get('version')
-    url = CloudinaryService.get_avatar(public_id=public_id, version=version)
+    url = CloudinaryService.get_photo(public_id=public_id, version=version)
     user.avatar = url
     user = update_user(user=user, session=session)
     return user

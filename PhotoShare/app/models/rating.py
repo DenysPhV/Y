@@ -16,5 +16,3 @@ class Rating(Base):
     user: Mapped["User"] = relationship('User', backref="rating", lazy='joined', passive_deletes=False)
     photo_id: Mapped[int] = mapped_column(Integer, ForeignKey("photo.id"), nullable=True)
     photo: Mapped["Photo"] = relationship('Photo', backref="ratings", lazy='joined', passive_deletes=True)
-
-Base.metadata.create_all(bind=engine)

@@ -54,10 +54,12 @@ def create_tag(body: TagModel, db: Session) -> Tag:
     :return: The created tag object
     :doc-author: Trelent
     """
-    tag = Tag(name=body.name)
-    db.add(tag)
-    db.commit()
-    db.refresh(tag)
+    tag = db.query(Tag).filter_by(name=body.name).first()
+    if tag is None:
+        tag = Tag(name=body.name)
+        db.add(tag)
+        db.commit()
+        db.refresh(tag)
     return tag
 
 

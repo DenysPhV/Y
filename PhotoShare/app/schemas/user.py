@@ -38,6 +38,14 @@ class UserRespond(BaseModel):
     role: str
 
 
+class UserPhotoRespond(BaseModel):
+    username: str | None = None
+    email: EmailStr
+
+    class Config:
+        from_attributes = True
+
+
 class TokenResponse(BaseModel):
     access_token: str
     refresh_token: str
