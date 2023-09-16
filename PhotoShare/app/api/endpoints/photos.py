@@ -166,7 +166,7 @@ def add_tag(body: NewTagModel, session: Session = Depends(get_db), user: User = 
     :param user: User: Get the current user
     :return: A photo object
     """
-    photo = photo_repository.get_photo(photo_id=body.photo_id, db=session, user=user)
+    photo = photo_repository.get_photo_user(photo_id=body.photo_id, db=session, user=user)
     if photo is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Photo not Found")
     tag = session.query(Tag).filter_by(name=body.tag).first()
@@ -190,7 +190,7 @@ def delete_tag(body: NewTagModel, session: Session = Depends(get_db), user: User
     :param user: User: Get the current user
     :return: The photo with the tag removed
     """
-    photo = photo_repository.get_photo(photo_id=body.photo_id, db=session, user=user)
+    photo = photo_repository.get_photo_user(photo_id=body.photo_id, db=session, user=user)
     if photo is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Photo not Found")
     tag = Tag(name=body.tag)

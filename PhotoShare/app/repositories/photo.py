@@ -34,7 +34,7 @@ def get_photos(limit: int, offset: int, db: Session):
     return photos
 
 
-def get_photo(photo_id: int, db: Session, user: User):
+def get_photo(photo_id: int, db: Session):
     """
     The get_photo function takes in a photo_url and returns the corresponding Photo object.
     If no such photo exists, it returns None.
@@ -44,7 +44,7 @@ def get_photo(photo_id: int, db: Session, user: User):
     :return: A photo object or none if the photo does not exist
     :doc-author: Trelent
     """
-    photo = db.query(Photo).filter(and_(Photo.id==photo_id, Photo.user == user)).first()
+    photo = db.query(Photo).filter(Photo.id == photo_id).first()
     return photo
 
 
@@ -176,7 +176,5 @@ def update_photo_in_db(photo, session: Session):
 
 
 def get_photo_user(photo_id: int, db: Session, user: User):
-    print(user.id)
     photo = db.query(Photo).filter(and_(Photo.id == photo_id, Photo.user == user)).first()
-    print(photo)
     return photo

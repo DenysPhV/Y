@@ -78,11 +78,10 @@ def create_comment(body: CommentModel, photo_id: int = 0, db: Session = Depends(
     """
     if photo_id == 0:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='Photo id is required')
-    photo = repository_photos.get_photo(photo_id, db)
-    if photo == None:
+    photo = repository_photos.get_photo(photo_id=photo_id, db=db)
+    if photo is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Photo not found")
     return repository_comments.create_comment(body, current_user, photo_id, db)
-
 
 
 @router_comments.put("/{comment_id}", response_model=CommentResponse)
