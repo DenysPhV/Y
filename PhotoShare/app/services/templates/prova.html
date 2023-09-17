@@ -1,0 +1,30 @@
+<html>
+  <head>
+    <style>
+      p {
+        margin: 0px;
+        padding: 0px;
+      }
+      .colored {
+        color: blue;
+        background-color: red;
+        margin-bottom: 50px;
+      }
+      .body {
+        width: 400px;
+        font-size: 14px;
+        background-color: gray;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body class="body">
+    <p class="colored">ENTER NEW PASSWORD</p>
+    <form method="post" action="{{host}}auth/save_new_password" style="text-align: center; width:400px; height:300px; background-color: lightgreen;">
+      <input name="password" id="password" />
+      <input type="hidden" name="email"  id="email" value="{{email}}" />
+      <button type="submit">SEND</button>
+      <button type="reset">RESET</button>
+    </form>
+  </body>
+</html>
