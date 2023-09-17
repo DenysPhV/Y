@@ -30,9 +30,7 @@ class PhotoModel(BaseModel):
 
 
 class PhotoUpdate(PhotoModel):
-    description: str = Field(max_length=300)
-    photo_url: str
-    updated_at: datetime | None
+    ...
 
 
 class PhotoResponse(PhotoModel):

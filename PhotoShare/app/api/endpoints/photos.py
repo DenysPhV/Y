@@ -49,7 +49,7 @@ def get_photo(photo_id: int, db: Session = Depends(get_db), user = Depends(get_c
     :return: A photo object
     :doc-author: Trelent
     """
-    photo = photo_repository.get_photo(photo_id, db, user=user)
+    photo = photo_repository.get_photo_user(photo_id, db, user=user)
     if photo is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

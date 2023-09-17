@@ -112,8 +112,8 @@ def update_photo(photo_id: int, body: PhotoUpdate, db: Session, user: User):
     photo = result.scalar_one_or_none()
     if photo is None:
         return None
+    photo.name = body.name
     photo.description = body.description
-    photo.updated_at = photo.updated_at + datetime.now()
     db.commit()
     db.refresh(photo)
     return photo
