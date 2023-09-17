@@ -15,6 +15,7 @@ from PhotoShare.app.services import roles
 
 router_rating = APIRouter(prefix="/rating", tags=["rating"])
 
+
 @router_rating.get("/", response_model=List[RatingResponse],
                    dependencies=[Depends(roles.Roles(['admin', 'moderator']))])
 def get_ratings(photo_id: int, db: Session=Depends(get_db)):
@@ -24,6 +25,7 @@ def get_ratings(photo_id: int, db: Session=Depends(get_db)):
     ratings = rating_repository.get_ratings(db, photo_id=photo_id)
     return ratings
 
+
 @router_rating.get("/{rating_id}", response_model=RatingResponse,
                    dependencies=[Depends(roles.Roles(['admin', 'moderator']))])
 def get_rating(rating_id: int, db: Session=Depends(get_db)):
@@ -32,9 +34,10 @@ def get_rating(rating_id: int, db: Session=Depends(get_db)):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Rating not found")
     return rating
 
+
 @router_rating.delete("/{rating_id}", response_model=RatingResponse,
-                   dependencies=[Depends(roles.Roles(['admin', 'moderator']))])
-def delete_rating(rating_id: int, db: Session=Depends(get_db)):
+                      dependencies=[Depends(roles.Roles(['admin', 'moderator']))])
+def delete_rating(rating_id: int, db: Session = Depends(get_db)):
     """
     Deletes a rating with specified ID.
 
@@ -51,9 +54,10 @@ def delete_rating(rating_id: int, db: Session=Depends(get_db)):
     photo_repository.calculate_rating(rating.photo_id, db)
     return rating
 
+
 @router_rating.post("/", response_model=RatingResponse, status_code=status.HTTP_201_CREATED)
-def add_rating(body: RatingModel, photo_id: int, db: Session=Depends(get_db),
-               current_user: User=Depends(get_current_user)):
+def add_rating(body: RatingModel, photo_id: int, db: Session = Depends(get_db),
+               current_user: User = Depends(get_current_user)):
     """
     """
     photo = photo_repository.get_photo(photo_id, db)
