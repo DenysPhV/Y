@@ -225,7 +225,7 @@ async def send_reset_in_background(email: str, host: str):
             subtype=MessageType.html
         )
         fm = FastMail(conf)
-        await fm.send_message(message, template_name="prova.html")
+        await fm.send_message(message, template_name="reset_password.html")
     except ConnectionErrors as err:
         print(err)
 

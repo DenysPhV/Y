@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, BackgroundTasks, Request, HTTPException,
 from sqlalchemy.orm import Session
 from fastapi import status, Form
 from fastapi.security import HTTPAuthorizationCredentials
+from pydantic import EmailStr
 
 from PhotoShare.app.core.database import get_db
 from PhotoShare.app.services.redis import RedisService as cache_redis                                            # noqa
@@ -165,12 +166,11 @@ def reset_password(email: str, request: Request, background_task: BackgroundTask
 
 
 @router_auth.post("/save_new_password", status_code=status.HTTP_200_OK)
-def save_new_password(password: str = Form(), email: str = Form(), session: Session = Depends(get_db)):
-    user = session.query(User).filter_by(email=email).first()
-    print(password, email)
+def save_new_password(password: str = Form(), email: EmailStr = Form(), session: Session = Depends(get_db)):
+    user = user_repo.get_user_by_email(email=email, session=session)
     if user is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
     user.password = get_password_hash(password)
-    user = user_repo.update_user(user=user, session=session)
+    user_repo.update_user(user=user, session=session)
     return {'message': 'your password is updated'}
 
