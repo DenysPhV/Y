@@ -5,8 +5,10 @@ from sqlalchemy import pool
 
 from alembic import context
 
-from main import Base
-from PhotoShare.app.core.database import POSTGRES_URL
+
+from PhotoShare.app.models.base import Base
+from PhotoShare.app.core.config import settings
+
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
@@ -21,12 +23,14 @@ if config.config_file_name is not None:
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 target_metadata = Base.metadata
+config.set_main_option("sqlalchemy.url", settings.postgres_path)
+
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
-config.set_main_option("sqlalchemy.url", POSTGRES_URL)
+
 
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode.

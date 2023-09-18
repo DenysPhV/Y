@@ -5,7 +5,8 @@ from sqlalchemy.orm import Session
 from PhotoShare.app.models.rating import Rating
 from PhotoShare.app.schemas.rating import RatingModel
 
-def get_ratings(db: Session, photo_id: int=0, user_id: int=0) -> List[Rating]:
+
+def get_ratings(db: Session, photo_id: int = 0, user_id: int = 0) -> List[Rating]:
     """
     Returns list of ratings.
 
@@ -19,15 +20,16 @@ def get_ratings(db: Session, photo_id: int=0, user_id: int=0) -> List[Rating]:
     :rtype: List[int]
     """
     if photo_id and user_id:
-        ratings = db.query(Rating).filter(Rating.photo_id==photo_id, Rating.user_id==user_id).all()
+        ratings = db.query(Rating).filter(Rating.photo_id == photo_id, Rating.user_id == user_id).all()
     elif photo_id and not user_id:
-        ratings = db.query(Rating).filter(Rating.photo_id==photo_id).all()
+        ratings = db.query(Rating).filter(Rating.photo_id == photo_id).all()
     elif user_id and not photo_id:
-        ratings = db.query(Rating).filter(Rating.user_id==user_id).all()
+        ratings = db.query(Rating).filter(Rating.user_id == user_id).all()
     else:
         ratings = db.query(Rating).all()
-    
+
     return ratings
+
 
 def get_rating(rating_id: int, db: Session) -> Rating:
     """
@@ -40,8 +42,9 @@ def get_rating(rating_id: int, db: Session) -> Rating:
     :return: The found rating.
     :rtype: Rating
     """
-    rating = db.query(Rating).filter(Rating.id==rating_id).first()
+    rating = db.query(Rating).filter(Rating.id == rating_id).first()
     return rating
+
 
 def add_rating(body: RatingModel, photo_id: int, user_id: int, db: Session) -> Rating:
     """
@@ -64,6 +67,7 @@ def add_rating(body: RatingModel, photo_id: int, user_id: int, db: Session) -> R
     db.refresh(rating)
     return rating
 
+
 def delete_rating(rating_id: int, db: Session) -> Rating:
     """
     Deletes a specified rating.
@@ -75,7 +79,7 @@ def delete_rating(rating_id: int, db: Session) -> Rating:
     :return: The deleted rating.
     :rtype: Rating
     """
-    rating = db.query(Rating).filter(Rating.id==rating_id).first()
+    rating = db.query(Rating).filter(Rating.id == rating_id).first()
     if rating:
         db.delete(rating)
         db.commit()
