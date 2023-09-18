@@ -7,9 +7,9 @@ from PhotoShare.app.models.user import User, UserRole
 @pytest.fixture(scope='function')
 def token(client, user, session):
     signup_payload = {
-        "username": "deadpool",
         "email": "philichkindenis1@gmail.com",
         "password": "qwerty123456",  # Або той самий пароль, який ви використовуєте для входу
+        "username": "deadpool",
         "first_name": "dead",
         "last_name": "pool"
     }
@@ -26,7 +26,7 @@ def token(client, user, session):
 
     # Аутентифікуємо користувача
     login_payload = {
-        "username": "deadpool",
+        "email": "philichkindenis1@gmail.com",
         "password": "qwerty123456"
     }
     response = client.post("/auth/login",
@@ -45,9 +45,10 @@ def token(client, user, session):
 @pytest.fixture(scope="function")
 def token_second(client, user, session):
     client.post("/auth/signup",
-                json={"username": "deadpool",
-                      "email": "philichkindenis1@gmail.com",
-                      "password": "qwerty123456"})
+                json={"email": "philichkindenis1@gmail.com",
+                      "password": "qwerty123456",
+                      "username": "deadpool"
+                      })
     current_user: User = session.query(User).filter(User.email == "philichkindenis1@gmail.com").first()
     if current_user is None:
         print("User not found in the database.")  # Debugging line
@@ -70,7 +71,8 @@ def token_second(client, user, session):
 def test_read_user_me(client, token):
     response = client.get("/user/me",
                           headers={"Authorization": f"Bearer {token}"})
-    assert response.status_code == status.HTTP_200_OK
+
+    assert response.status_code == status.HTTP_200_OK, response.text
 
     response = client.get("/user/me")
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
