@@ -217,4 +217,6 @@ def search(word: str = Path(min_length=3), session: Session = Depends(get_db)):
     photos = photos if photos else []
     tag_photo = tag.photo if tag else []
     photos = list(set(photos + tag_photo))
+    if photos == []:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Photo not found")
     return photos
