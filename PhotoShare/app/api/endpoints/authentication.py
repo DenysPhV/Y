@@ -1,7 +1,8 @@
-from fastapi import APIRouter, Depends, BackgroundTasks, Request, HTTPException
+from fastapi import APIRouter, Depends, BackgroundTasks, Request, HTTPException, Path
 from sqlalchemy.orm import Session
-from fastapi import status
+from fastapi import status, Form
 from fastapi.security import HTTPAuthorizationCredentials
+from pydantic import EmailStr
 
 from PhotoShare.app.core.database import get_db
 from PhotoShare.app.services.redis import RedisService as cache_redis                                            # noqa
@@ -9,14 +10,16 @@ from PhotoShare.app.services.roles import Roles
 from PhotoShare.app.models.user import User
 import PhotoShare.app.repositories.users as user_repo
 from PhotoShare.app.schemas.user import (
-    UserRespond, UserRegisterModel, UserLoginModel, TokenResponse
+    UserRespond, UserRegisterModel, UserLoginModel, TokenResponse, NewPassword
 )
 from PhotoShare.app.services.auth_service import (
         create_email_confirmation_token,
         send_in_background,
+        send_reset_in_background,
         get_email_form_confirmation_token,
         get_email_form_refresh_token,
         verify_password,
+        get_password_hash,
         oauth2_scheme,
         get_current_user
 )
@@ -154,3 +157,20 @@ def banned_user(email: str, session: Session = Depends(get_db)):
     user.banned = True
     user = user_repo.update_user(user, session)
     return {f'user {user.email}': 'BANNED'}
+
+
+@router_auth.get("/reset_password/{email}", status_code=status.HTTP_200_OK, summary="Rset password")
+def reset_password(email: str, request: Request, background_task: BackgroundTasks):
+    background_task.add_task(send_reset_in_background, email, str(request.base_url))
+    return {'message': "check your email"}
+
+
+@router_auth.post("/save_new_password", status_code=status.HTTP_200_OK)
+def save_new_password(password: str = Form(), email: EmailStr = Form(), session: Session = Depends(get_db)):
+    user = user_repo.get_user_by_email(email=email, session=session)
+    if user is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    user.password = get_password_hash(password)
+    user_repo.update_user(user=user, session=session)
+    return {'message': 'your password is updated'}
+

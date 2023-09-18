@@ -28,7 +28,7 @@ class CloudinaryService:
         :doc-author: Trelent
         """
         public_id = hashlib.sha256(filename.encode()).hexdigest()[:10]
-        return f"Y/{public_id}"
+        return public_id
 
     @staticmethod
     def upload_photo(file, public_id):

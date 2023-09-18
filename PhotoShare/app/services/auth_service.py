@@ -205,6 +205,29 @@ async def send_in_background(email: str, host: str, token: str):
     except ConnectionErrors as err:
         print(err)
 
+async def send_reset_in_background(email: str, host: str):
+    """
+    Функція send_in_background — це співпрограма, яка надсилає електронний лист на адресу електронної пошти користувача.
+
+    Args:
+    email: str: Передача електронної адреси одержувача
+    host: str: Передача host для даного сайту
+    token: str: Передача маркеру до шаблону електронної пошти
+
+    Returns:
+    Об'єкто співпрограмми
+    """
+    try:
+        message = MessageSchema(
+            subject="Reset Password",
+            recipients=[email],
+            template_body={"email": email, 'host': host},
+            subtype=MessageType.html
+        )
+        fm = FastMail(conf)
+        await fm.send_message(message, template_name="reset_password.html")
+    except ConnectionErrors as err:
+        print(err)
 
 def get_email_form_confirmation_token(token: str):
     """

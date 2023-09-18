@@ -28,6 +28,7 @@ def get_comments(limit: int, photo_id: int, db: Session) -> List[Comment]:
     """
     return db.query(Comment).filter(Comment.photo_id==photo_id).limit(limit).all()
 
+
 def get_comment(comment_id: int, db: Session) -> Comment:
     """
     Retrieves a comment with a specific ID.

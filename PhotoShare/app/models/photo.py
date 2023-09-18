@@ -3,7 +3,6 @@ from datetime import date
 from sqlalchemy import Integer, String, ForeignKey, DateTime, func, Column, Table
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from PhotoShare.app.core.database import engine
 from PhotoShare.app.models.base import Base
 from PhotoShare.app.models.user import User
 
@@ -25,7 +24,7 @@ class Photo(Base):
     created_at: Mapped[date] = mapped_column('created_at', DateTime, default=func.now(), nullable=True)
     updated_at: Mapped[date] = mapped_column('updated_at', DateTime, default=func.now(), onupdate=func.now(),
                                              nullable=True)
-    tags: Mapped["Tag"] = relationship("Tag", secondary=photo_m2m_tag, backref="photo")
+    tags: Mapped[list["Tag"]] = relationship("Tag", secondary=photo_m2m_tag, backref="photo")
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), nullable=True)
     user: Mapped["User"] = relationship('User', backref="photo", lazy='joined')
 
@@ -35,7 +34,7 @@ class Photo(Base):
 class Tag(Base):
     __tablename__ = "tags"
     id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(String(25), nullable=False, unique=True)
+    name: Mapped[str] = mapped_column(String(25), nullable=False)
 
-
-Base.metadata.create_all(bind=engine)
+    def __eq__(self, other):
+        return self.name == other

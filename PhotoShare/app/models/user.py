@@ -30,5 +30,3 @@ class User(Base):
     uploaded_photos: Mapped[int] = mapped_column(default=0)
     created_at: Mapped[DateTime] = mapped_column(DateTime, default=func.now())
 
-
-# Base.metadata.create_all(bind=engine)

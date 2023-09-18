@@ -2,7 +2,7 @@ import io
 from datetime import datetime
 
 import qrcode
-from sqlalchemy import select
+from sqlalchemy import select, and_
 from sqlalchemy.orm import Session
 
 from PhotoShare.app.models.photo import Photo, Tag
@@ -30,9 +30,8 @@ def get_photos(limit: int, offset: int, db: Session):
     :return: A list of photos
     :doc-author: Trelent
     """
-    sq = select(Photo).offset(offset).limit(limit)
-    contacts = db.execute(sq)
-    return contacts.scalars().all()
+    photos = db.query(Photo).offset(offset).limit(limit).all()
+    return photos
 
 
 def get_photo(photo_id: int, db: Session):
@@ -45,11 +44,8 @@ def get_photo(photo_id: int, db: Session):
     :return: A photo object or none if the photo does not exist
     :doc-author: Trelent
     """
-
-    sq = select(Photo).filter_by(id=photo_id)
-
-    contact = db.execute(sq)
-    return contact.scalar_one_or_none()
+    photo = db.query(Photo).filter(Photo.id == photo_id).first()
+    return photo
 
 
 def create_photo(body: PhotoModel, photo_url: str, db: Session, user: User):
@@ -116,8 +112,8 @@ def update_photo(photo_id: int, body: PhotoUpdate, db: Session, user: User):
     photo = result.scalar_one_or_none()
     if photo is None:
         return None
+    photo.name = body.name
     photo.description = body.description
-    photo.updated_at = photo.updated_at + datetime.now()
     db.commit()
     db.refresh(photo)
     return photo
@@ -171,3 +167,14 @@ def calculate_rating(photo_id: int, db: Session) -> int:
         db.refresh(photo)
     return rating_avg
 
+
+def update_photo_in_db(photo, session: Session):
+    session.add(photo)
+    session.commit()
+    session.refresh(photo)
+    return photo
+
+
+def get_photo_user(photo_id: int, db: Session, user: User):
+    photo = db.query(Photo).filter(and_(Photo.id == photo_id, Photo.user == user)).first()
+    return photo
