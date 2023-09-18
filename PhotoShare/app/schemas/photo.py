@@ -3,7 +3,7 @@ from datetime import datetime
 from fastapi import Form, UploadFile
 from pydantic import BaseModel, Field
 
-from PhotoShare.app.schemas.user import UserRespond
+from PhotoShare.app.schemas.user import UserPhotoRespond, UserRespond
 
 
 class TagModel(BaseModel):
@@ -30,9 +30,7 @@ class PhotoModel(BaseModel):
 
 
 class PhotoUpdate(PhotoModel):
-    description: str = Field(max_length=300)
-    photo_url: str
-    updated_at: datetime | None
+    ...
 
 
 class PhotoResponse(PhotoModel):
@@ -40,8 +38,9 @@ class PhotoResponse(PhotoModel):
     photo_url: str
     created_at: datetime | None
     updated_at: datetime | None
-    user: UserRespond | None
+    user: UserPhotoRespond | None
     rating: int = 0
+    tags: list[TagModel]
 
     class Config:
         from_attributes = True

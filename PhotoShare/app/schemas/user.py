@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 
 
 class UserLoginModel(BaseModel):
@@ -38,6 +38,14 @@ class UserRespond(BaseModel):
     role: str
 
 
+class UserPhotoRespond(BaseModel):
+    username: str | None = None
+    email: EmailStr
+
+    class Config:
+        from_attributes = True
+
+
 class TokenResponse(BaseModel):
     access_token: str
     refresh_token: str
@@ -54,3 +62,7 @@ class UserFirstname(BaseModel):
 
 class UserLastname(BaseModel):
     last_name: str
+
+
+class NewPassword(BaseModel):
+    password: str = Field()

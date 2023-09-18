@@ -1,15 +1,18 @@
 version: '3'
 services:
   redis:
-    image: redis:alpine
+    image: redis:latest
     ports:
       - "6379:6379"
   postgres:
-    image: postgres:12
+    image: postgres:latest
     environment:
-      POSTGRES_DB: snuffleupagus.db.elephantsql.com
-      POSTGRES_USER: ycrymnbx
-      POSTGRES_PASSWORD: R76JH9HLrLwq6CcGfkXPpFc-PEvBcCzS
+#      POSTGRES_DB: snuffleupagus.db.elephantsql.com
+#      POSTGRES_USER: ycrymnbx
+#      POSTGRES_PASSWORD: R76JH9HLrLwq6CcGfkXPpFc-PEvBcCzS
+      POSTGRES_DB: localhost
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1065
     ports:
       - "5432:5432"
     volumes:

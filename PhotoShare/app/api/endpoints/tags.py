@@ -7,10 +7,10 @@ from PhotoShare.app.core.database import get_db
 from PhotoShare.app.repositories import tags as repository_tags
 from PhotoShare.app.schemas.photo import TagModel, TagResponse
 
-router = APIRouter(prefix='/tags', tags=["tags"])
+router_tags = APIRouter(prefix='/tags', tags=["tags"])
 
 
-@router.get("/", response_model=List[TagResponse])
+@router_tags.get("/", response_model=List[TagResponse])
 def read_tags(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
 
     """
@@ -26,7 +26,7 @@ def read_tags(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return tags
 
 
-@router.get("/{tag_id}", response_model=TagResponse)
+@router_tags.get("/{tag_id}", response_model=TagResponse)
 def read_tag(tag_id: int, db: Session = Depends(get_db)):
     """
     The read_tag function will return a single tag from the database.
@@ -44,7 +44,7 @@ def read_tag(tag_id: int, db: Session = Depends(get_db)):
     return tag
 
 
-@router.post("/", response_model=TagResponse)
+@router_tags.post("/", response_model=TagResponse)
 def create_tag(body: TagModel, db: Session = Depends(get_db)):
     """
     The create_tag function creates a new tag in the database.
@@ -54,10 +54,11 @@ def create_tag(body: TagModel, db: Session = Depends(get_db)):
     :return: A tagmodel object
     :doc-author: Trelent
     """
-    return repository_tags.create_tag(body, db)
+    tag = repository_tags.create_tag(body, db)
+    return tag
 
 
-@router.put("/{tag_id}", response_model=TagResponse)
+@router_tags.put("/{tag_id}", response_model=TagResponse)
 def update_tag(body: TagModel, tag_id: int, db: Session = Depends(get_db)):
     """
     The update_tag function updates a tag in the database.
@@ -74,7 +75,7 @@ def update_tag(body: TagModel, tag_id: int, db: Session = Depends(get_db)):
     return tag
 
 
-@router.delete("/{tag_id}", response_model=TagResponse)
+@router_tags.delete("/{tag_id}", response_model=TagResponse)
 def remove_tag(tag_id: int, db: Session = Depends(get_db)):
     """
     The remove_tag function removes a tag from the database.
